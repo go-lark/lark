@@ -34,7 +34,7 @@ func TestHeartbeat(t *testing.T) {
 	bot.debugHeartbeat = 1
 	assert.Nil(t, bot.heartbeat)
 	bot.StartHeartbeat()
-	time.Sleep(500 * time.Millisecond)
+	time.Sleep(1 * time.Second)
 	assert.NotEmpty(t, bot.tenantAccessToken)
 	assert.Equal(t, 1, bot.debugHeartbeat)
 	time.Sleep(1 * time.Second)

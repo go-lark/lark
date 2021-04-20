@@ -34,13 +34,13 @@ func newTestBot() *Bot {
 			log.Fatal("Error loading .env file")
 		}
 	}
-	testAppID = os.Getenv("lark_app_id")
-	testAppSecret = os.Getenv("lark_app_secret")
+	testAppID = os.Getenv("LARK_APP_ID")
+	testAppSecret = os.Getenv("LARK_APP_SECRET")
 
-	testUserEmail = os.Getenv("lark_user_email")
-	testUserOpenID = os.Getenv("lark_open_id")
-	testGroupChatID = os.Getenv("lark_chat_id")
-	testMessageID = os.Getenv("lark_message_id")
+	testUserEmail = os.Getenv("LARK_USER_EMAIL")
+	testUserOpenID = os.Getenv("LARK_OPEN_ID")
+	testGroupChatID = os.Getenv("LARK_CHAT_ID")
+	testMessageID = os.Getenv("LARK_MESSAGE_ID")
 	return NewChatBot(testAppID, testAppSecret)
 }
 

@@ -1,0 +1,31 @@
+name: build
+on: [push, pull_request]
+jobs:
+  checks:
+    name: run
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@master
+
+    - name: run
+      uses: cedrickring/golang-action/go1.13@1.6.0
+      env:
+        GO111MODULE: "on"
+
+    - name: lint
+      run: |
+        export PATH=$PATH:$(go env GOPATH)/bin
+        go get -u golang.org/x/lint/golint
+        golint -set_exit_status ./...
+
+    - name: build
+      run: ./scripts/test.sh
+
+    env:
+      LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+      LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+      LARK_USER_EMAIL: ${{ secrets.LARK_USER_EMAIL }}
+      LARK_CHAT_ID: ${{ secrets.LARK_CHAT_ID }}
+      LARK_OPEN_ID: ${{ secrets.LARK_OPEN_ID }}
+      LARK_MESSAGE_ID: ${{ secrets.LARK_MESSAGE_ID }}

@@ -1,5 +1,7 @@
 # go-lark
 
+[![build](https://github.com/go-lark/lark/actions/workflows/ci.yml/badge.svg)](https://github.com/go-lark/lark/actions/workflows/ci.yml)
+
 go-lark is an easy-to-use unofficial SDK for Feishu and Lark Open Platform.
 
 go-lark implements messaging APIs, with full-fledged supports on building Chat Bot and Notification Bot.
@@ -120,7 +122,7 @@ For Chat Bot, we can send simple messages with the following method:
 
 Basic message examples: [examples/basic-message](/examples/basic-message)
 
-To build rich messages, we may use [Message Buffer](/#message-buffer) (or simply `MsgBuffer`),
+To build rich messages, we may use [Message Buffer](#message-buffer) (or simply `MsgBuffer`),
 which builds message conveniently with chaining methods.
 
 ### Examples

@@ -28,7 +28,6 @@ func TestWebhookV1Error(t *testing.T) {
 	resp, err := bot.PostNotificationV2(mbText.Build())
 	assert.NoError(t, err)
 	assert.Zero(t, resp.StatusCode)
-	assert.True(t, resp.Ok)
 }
 
 func TestWebhookV2(t *testing.T) {
@@ -40,7 +39,6 @@ func TestWebhookV2(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Zero(t, resp.StatusCode)
 	assert.Equal(t, "success", resp.StatusMessage)
-	assert.True(t, resp.Ok)
 
 	mbPost := NewMsgBuffer(MsgPost)
 	mbPost.Post(NewPostBuilder().Title("hello").TextTag("world", 1, true).Render())
@@ -48,7 +46,6 @@ func TestWebhookV2(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Zero(t, resp.StatusCode)
 	assert.Equal(t, "success", resp.StatusMessage)
-	assert.True(t, resp.Ok)
 
 	mbImg := NewMsgBuffer(MsgImage)
 	mbImg.Image("img_a97c1597-9c0a-47c1-9fb4-dd3e5e37ac9g")
@@ -56,7 +53,6 @@ func TestWebhookV2(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Zero(t, resp.StatusCode)
 	assert.Equal(t, "success", resp.StatusMessage)
-	assert.True(t, resp.Ok)
 
 	mbShareGroup := NewMsgBuffer(MsgShareCard)
 	mbShareGroup.ShareChat(testGroupChatID)
@@ -64,7 +60,6 @@ func TestWebhookV2(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Zero(t, resp.StatusCode)
 	assert.Equal(t, "success", resp.StatusMessage)
-	assert.True(t, resp.Ok)
 }
 
 func TestWebhookV2Errors(t *testing.T) {
