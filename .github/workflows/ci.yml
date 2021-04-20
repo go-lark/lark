@@ -8,16 +8,12 @@ jobs:
     - name: checkout
       uses: actions/checkout@master
 
-    - name: run
+    - name: build
       uses: cedrickring/golang-action/go1.13@1.6.0
       env:
         GO111MODULE: "on"
-
-    - name: Provision
-      run: go get -u golang.org/x/lint/golint
-
-    - name: build
       run: |
+        go get -u golang.org/x/lint/golint
         ./scripts/lint.sh
         ./scripts/test.sh
 
