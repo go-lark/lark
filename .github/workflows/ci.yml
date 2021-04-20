@@ -1,5 +1,5 @@
-on: push
 name: build
+on: [push, pull_request]
 jobs:
   checks:
     name: run
@@ -18,12 +18,14 @@ jobs:
 
     - name: build
       run: |
+        echo "$LARK_MESSAGE_ID"
         ./scripts/lint.sh
         ./scripts/test.sh
-      env:
-        LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
-        LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
-        LARK_USER_EMAIL: ${{ secrets.LARK_USER_EMAIL }}
-        LARK_CHAT_ID: ${{ secrets.LARK_CHAT_ID }}
-        LARK_OPEN_ID: ${{ secrets.LARK_OPEN_ID }}
-        LARK_MESSAGE_ID: ${{ secrets.LARK_MESSAGE_ID }}
+
+    env:
+      LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+      LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+      LARK_USER_EMAIL: ${{ secrets.LARK_USER_EMAIL }}
+      LARK_CHAT_ID: ${{ secrets.LARK_CHAT_ID }}
+      LARK_OPEN_ID: ${{ secrets.LARK_OPEN_ID }}
+      LARK_MESSAGE_ID: ${{ secrets.LARK_MESSAGE_ID }}
