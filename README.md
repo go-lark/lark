@@ -108,7 +108,7 @@ resp, err := bot.GetTenantAccessTokenInternal(true)
 // and we can now access the token value with `bot.tenantAccessToken()`
 ```
 
-Example: [examples/auth](/examples/auth)
+Example: [examples/auth](https://github.com/go-lark/examples/tree/main/auth)
 
 ### Messaging
 
@@ -120,7 +120,7 @@ For Chat Bot, we can send simple messages with the following method:
 - `PostImage`
 - `PostShareChatCard`
 
-Basic message examples: [examples/basic-message](/examples/basic-message)
+Basic message examples: [examples/basic-message](https://github.com/go-lark/examples/tree/main/basic-message)
 
 To build rich messages, we may use [Message Buffer](#message-buffer) (or simply `MsgBuffer`),
 which builds message conveniently with chaining methods.
@@ -130,14 +130,14 @@ which builds message conveniently with chaining methods.
 Apart from the general auth and messaging chapter, there are comprehensive examples for almost all APIs.
 Here is a collection of ready-to-run examples for each part of `go-lark`:
 
-- [examples/auth](/examples/auth)
-- [examples/basic-message](/examples/basic-message)
-- [examples/image-message](/examples/image-message)
-- [examples/rich-text-message](/examples/rich-text-message)
-- [examples/share-chat](/examples/share-chat)
-- [examples/interactive-message](/examples/interactive-message)
-- [examples/group](/examples/group)
-- [examples/user](/examples/user)
+- [examples/auth](https://github.com/go-lark/examples/tree/main/auth)
+- [examples/basic-message](https://github.com/go-lark/examples/tree/main/basic-message)
+- [examples/image-message](https://github.com/go-lark/examples/tree/main/image-message)
+- [examples/rich-text-message](https://github.com/go-lark/examples/tree/main/rich-text-message)
+- [examples/share-chat](https://github.com/go-lark/examples/tree/main/share-chat)
+- [examples/interactive-message](https://github.com/go-lark/examples/tree/main/interactive-message)
+- [examples/group](https://github.com/go-lark/examples/tree/main/group)
+- [examples/user](https://github.com/go-lark/examples/tree/main/user)
 
 ### Message Buffer
 
@@ -192,7 +192,7 @@ We recommend Gin middleware to handle these events.
 
 ### Gin Middleware
 
-Example: [examples/gin-middleware](/examples/gin-middleware)
+Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware)
 
 #### URL Challenge
 
@@ -232,7 +232,7 @@ Lark does not provide messaging API debugger officially. Thus, we have to debug 
 We add `PostEvent` to simulate message sending to make it easier.
 `PostEvent` can also be used to redirect message, which acts like a reverse proxy.
 
-Example: [examples/event-forward](/examples/event-forward)
+Example: [examples/event-forward](https://github.com/go-lark/examples/tree/main/event-forward)
 
 > Notice: `PostEvent` does not support AES encryption at the moment.
 
