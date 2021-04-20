@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set +e
 rm lint-error.log
 touch lint-error.log
 
