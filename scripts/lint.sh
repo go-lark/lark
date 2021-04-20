@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-golint -set_exit_status ./...

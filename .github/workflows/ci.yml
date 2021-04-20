@@ -8,14 +8,19 @@ jobs:
     - name: checkout
       uses: actions/checkout@master
 
-    - name: build
+    - name: run
       uses: cedrickring/golang-action/go1.13@1.6.0
       env:
         GO111MODULE: "on"
+
+    - name: lint
       run: |
+        export PATH=$PATH:$(go env GOPATH)/bin
         go get -u golang.org/x/lint/golint
-        ./scripts/lint.sh
-        ./scripts/test.sh
+        golint -set_exit_status ./...
+
+    - name: build
+      run: ./scripts/test.sh
 
     env:
       LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
