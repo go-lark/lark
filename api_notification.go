@@ -7,7 +7,6 @@ type PostNotificationResp struct {
 
 // PostNotificationV2Resp response of PostNotificationV2
 type PostNotificationV2Resp struct {
-	Ok            bool   `json:"-"` // compat v1 check format
 	StatusCode    int    `json:"StatusCode"`
 	StatusMessage string `json:"StatusMessage"`
 }

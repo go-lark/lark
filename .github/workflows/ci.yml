@@ -18,7 +18,6 @@ jobs:
 
     - name: build
       run: |
-        echo "$LARK_MESSAGE_ID"
         ./scripts/lint.sh
         ./scripts/test.sh
 
