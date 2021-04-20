@@ -1,0 +1,4 @@
+coverage.txt
+profile.out
+lint-error.log
+.env

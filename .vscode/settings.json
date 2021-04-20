@@ -1,0 +1,9 @@
+{
+    "go.testFlags": [
+        "-count=1",
+        "-v"
+    ],
+    "go.testEnvVars": {
+        "GO_LARK_TEST_MODE": "local",
+    },
+}
