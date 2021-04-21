@@ -137,7 +137,6 @@ Here is a collection of ready-to-run examples for each part of `go-lark`:
 - [examples/share-chat](https://github.com/go-lark/examples/tree/main/share-chat)
 - [examples/interactive-message](https://github.com/go-lark/examples/tree/main/interactive-message)
 - [examples/group](https://github.com/go-lark/examples/tree/main/group)
-- [examples/user](https://github.com/go-lark/examples/tree/main/user)
 
 ### Message Buffer
 
@@ -247,7 +246,6 @@ Compatibility table:
 | messaging        | v4 only         |                        |
 | interactive card | v4 only         |                        |
 | bot              | N/A             | Lark does not offer v4 |
-| user             | v4 only         |                        |
 | group            | partial v3 & v4 | WIP                    |
 
 ## FAQ
