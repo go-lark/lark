@@ -37,8 +37,11 @@ type Bot struct {
 	logger *log.Logger
 }
 
-// default domain
-const defaultDomain = "https://open.feishu.cn"
+// Domains
+const (
+	DomainFeishu = "https://open.feishu.cn"
+	DomainLark   = "https://open.larksuite.com"
+)
 
 // NewChatBot with appID and appSecret
 func NewChatBot(appID, appSecret string) *Bot {
@@ -47,7 +50,7 @@ func NewChatBot(appID, appSecret string) *Bot {
 		appID:     appID,
 		appSecret: appSecret,
 		client:    initClient(),
-		domain:    defaultDomain,
+		domain:    DomainFeishu,
 		logger:    initDefaultLogger(),
 	}
 }

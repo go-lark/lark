@@ -82,7 +82,7 @@ The default API endpoints are for Feishu, in order to switch to Lark, we should 
 
 ```go
 bot := lark.NewChatBot("<App ID>", "<App Secret>")
-bot.SetDomain("https://open.larksuite.com")
+bot.SetDomain(lark.DomainLark)
 ```
 
 ## Usage

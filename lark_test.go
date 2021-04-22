@@ -66,7 +66,7 @@ func TestBotProperties(t *testing.T) {
 	assert.NotEmpty(t, chatBot.appID)
 	assert.NotEmpty(t, chatBot.appSecret)
 	assert.Empty(t, chatBot.webhook)
-	assert.Equal(t, defaultDomain, chatBot.domain)
+	assert.Equal(t, DomainFeishu, chatBot.domain)
 	assert.Equal(t, ChatBot, chatBot.botType)
 	assert.NotNil(t, chatBot.client)
 	assert.NotNil(t, chatBot.logger)
@@ -89,7 +89,7 @@ func TestRequiredType(t *testing.T) {
 
 func TestSetDomain(t *testing.T) {
 	bot := newTestBot()
-	assert.Equal(t, "https://open.feishu.cn", bot.domain)
+	assert.Equal(t, DomainFeishu, bot.domain)
 	bot.SetDomain("https://test.test")
 	assert.Equal(t, "https://test.test", bot.domain)
 }
