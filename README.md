@@ -1,7 +1,7 @@
 # go-lark
 
 [![build](https://github.com/go-lark/lark/actions/workflows/ci.yml/badge.svg)](https://github.com/go-lark/lark/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/go-lark/lark/branch/master/graph/badge.svg)](https://codecov.io/gh/go-lark/lark)
+[![codecov](https://codecov.io/gh/go-lark/lark/branch/main/graph/badge.svg)](https://codecov.io/gh/go-lark/lark)
 
 go-lark is an easy-to-use unofficial SDK for Feishu and Lark Open Platform.
 
