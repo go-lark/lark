@@ -22,6 +22,11 @@ jobs:
     - name: build
       run: ./scripts/test.sh
 
+    - name: codecov
+      uses: codecov/codecov-action@v1
+      with:
+        - token: ${{ secrets.CODECOV_TOKEN }}
+
     env:
       LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
       LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
