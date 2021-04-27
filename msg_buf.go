@@ -113,16 +113,16 @@ func (m *MsgBuffer) Card(cardContent string) *MsgBuffer {
 		log.Println("`Card` is only available to MsgInteractive")
 	}
 	m.message.Card = new(map[string]interface{})
-	json.Unmarshal([]byte(cardContent), m.message.Card)
+	_ = json.Unmarshal([]byte(cardContent), m.message.Card)
 	return m
 }
 
-// Build message
+// Build message and return message body
 func (m *MsgBuffer) Build() OutcomingMessage {
 	return m.message
 }
 
-// Clear .
+// Clear message in buffer
 func (m *MsgBuffer) Clear() *MsgBuffer {
 	m.message = OutcomingMessage{
 		MsgType: m.msgType,
