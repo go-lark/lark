@@ -191,7 +191,7 @@ go-lark now only implements two of them, which are needed for interacting betwee
 
 We recommend Gin middleware to handle these events.
 
-### Gin Middleware
+### [Gin Middleware](https://github.com/go-lark/lark-gin)
 
 Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware)
 
