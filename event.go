@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// See https://lark-open.bytedance.net/document/uYjL24iN/uUTNz4SN1MjL1UzM
+// See https://open.feishu.cn/document/uYjL24iN/uUTNz4SN1MjL1UzM
 const (
 	// EventGetMessage .
 	EventGetMessage = 1
