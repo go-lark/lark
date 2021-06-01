@@ -6,9 +6,8 @@
 
 [简体中文](/README_zhCN.md)
 
-go-lark is an easy-to-use unofficial SDK for Feishu and Lark Open Platform.
-
-go-lark implements messaging APIs, with full-fledged supports on building Chat Bot and Notification Bot.
+go-lark is an easy-to-use unofficial SDK for Feishu and Lark Open Platform,
+which implements messaging APIs, with full-fledged supports on building Chat Bot and Notification Bot.
 
 It is widely used and tested by in-house ~450 developers with over 1.5k Go packages.
 
