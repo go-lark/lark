@@ -27,6 +27,7 @@ func TestPostTextTag(t *testing.T) {
 	assert.Equal(t, 1, *pb.buf[0].Lines)
 	assert.Equal(t, true, *pb.buf[0].UnEscape)
 }
+
 func TestPostLinkTag(t *testing.T) {
 	pb := NewPostBuilder()
 	pb.LinkTag("hello, world", "https://www.toutiao.com/")
@@ -34,6 +35,7 @@ func TestPostLinkTag(t *testing.T) {
 	assert.Equal(t, "hello, world", *pb.buf[0].Text)
 	assert.Equal(t, "https://www.toutiao.com/", *pb.buf[0].Href)
 }
+
 func TestPostAtTag(t *testing.T) {
 	pb := NewPostBuilder()
 	pb.AtTag("www", "123456")
@@ -41,6 +43,7 @@ func TestPostAtTag(t *testing.T) {
 	assert.Equal(t, "www", *pb.buf[0].Text)
 	assert.Equal(t, "123456", *pb.buf[0].UserID)
 }
+
 func TestPostImgTag(t *testing.T) {
 	pb := NewPostBuilder()
 	pb.ImageTag("d9f7d37e-c47c-411b-8ec6-9861132e6986", 320, 240)
