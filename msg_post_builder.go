@@ -33,11 +33,16 @@ const (
 	msgPostImage = "img"
 )
 
+// PostBuf .
+type PostBuf struct {
+	Title   string     `json:"title"`
+	Content []PostElem `json:"content"`
+}
+
 // MsgPostBuilder for build text buf
 type MsgPostBuilder struct {
-	buf    []PostElem
-	locale string
-	title  string
+	buf       map[string]*PostBuf
+	curLocale string
 }
 
 const defaultLocale = "zh_cn"
@@ -45,20 +50,34 @@ const defaultLocale = "zh_cn"
 // NewPostBuilder creates a text builder
 func NewPostBuilder() *MsgPostBuilder {
 	return &MsgPostBuilder{
-		buf:    make([]PostElem, 0),
-		locale: defaultLocale,
+		buf:       make(map[string]*PostBuf),
+		curLocale: defaultLocale,
 	}
 }
 
-// Locale sets locale
+// Locale renamed to WithLocale but still available
 func (pb *MsgPostBuilder) Locale(locale string) *MsgPostBuilder {
-	pb.locale = locale
+	return pb.WithLocale(locale)
+}
+
+// WithLocale switches to locale and returns self
+func (pb *MsgPostBuilder) WithLocale(locale string) *MsgPostBuilder {
+	if _, ok := pb.buf[locale]; !ok {
+		pb.buf[locale] = &PostBuf{}
+	}
+
+	pb.curLocale = locale
 	return pb
+}
+
+// CurLocale switches to locale and returns the buffer of that locale
+func (pb *MsgPostBuilder) CurLocale() *PostBuf {
+	return pb.WithLocale(pb.curLocale).buf[pb.curLocale]
 }
 
 // Title sets title
 func (pb *MsgPostBuilder) Title(title string) *MsgPostBuilder {
-	pb.title = title
+	pb.CurLocale().Title = title
 	return pb
 }
 
@@ -70,7 +89,7 @@ func (pb *MsgPostBuilder) TextTag(text string, lines int, unescape bool) *MsgPos
 		Lines:    &lines,
 		UnEscape: &unescape,
 	}
-	pb.buf = append(pb.buf, pe)
+	pb.CurLocale().Content = append(pb.CurLocale().Content, pe)
 	return pb
 }
 
@@ -81,7 +100,7 @@ func (pb *MsgPostBuilder) LinkTag(text, href string) *MsgPostBuilder {
 		Text: &text,
 		Href: &href,
 	}
-	pb.buf = append(pb.buf, pe)
+	pb.CurLocale().Content = append(pb.CurLocale().Content, pe)
 	return pb
 }
 
@@ -92,7 +111,7 @@ func (pb *MsgPostBuilder) AtTag(text, userID string) *MsgPostBuilder {
 		Text:   &text,
 		UserID: &userID,
 	}
-	pb.buf = append(pb.buf, pe)
+	pb.CurLocale().Content = append(pb.CurLocale().Content, pe)
 	return pb
 }
 
@@ -104,28 +123,29 @@ func (pb *MsgPostBuilder) ImageTag(imageKey string, imageWidth, imageHeight int)
 		ImageWidth:  &imageWidth,
 		ImageHeight: &imageHeight,
 	}
-	pb.buf = append(pb.buf, pe)
+	pb.CurLocale().Content = append(pb.CurLocale().Content, pe)
 	return pb
 }
 
 // Clear all message
 func (pb *MsgPostBuilder) Clear() {
-	pb.title = ""
-	pb.locale = defaultLocale
-	pb.buf = make([]PostElem, 0)
+	pb.curLocale = defaultLocale
+	pb.buf = make(map[string]*PostBuf)
 }
 
 // Render message
 func (pb *MsgPostBuilder) Render() *PostContent {
 	content := make(PostContent)
-	content[pb.locale] = PostBody{
-		Title:   pb.title,
-		Content: [][]PostElem{pb.buf},
+	for locale, buf := range pb.buf {
+		content[locale] = PostBody{
+			Title:   buf.Title,
+			Content: [][]PostElem{buf.Content},
+		}
 	}
 	return &content
 }
 
 // Len returns buf len
 func (pb MsgPostBuilder) Len() int {
-	return len(pb.buf)
+	return len(pb.CurLocale().Content)
 }

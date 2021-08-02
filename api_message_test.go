@@ -119,11 +119,15 @@ func TestPostPostMessage(t *testing.T) {
 
 	msg := NewMsgBuffer(MsgPost)
 	postContent := NewPostBuilder().
-		Title("post title").
+		Title("中文标题").
+		TextTag("你好世界", 1, true).
 		TextTag("hello, world", 1, true).
 		LinkTag("Google", "https://google.com/").
 		AtTag("www", testGroupChatID).
-		ImageTag("d9f7d37e-c47c-411b-8ec6-9861132e6986", 300, 300).
+		ImageTag("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg", 300, 300).
+		WithLocale("en_us").
+		Title("English Title").
+		TextTag("hello, world", 1, true).
 		Render()
 	om := msg.BindOpenChatID(testGroupChatID).Post(postContent).Build()
 	resp, err := bot.PostMessage(om)
