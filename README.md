@@ -17,7 +17,7 @@ It is widely used and tested by in-house ~450 developers with over 1.5k Go packa
 - Send messages (Group, Private, Rich Text, and Card)
 - Quick to build message with `MsgBuffer`
 - Easy to create incoming message hook
-- Encryption and Token Verification supported
+- Encryption and token verification supported
 - Middleware support for Gin web framework
 - Documentation & tests
 
@@ -64,8 +64,8 @@ Notification Bot:
 import "github.com/go-lark/lark"
 
 func main() {
-    bot := lark.NewNotificationBot("WEB HOOK URL")
-    bot.PostNotification("go-lark", "example")
+    bot := lark.NewNotificationBot("<WEB HOOK URL>")
+    bot.PostNotification("title", "text")
 }
 ```
 
