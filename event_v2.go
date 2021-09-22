@@ -20,9 +20,9 @@ func (e EventV2) GetMessageReceived() (EventV2MessageReceived, bool) {
 	return body, ok
 }
 
-// GetGroupDisbanded .
-func (e EventV2) GetGroupDisbanded() (EventV2GroupDisbanded, bool) {
-	body, ok := e.Event.(EventV2GroupDisbanded)
+// GetChatDisbanded .
+func (e EventV2) GetChatDisbanded() (EventV2ChatDisbanded, bool) {
+	body, ok := e.Event.(EventV2ChatDisbanded)
 	return body, ok
 }
 
@@ -95,8 +95,8 @@ type EventV2MessageReceived struct {
 	} `json:"message,omitempty"`
 }
 
-// EventV2GroupDisbanded .
-type EventV2GroupDisbanded struct {
+// EventV2ChatDisbanded .
+type EventV2ChatDisbanded struct {
 	ChatID            string        `json:"chat_id,omitempty"`
 	OperatorID        EventV2UserID `json:"operator_id,omitempty"`
 	External          bool          `json:"external,omitempty"`
