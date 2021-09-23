@@ -61,6 +61,14 @@ func performRequest(r http.HandlerFunc, method, path string, body interface{}) *
 	return w
 }
 
+// for general API test suites
+var bot *Bot
+
+func init() {
+	bot = newTestBot()
+	_, _ = bot.GetTenantAccessTokenInternal(true)
+}
+
 func TestBotProperties(t *testing.T) {
 	chatBot := newTestBot()
 	assert.NotEmpty(t, chatBot.appID)

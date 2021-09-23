@@ -9,8 +9,6 @@ import (
 )
 
 func TestUploadImage(t *testing.T) {
-	bot := newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
 	resp, err := bot.UploadImage("./fixtures/test.jpg")
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
@@ -20,9 +18,6 @@ func TestUploadImage(t *testing.T) {
 }
 
 func TestUploadImageObject(t *testing.T) {
-	bot := newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
-
 	file, _ := os.Open("./fixtures/test.jpg")
 	img, _ := jpeg.Decode(file)
 
