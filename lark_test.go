@@ -110,6 +110,13 @@ func TestBotGetters(t *testing.T) {
 	assert.Equal(t, "", bot.TenantAccessToken())
 }
 
+func TestSetClient(t *testing.T) {
+	bot := &Bot{}
+	assert.Nil(t, bot.client)
+	bot.SetClient(&http.Client{})
+	assert.NotNil(t, bot.Client())
+}
+
 func TestSetLogger(t *testing.T) {
 	bot := newTestBot()
 	newLogger := log.New(os.Stderr, "new logger", log.LstdFlags)
