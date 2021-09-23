@@ -7,8 +7,6 @@ import (
 )
 
 func TestGetBotInfo(t *testing.T) {
-	bot := newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
 	resp, err := bot.GetBotInfo()
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)

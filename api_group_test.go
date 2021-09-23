@@ -8,8 +8,6 @@ import (
 )
 
 func TestGetGroupList(t *testing.T) {
-	bot := newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
 	resp, err := bot.GetGroupList(1, 10)
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
@@ -19,8 +17,6 @@ func TestGetGroupList(t *testing.T) {
 }
 
 func TestGetGroupInfo(t *testing.T) {
-	bot := newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
 	resp, err := bot.GetGroupInfo("oc_51e1f7ff2b3dbe8f74b7b22d5d44d14e")
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
@@ -30,8 +26,6 @@ func TestGetGroupInfo(t *testing.T) {
 }
 
 func TestGroupCreateDisbandAddDelete(t *testing.T) {
-	bot := newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
 	createResp, err := bot.CreateGroup("go-lark-ci create-group", "group create", []string{testUserOpenID})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, createResp.Code)
@@ -57,8 +51,6 @@ func TestGroupCreateDisbandAddDelete(t *testing.T) {
 }
 
 func TestUpdateGroupInfo(t *testing.T) {
-	bot := newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
 	_, err := bot.UpdateGroupInfo(&UpdateGroupInfoReq{
 		OpenChatID: "oc_dae15ce1b55b00ecf853c50336a51e55",
 		Name:       "test 1",
@@ -67,8 +59,6 @@ func TestUpdateGroupInfo(t *testing.T) {
 }
 
 func TestAddRemoveBot(t *testing.T) {
-	bot := newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
 	openChatID := "oc_dae15ce1b55b00ecf853c50336a51e55"
 
 	_, err := bot.RemoveBotFromGroup(openChatID)
