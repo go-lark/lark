@@ -19,6 +19,6 @@ type GetBotInfoResponse struct {
 // GetBotInfo returns bot info
 func (bot *Bot) GetBotInfo() (*GetBotInfoResponse, error) {
 	var respData GetBotInfoResponse
-	err := bot.PostAPIRequestWithAuth("GetBotInfo", getBotInfoURL, nil, &respData)
+	err := bot.PostAPIRequest("GetBotInfo", getBotInfoURL, true, nil, &respData)
 	return &respData, err
 }

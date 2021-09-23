@@ -80,6 +80,11 @@ func (bot *Bot) SetClient(c *http.Client) {
 	bot.client = c
 }
 
+// Client returns http client
+func (bot Bot) Client() *http.Client {
+	return bot.client
+}
+
 func initClient() *http.Client {
 	return &http.Client{
 		Timeout: 5 * time.Second,
