@@ -35,7 +35,7 @@ func (bot *Bot) GetAccessTokenInternal(updateToken bool) (*AuthTokenInternalResp
 		"app_secret": bot.appSecret,
 	}
 	var respData AuthTokenInternalResponse
-	err := bot.PostAPIRequest("GetAccessTokenInternal", appAccessTokenInternalURL, params, &respData)
+	err := bot.PostAPIRequest("GetAccessTokenInternal", appAccessTokenInternalURL, false, params, &respData)
 	if err == nil && updateToken {
 		bot.accessToken = respData.AppAccessToken
 	}
@@ -53,7 +53,7 @@ func (bot *Bot) GetTenantAccessTokenInternal(updateToken bool) (*TenantAuthToken
 		"app_secret": bot.appSecret,
 	}
 	var respData TenantAuthTokenInternalResponse
-	err := bot.PostAPIRequest("GetTenantAccessTokenInternal", tenantAppAccessTokenInternalURL, params, &respData)
+	err := bot.PostAPIRequest("GetTenantAccessTokenInternal", tenantAppAccessTokenInternalURL, false, params, &respData)
 	if err == nil && updateToken {
 		bot.tenantAccessToken = respData.TenantAppAccessToken
 	}

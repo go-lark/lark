@@ -126,7 +126,7 @@ func (bot *Bot) PostShareChat(openChatID string, userID *OptionalUserID) (*PostM
 func (bot *Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	params := BuildOutcomingMessageReq(om)
 	var respData PostMessageResponse
-	err := bot.PostAPIRequestWithAuth("PostMessage", messageURL, params, &respData)
+	err := bot.PostAPIRequest("PostMessage", messageURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -136,7 +136,7 @@ func (bot *Bot) RecallMessage(messageID string) (*RecallMessageResponse, error) 
 		"message_id": messageID,
 	}
 	var respData RecallMessageResponse
-	err := bot.PostAPIRequestWithAuth("RecallMessage", recallMessageURL, params, &respData)
+	err := bot.PostAPIRequest("RecallMessage", recallMessageURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -146,6 +146,6 @@ func (bot *Bot) MessageReadReceipt(messageID string) (*MessageReceiptResponse, e
 		"message_id": messageID,
 	}
 	var respData MessageReceiptResponse
-	err := bot.PostAPIRequestWithAuth("MessageReadReceipt", messageReceiptURL, params, &respData)
+	err := bot.PostAPIRequest("MessageReadReceipt", messageReceiptURL, true, params, &respData)
 	return &respData, err
 }

@@ -105,7 +105,7 @@ func (bot *Bot) GetGroupList(pageNum, pageSize int) (*GroupListResponse, error) 
 		"page_size": pageSize,
 	}
 	var respData GroupListResponse
-	err := bot.PostAPIRequestWithAuth("GetGroupList", groupListURL, params, &respData)
+	err := bot.PostAPIRequest("GetGroupList", groupListURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -115,7 +115,7 @@ func (bot *Bot) GetGroupInfo(openChatID string) (*GroupInfoResponse, error) {
 		"chat_id": openChatID,
 	}
 	var respData GroupInfoResponse
-	err := bot.PostAPIRequestWithAuth("GetGroupInfo", groupInfoURL, params, &respData)
+	err := bot.PostAPIRequest("GetGroupInfo", groupInfoURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -127,7 +127,7 @@ func (bot *Bot) CreateGroup(name, description string, openID []string) (*CreateG
 		"open_ids":    openID,
 	}
 	var respData CreateGroupResponse
-	err := bot.PostAPIRequestWithAuth("CreateGroup", createGroupURL, params, &respData)
+	err := bot.PostAPIRequest("CreateGroup", createGroupURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -138,7 +138,7 @@ func (bot *Bot) AddGroupMember(openChatID string, openID []string) (*AddGroupMem
 		"open_ids": openID,
 	}
 	var respData AddGroupMemberResponse
-	err := bot.PostAPIRequestWithAuth("AddGroupMember", addGroupMemberURL, params, &respData)
+	err := bot.PostAPIRequest("AddGroupMember", addGroupMemberURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -149,7 +149,7 @@ func (bot *Bot) AddGroupMemberByUserID(openChatID string, userID []string) (*Add
 		"user_ids": userID,
 	}
 	var respData AddGroupMemberResponse
-	err := bot.PostAPIRequestWithAuth("AddGroupMemberByUserID", addGroupMemberURL, params, &respData)
+	err := bot.PostAPIRequest("AddGroupMemberByUserID", addGroupMemberURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -160,7 +160,7 @@ func (bot *Bot) DeleteGroupMember(openChatID string, openID []string) (*DeleteGr
 		"open_ids":     openID,
 	}
 	var respData DeleteGroupMemberResponse
-	err := bot.PostAPIRequestWithAuth("DeleteGroupMember", deleteGroupMemberURL, params, &respData)
+	err := bot.PostAPIRequest("DeleteGroupMember", deleteGroupMemberURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -170,7 +170,7 @@ func (bot *Bot) UpdateGroupInfo(params *UpdateGroupInfoReq) (*UpdateGroupInfoRes
 		return nil, fmt.Errorf("open chat id is empty in parameters")
 	}
 	var respData UpdateGroupInfoResponse
-	err := bot.PostAPIRequestWithAuth("UpdateGroupInfo", updateGroupURL, params, &respData)
+	err := bot.PostAPIRequest("UpdateGroupInfo", updateGroupURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -180,7 +180,7 @@ func (bot *Bot) AddBotToGroup(openChatID string) (*AddBotToGroupResponse, error)
 		"chat_id": openChatID,
 	}
 	var respData AddBotToGroupResponse
-	err := bot.PostAPIRequestWithAuth("AddBotToGroup", addBotToGroupURL, params, &respData)
+	err := bot.PostAPIRequest("AddBotToGroup", addBotToGroupURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -190,7 +190,7 @@ func (bot *Bot) RemoveBotFromGroup(openChatID string) (*RemoveBotFromGroupRespon
 		"chat_id": openChatID,
 	}
 	var respData RemoveBotFromGroupResponse
-	err := bot.PostAPIRequestWithAuth("RemoveBotFromGroup", removeBotFromGroupURL, params, &respData)
+	err := bot.PostAPIRequest("RemoveBotFromGroup", removeBotFromGroupURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -200,6 +200,6 @@ func (bot *Bot) DisbandGroup(openChatID string) (*DisbandGroupResponse, error) {
 		"chat_id": openChatID,
 	}
 	var respData DisbandGroupResponse
-	err := bot.PostAPIRequestWithAuth("DisbandGroup", disbandGroupURL, params, &respData)
+	err := bot.PostAPIRequest("DisbandGroup", disbandGroupURL, true, params, &respData)
 	return &respData, err
 }

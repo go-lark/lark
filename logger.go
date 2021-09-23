@@ -23,6 +23,11 @@ func (bot *Bot) SetLogger(logger *log.Logger) {
 	bot.logger = logger
 }
 
+// Logger returns current logger
+func (bot Bot) Logger() *log.Logger {
+	return bot.logger
+}
+
 func (bot *Bot) captureOutput(f func()) string {
 	var buf bytes.Buffer
 	bot.logger.SetOutput(&buf)

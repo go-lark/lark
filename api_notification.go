@@ -22,7 +22,7 @@ func (bot *Bot) PostNotification(title, text string) (*PostNotificationResp, err
 		"text":  text,
 	}
 	var respData PostNotificationResp
-	err := bot.PostAPIRequest("PostNotification", bot.webhook, params, &respData)
+	err := bot.PostAPIRequest("PostNotification", bot.webhook, false, params, &respData)
 	return &respData, err
 }
 
@@ -37,6 +37,6 @@ func (bot *Bot) PostNotificationV2(om OutcomingMessage) (*PostNotificationV2Resp
 	}
 	params := BuildOutcomingMessageReq(om)
 	var respData PostNotificationV2Resp
-	err := bot.PostAPIRequest("PostNotificationV2", bot.webhook, params, &respData)
+	err := bot.PostAPIRequest("PostNotificationV2", bot.webhook, false, params, &respData)
 	return &respData, err
 }

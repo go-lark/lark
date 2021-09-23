@@ -116,4 +116,6 @@ func TestSetLogger(t *testing.T) {
 	bot.SetLogger(newLogger)
 	assert.Equal(t, newLogger, bot.logger)
 	assert.Equal(t, "new logger", bot.logger.Prefix())
+	assert.Equal(t, newLogger, bot.Logger())
+	assert.Equal(t, "new logger", bot.Logger().Prefix())
 }
