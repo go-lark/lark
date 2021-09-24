@@ -30,6 +30,9 @@ type Bot struct {
 	domain string
 	// http client
 	client *http.Client
+	// custom http client
+	useCustomClient bool
+	customClient    HTTPWrapper
 	// auth heartbeat
 	heartbeat      chan bool
 	debugHeartbeat int
@@ -80,15 +83,22 @@ func (bot *Bot) SetClient(c *http.Client) {
 	bot.client = c
 }
 
-// Client returns http client
-func (bot Bot) Client() *http.Client {
-	return bot.client
-}
-
 func initClient() *http.Client {
 	return &http.Client{
 		Timeout: 5 * time.Second,
 	}
+}
+
+// SetCustomClient .
+func (bot *Bot) SetCustomClient(c HTTPWrapper) {
+	bot.useCustomClient = true
+	bot.customClient = c
+}
+
+// UnsetCustomClient .
+func (bot *Bot) UnsetCustomClient() {
+	bot.useCustomClient = false
+	bot.customClient = nil
 }
 
 // SetDomain set domain of endpoint, so we could call Feishu/Lark

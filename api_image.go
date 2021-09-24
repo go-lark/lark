@@ -5,11 +5,11 @@ package lark
 
 import (
 	"bytes"
-	"encoding/json"
 	"image"
 	"image/jpeg"
 	"io"
 	"mime/multipart"
+	"net/http"
 	"os"
 )
 
@@ -49,17 +49,11 @@ func (bot *Bot) UploadImage(path string) (*UploadImageResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	req, err := bot.RawAPIRequest("POST", "UploadImage", uploadImageURL, true, body)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-
-	resp, err := bot.client.Do(req)
 	var respData UploadImageResponse
-	err = json.NewDecoder(resp.Body).Decode(&respData)
+	header := make(http.Header)
+	header.Set("Content-Type", writer.FormDataContentType())
+	err = bot.DoAPIRequest("POST", "UploadImage", uploadImageURL, header, true, body, &respData)
 	if err != nil {
-		bot.logger.Println("UploadImage decode body failed:", err)
 		return nil, err
 	}
 	return &respData, err
@@ -82,18 +76,11 @@ func (bot *Bot) UploadImageObject(img image.Image) (*UploadImageResponse, error)
 	if err != nil {
 		return nil, err
 	}
-	req, err := bot.RawAPIRequest("POST", "UploadImageObject", uploadImageURL, true, body)
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-
-	resp, err := bot.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
 	var respData UploadImageResponse
-	err = json.NewDecoder(resp.Body).Decode(&respData)
+	header := make(http.Header)
+	header.Set("Content-Type", writer.FormDataContentType())
+	err = bot.DoAPIRequest("POST", "UploadImage", uploadImageURL, header, true, body, &respData)
 	if err != nil {
-		bot.logger.Println("UploadImageObject decode body failed:", err)
 		return nil, err
 	}
 	return &respData, err

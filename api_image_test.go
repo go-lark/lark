@@ -11,7 +11,7 @@ import (
 func TestUploadImage(t *testing.T) {
 	resp, err := bot.UploadImage("./fixtures/test.jpg")
 	if assert.NoError(t, err) {
-		assert.Equal(t, 0, resp.Code)
+		assert.Zero(t, resp.Code)
 		t.Log(resp.Data.ImageKey)
 		assert.NotEmpty(t, resp.Data.ImageKey)
 	}
@@ -23,7 +23,7 @@ func TestUploadImageObject(t *testing.T) {
 
 	resp, err := bot.UploadImageObject(img)
 	if assert.NoError(t, err) {
-		assert.Equal(t, 0, resp.Code)
+		assert.Zero(t, resp.Code)
 		t.Log(resp.Data.ImageKey)
 		assert.NotEmpty(t, resp.Data.ImageKey)
 	}
