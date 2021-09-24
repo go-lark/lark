@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-// HTTPWrapper is a wrapper. The Default implementation is for net/http.
-// And you may implement your own by yourself.
+// HTTPWrapper is a wrapper interface, which enables extension on HTTP part.
+// Typicall, we do not need this because default client is sufficient.
 type HTTPWrapper interface {
 	Do(method, prefix, url string, header http.Header, body io.Reader) (io.ReadCloser, error)
 }
