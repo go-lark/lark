@@ -6,12 +6,10 @@ package lark
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"image"
 	"image/jpeg"
 	"io"
 	"mime/multipart"
-	"net/http"
 	"os"
 )
 
@@ -51,21 +49,17 @@ func (bot *Bot) UploadImage(path string) (*UploadImageResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	request, _ := http.NewRequest("POST", fmt.Sprintf("%s%s", bot.domain, uploadImageURL), body)
-	request.Header.Set("Content-Type", writer.FormDataContentType())
-	var bearer = "Bearer " + bot.tenantAccessToken
-	request.Header.Set("Authorization", bearer)
-
-	client := http.Client{}
-	resp, err := client.Do(request)
+	req, err := bot.RawAPIRequest("POST", "UploadImage", uploadImageURL, true, body)
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+
+	resp, err := bot.client.Do(req)
 	var respData UploadImageResponse
 	err = json.NewDecoder(resp.Body).Decode(&respData)
 	if err != nil {
-		bot.logger.Printf("UploadImage decode body failed: %+v\n", err)
+		bot.logger.Println("UploadImage decode body failed:", err)
 		return nil, err
 	}
 	return &respData, err
@@ -88,13 +82,10 @@ func (bot *Bot) UploadImageObject(img image.Image) (*UploadImageResponse, error)
 	if err != nil {
 		return nil, err
 	}
-	request, _ := http.NewRequest("POST", fmt.Sprintf("%s%s", bot.domain, uploadImageURL), body)
-	request.Header.Set("Content-Type", writer.FormDataContentType())
-	var bearer = "Bearer " + bot.tenantAccessToken
-	request.Header.Set("Authorization", bearer)
+	req, err := bot.RawAPIRequest("POST", "UploadImageObject", uploadImageURL, true, body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
 
-	client := http.Client{}
-	resp, err := client.Do(request)
+	resp, err := bot.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +93,7 @@ func (bot *Bot) UploadImageObject(img image.Image) (*UploadImageResponse, error)
 	var respData UploadImageResponse
 	err = json.NewDecoder(resp.Body).Decode(&respData)
 	if err != nil {
-		bot.logger.Printf("UploadImage decode body failed: %+v\n", err)
+		bot.logger.Println("UploadImageObject decode body failed:", err)
 		return nil, err
 	}
 	return &respData, err

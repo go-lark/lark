@@ -13,18 +13,11 @@ func (bot Bot) ExpandURL(urlPath string) string {
 	return url
 }
 
-// httpPostWithAuth send http posts with bearer token
-func (bot Bot) httpPost(urlPath string, auth bool, params interface{}) (*http.Response, error) {
-	buf := new(bytes.Buffer)
-	err := json.NewEncoder(buf).Encode(params)
+// RawAPIRequest builds http request
+func (bot Bot) RawAPIRequest(method, prefix, urlPath string, auth bool, body *bytes.Buffer) (*http.Request, error) {
+	req, err := http.NewRequest(method, bot.ExpandURL(urlPath), body)
 	if err != nil {
-		bot.logger.Printf("Encode json failed: %+v\n", err)
-		return nil, err
-	}
-	url := bot.ExpandURL(urlPath)
-	req, err := http.NewRequest("POST", url, buf)
-	if err != nil {
-		bot.logger.Printf("Init request failed: %+v\n", err)
+		bot.logger.Printf("[%s] init request failed: %+v\n", prefix, err)
 		return nil, err
 	}
 
@@ -34,13 +27,23 @@ func (bot Bot) httpPost(urlPath string, auth bool, params interface{}) (*http.Re
 		req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	}
 
-	resp, err := bot.client.Do(req)
-	return resp, err
+	return req, err
 }
 
 // PostAPIRequest call Lark API without auth tokens
 func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
-	resp, err := bot.httpPost(urlPath, auth, params)
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(params)
+	if err != nil {
+		bot.logger.Printf("[%s] encode json failed: %+v\n", prefix, err)
+		return err
+	}
+
+	req, err := bot.RawAPIRequest("POST", prefix, urlPath, auth, buf)
+	if err != nil {
+		return err
+	}
+	resp, err := bot.client.Do(req)
 	if err != nil {
 		bot.logger.Printf("[%s] call failed: %+v\n", prefix, err)
 		return err
