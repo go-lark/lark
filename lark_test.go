@@ -133,13 +133,3 @@ func TestCustomClient(t *testing.T) {
 	bot.SetCustomClient(c)
 	assert.NotNil(t, bot.customClient)
 }
-
-func TestSetLogger(t *testing.T) {
-	bot := newTestBot()
-	newLogger := log.New(os.Stderr, "new logger", log.LstdFlags)
-	bot.SetLogger(newLogger)
-	assert.Equal(t, newLogger, bot.logger)
-	assert.Equal(t, "new logger", bot.logger.Prefix())
-	assert.Equal(t, newLogger, bot.Logger())
-	assert.Equal(t, "new logger", bot.Logger().Prefix())
-}

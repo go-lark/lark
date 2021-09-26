@@ -14,6 +14,10 @@ func (bot Bot) ExpandURL(urlPath string) string {
 	return url
 }
 
+func (bot Bot) httpErrorLog(prefix, text string, err error) {
+	bot.logger.Log(LogLevelError, fmt.Sprintf("[%s] %s: %+v\n", prefix, text, err))
+}
+
 // DoAPIRequest builds http request
 func (bot Bot) DoAPIRequest(
 	method string,
@@ -38,19 +42,19 @@ func (bot Bot) DoAPIRequest(
 		}
 		respBody, err = bot.customClient.Do(method, url, header, body)
 		if err != nil {
-			bot.logger.Printf("[%s] call failed: %+v\n", prefix, err)
+			bot.httpErrorLog(prefix, "call failed", err)
 			return err
 		}
 	} else {
 		req, err := http.NewRequest(method, url, body)
 		if err != nil {
-			bot.logger.Printf("[%s] init request failed: %+v\n", prefix, err)
+			bot.httpErrorLog(prefix, "init request failed", err)
 			return err
 		}
 		req.Header = header
 		resp, err := bot.client.Do(req)
 		if err != nil {
-			bot.logger.Printf("[%s] call failed: %+v\n", prefix, err)
+			bot.httpErrorLog(prefix, "call failed", err)
 			return err
 		}
 		respBody = resp.Body
@@ -58,7 +62,7 @@ func (bot Bot) DoAPIRequest(
 	defer respBody.Close()
 	err = json.NewDecoder(respBody).Decode(&output)
 	if err != nil {
-		bot.logger.Printf("[%s] decode body failed: %+v\n", prefix, err)
+		bot.httpErrorLog(prefix, "decode body failed", err)
 		return err
 	}
 	return err
@@ -69,7 +73,7 @@ func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interfac
 	buf := new(bytes.Buffer)
 	err := json.NewEncoder(buf).Encode(params)
 	if err != nil {
-		bot.logger.Printf("[%s] encode json failed: %+v\n", prefix, err)
+		bot.httpErrorLog(prefix, "encode JSON failed", err)
 		return err
 	}
 
