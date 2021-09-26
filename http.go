@@ -36,7 +36,7 @@ func (bot Bot) DoAPIRequest(
 		if bot.customClient == nil {
 			return ErrCustomHTTPClientNotSet
 		}
-		respBody, err = bot.customClient.Do(method, prefix, url, header, body)
+		respBody, err = bot.customClient.Do(method, url, header, body)
 		if err != nil {
 			bot.logger.Printf("[%s] call failed: %+v\n", prefix, err)
 			return err
