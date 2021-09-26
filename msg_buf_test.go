@@ -51,19 +51,18 @@ func TestMsgShareChat(t *testing.T) {
 }
 
 func TestMsgWithWrongType(t *testing.T) {
-	// with wrong type
 	mb := NewMsgBuffer(MsgText)
 	mb.ShareChat("6559399282837815565")
-	assert.Contains(t, mb.Error(), "`ShareChat` is only available to MsgShareChat")
+	assert.Equal(t, mb.Error().Error(), "`ShareChat` is only available to `share_chat`")
 	mb.Image("aaa")
-	assert.Contains(t, mb.Error(), "`Image` is only available to MsgImage")
+	assert.Equal(t, mb.Error().Error(), "`Image` is only available to `image`")
 	mb.Post(nil)
-	assert.Contains(t, mb.Error(), "`Post` is only available to MsgPost")
+	assert.Equal(t, mb.Error().Error(), "`Post` is only available to `post`")
 	mb.Card("nil")
-	assert.Contains(t, mb.Error(), "`Card` is only available to MsgInteractive")
+	assert.Equal(t, mb.Error().Error(), "`Card` is only available to `interactive`")
 	mbp := NewMsgBuffer(MsgPost)
 	mbp.Text("hello")
-	assert.Contains(t, mb.Error(), "`Text` is only available to MsgText")
+	assert.Equal(t, mbp.Error().Error(), "`Text` is only available to `text`")
 }
 
 func TestClearMessage(t *testing.T) {

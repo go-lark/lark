@@ -72,7 +72,7 @@ func (m *MsgBuffer) UpdateMulti(flag bool) *MsgBuffer {
 }
 
 func (m MsgBuffer) typeError(funcName string, msgType MessageType) error {
-	return fmt.Errorf("`%s` is only avalable to %s", funcName, msgType)
+	return fmt.Errorf("`%s` is only available to `%s`", funcName, msgType)
 }
 
 // Text attaches text
