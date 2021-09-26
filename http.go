@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -13,42 +14,69 @@ func (bot Bot) ExpandURL(urlPath string) string {
 	return url
 }
 
-// httpPostWithAuth send http posts with bearer token
-func (bot Bot) httpPost(urlPath string, auth bool, params interface{}) (*http.Response, error) {
-	buf := new(bytes.Buffer)
-	err := json.NewEncoder(buf).Encode(params)
-	if err != nil {
-		bot.logger.Printf("Encode json failed: %+v\n", err)
-		return nil, err
+// DoAPIRequest builds http request
+func (bot Bot) DoAPIRequest(
+	method string,
+	prefix, urlPath string,
+	header http.Header, auth bool,
+	body io.Reader,
+	output interface{}) error {
+	var (
+		err      error
+		respBody io.ReadCloser
+		url      = bot.ExpandURL(urlPath)
+	)
+	if header == nil {
+		header = make(http.Header)
 	}
-	url := bot.ExpandURL(urlPath)
-	req, err := http.NewRequest("POST", url, buf)
-	if err != nil {
-		bot.logger.Printf("Init request failed: %+v\n", err)
-		return nil, err
-	}
-
 	if auth {
-		bearer := "Bearer " + bot.tenantAccessToken
-		req.Header.Set("Authorization", bearer)
-		req.Header.Set("Content-Type", "application/json; charset=utf-8")
+		header.Add("Authorization", fmt.Sprintf("Bearer %s", bot.tenantAccessToken))
 	}
-
-	resp, err := bot.client.Do(req)
-	return resp, err
+	if bot.useCustomClient {
+		if bot.customClient == nil {
+			return ErrCustomHTTPClientNotSet
+		}
+		respBody, err = bot.customClient.Do(method, prefix, url, header, body)
+		if err != nil {
+			bot.logger.Printf("[%s] call failed: %+v\n", prefix, err)
+			return err
+		}
+	} else {
+		req, err := http.NewRequest(method, url, body)
+		if err != nil {
+			bot.logger.Printf("[%s] init request failed: %+v\n", prefix, err)
+			return err
+		}
+		req.Header = header
+		resp, err := bot.client.Do(req)
+		if err != nil {
+			bot.logger.Printf("[%s] call failed: %+v\n", prefix, err)
+			return err
+		}
+		respBody = resp.Body
+	}
+	defer respBody.Close()
+	err = json.NewDecoder(respBody).Decode(&output)
+	if err != nil {
+		bot.logger.Printf("[%s] decode body failed: %+v\n", prefix, err)
+		return err
+	}
+	return err
 }
 
 // PostAPIRequest call Lark API without auth tokens
 func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
-	resp, err := bot.httpPost(urlPath, auth, params)
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(params)
 	if err != nil {
-		bot.logger.Printf("[%s] call failed: %+v\n", prefix, err)
+		bot.logger.Printf("[%s] encode json failed: %+v\n", prefix, err)
 		return err
 	}
-	defer resp.Body.Close()
-	err = json.NewDecoder(resp.Body).Decode(&output)
+
+	header := make(http.Header)
+	header.Set("Content-Type", "application/json; charset=utf-8")
+	err = bot.DoAPIRequest("POST", prefix, urlPath, nil, auth, buf, output)
 	if err != nil {
-		bot.logger.Printf("[%s] decode body failed: %+v\n", prefix, err)
 		return err
 	}
 	return nil

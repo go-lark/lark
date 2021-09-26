@@ -3,6 +3,7 @@ package lark
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -114,7 +115,23 @@ func TestSetClient(t *testing.T) {
 	bot := &Bot{}
 	assert.Nil(t, bot.client)
 	bot.SetClient(&http.Client{})
-	assert.NotNil(t, bot.Client())
+	assert.NotNil(t, bot.client)
+}
+
+type customHTTPWrapper struct {
+	client *http.Client
+}
+
+func (c customHTTPWrapper) Do(method, prefix, url string, header http.Header, body io.Reader) (io.ReadCloser, error) {
+	return nil, nil
+}
+
+func TestCustomClient(t *testing.T) {
+	bot := &Bot{}
+	assert.Nil(t, bot.customClient)
+	var c customHTTPWrapper
+	bot.SetCustomClient(c)
+	assert.NotNil(t, bot.customClient)
 }
 
 func TestSetLogger(t *testing.T) {

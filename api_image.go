@@ -5,8 +5,6 @@ package lark
 
 import (
 	"bytes"
-	"encoding/json"
-	"fmt"
 	"image"
 	"image/jpeg"
 	"io"
@@ -51,21 +49,11 @@ func (bot *Bot) UploadImage(path string) (*UploadImageResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	request, _ := http.NewRequest("POST", fmt.Sprintf("%s%s", bot.domain, uploadImageURL), body)
-	request.Header.Set("Content-Type", writer.FormDataContentType())
-	var bearer = "Bearer " + bot.tenantAccessToken
-	request.Header.Set("Authorization", bearer)
-
-	client := http.Client{}
-	resp, err := client.Do(request)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
 	var respData UploadImageResponse
-	err = json.NewDecoder(resp.Body).Decode(&respData)
+	header := make(http.Header)
+	header.Set("Content-Type", writer.FormDataContentType())
+	err = bot.DoAPIRequest("POST", "UploadImage", uploadImageURL, header, true, body, &respData)
 	if err != nil {
-		bot.logger.Printf("UploadImage decode body failed: %+v\n", err)
 		return nil, err
 	}
 	return &respData, err
@@ -88,21 +76,11 @@ func (bot *Bot) UploadImageObject(img image.Image) (*UploadImageResponse, error)
 	if err != nil {
 		return nil, err
 	}
-	request, _ := http.NewRequest("POST", fmt.Sprintf("%s%s", bot.domain, uploadImageURL), body)
-	request.Header.Set("Content-Type", writer.FormDataContentType())
-	var bearer = "Bearer " + bot.tenantAccessToken
-	request.Header.Set("Authorization", bearer)
-
-	client := http.Client{}
-	resp, err := client.Do(request)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
 	var respData UploadImageResponse
-	err = json.NewDecoder(resp.Body).Decode(&respData)
+	header := make(http.Header)
+	header.Set("Content-Type", writer.FormDataContentType())
+	err = bot.DoAPIRequest("POST", "UploadImage", uploadImageURL, header, true, body, &respData)
 	if err != nil {
-		bot.logger.Printf("UploadImage decode body failed: %+v\n", err)
 		return nil, err
 	}
 	return &respData, err
