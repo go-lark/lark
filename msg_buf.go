@@ -2,7 +2,7 @@ package lark
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 )
 
 // MsgBuffer stores all the messages attached
@@ -12,6 +12,8 @@ type MsgBuffer struct {
 	msgType MessageType
 	// Output
 	message OutcomingMessage
+
+	err error
 }
 
 // NewMsgBuffer create a message buffer
@@ -69,10 +71,15 @@ func (m *MsgBuffer) UpdateMulti(flag bool) *MsgBuffer {
 	return m
 }
 
+func (m MsgBuffer) typeError(funcName string, msgType MessageType) error {
+	return fmt.Errorf("`%s` is only avalable to %s", funcName, msgType)
+}
+
 // Text attaches text
 func (m *MsgBuffer) Text(text string) *MsgBuffer {
 	if m.msgType != MsgText {
-		log.Println("`Text` is only available to MsgText")
+		m.err = m.typeError("Text", MsgText)
+		return m
 	}
 	m.message.Content.Text = &text
 	return m
@@ -82,7 +89,8 @@ func (m *MsgBuffer) Text(text string) *MsgBuffer {
 // for MsgImage only
 func (m *MsgBuffer) Image(imageKey string) *MsgBuffer {
 	if m.msgType != MsgImage {
-		log.Println("`Image` is only available to MsgImage")
+		m.err = m.typeError("Image", MsgImage)
+		return m
 	}
 	m.message.Content.ImageKey = &imageKey
 	return m
@@ -92,7 +100,8 @@ func (m *MsgBuffer) Image(imageKey string) *MsgBuffer {
 // for MsgShareChat only
 func (m *MsgBuffer) ShareChat(chatID string) *MsgBuffer {
 	if m.msgType != MsgShareCard {
-		log.Println("`ShareChat` is only available to MsgShareChat")
+		m.err = m.typeError("ShareChat", MsgShareCard)
+		return m
 	}
 	m.message.Content.ShareChat = &chatID
 	return m
@@ -101,7 +110,8 @@ func (m *MsgBuffer) ShareChat(chatID string) *MsgBuffer {
 // Post sets raw post content
 func (m *MsgBuffer) Post(postContent *PostContent) *MsgBuffer {
 	if m.msgType != MsgPost {
-		log.Println("`Post` is only available to MsgPost")
+		m.err = m.typeError("Post", MsgPost)
+		return m
 	}
 	m.message.Content.Post = postContent
 	return m
@@ -110,7 +120,8 @@ func (m *MsgBuffer) Post(postContent *PostContent) *MsgBuffer {
 // Card binds card content with V4 format
 func (m *MsgBuffer) Card(cardContent string) *MsgBuffer {
 	if m.msgType != MsgInteractive {
-		log.Println("`Card` is only available to MsgInteractive")
+		m.err = m.typeError("Card", MsgInteractive)
+		return m
 	}
 	m.message.Card = new(map[string]interface{})
 	_ = json.Unmarshal([]byte(cardContent), m.message.Card)
@@ -122,10 +133,16 @@ func (m *MsgBuffer) Build() OutcomingMessage {
 	return m.message
 }
 
+// Error returns last error
+func (m *MsgBuffer) Error() error {
+	return m.err
+}
+
 // Clear message in buffer
 func (m *MsgBuffer) Clear() *MsgBuffer {
 	m.message = OutcomingMessage{
 		MsgType: m.msgType,
 	}
+	m.err = nil
 	return m
 }

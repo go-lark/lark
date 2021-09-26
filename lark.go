@@ -1,7 +1,6 @@
 package lark
 
 import (
-	"log"
 	"net/http"
 	"time"
 )
@@ -37,7 +36,7 @@ type Bot struct {
 	heartbeat      chan bool
 	debugHeartbeat int
 
-	logger *log.Logger
+	logger LogWrapper
 }
 
 // Domains
