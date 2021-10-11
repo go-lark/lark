@@ -1,6 +1,8 @@
 package lark
 
 import (
+	"context"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -27,4 +29,11 @@ func TestLogLevel(t *testing.T) {
 	assert.Equal(t, "INFO", logLevel.String())
 	logLevel = 1000
 	assert.Equal(t, "", logLevel.String())
+}
+
+func TestWithContext(t *testing.T) {
+	bot := newTestBot()
+	assert.Equal(t, "context.Background", fmt.Sprintf("%s", bot.ctx))
+	bot.WithContext(context.TODO())
+	assert.Equal(t, "context.TODO", fmt.Sprintf("%s", bot.ctx))
 }
