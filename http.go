@@ -40,7 +40,7 @@ func (bot Bot) DoAPIRequest(
 		if bot.customClient == nil {
 			return ErrCustomHTTPClientNotSet
 		}
-		respBody, err = bot.customClient.Do(method, url, header, body)
+		respBody, err = bot.customClient.Do(bot.ctx, method, url, header, body)
 		if err != nil {
 			bot.httpErrorLog(prefix, "call failed", err)
 			return err
