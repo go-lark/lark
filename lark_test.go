@@ -2,6 +2,7 @@ package lark
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"log"
@@ -122,7 +123,7 @@ type customHTTPWrapper struct {
 	client *http.Client
 }
 
-func (c customHTTPWrapper) Do(method, url string, header http.Header, body io.Reader) (io.ReadCloser, error) {
+func (c customHTTPWrapper) Do(ctx context.Context, method, url string, header http.Header, body io.Reader) (io.ReadCloser, error) {
 	return nil, nil
 }
 

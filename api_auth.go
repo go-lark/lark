@@ -1,7 +1,6 @@
 package lark
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -69,7 +68,7 @@ func (bot *Bot) StopHeartbeat() {
 // StartHeartbeat renew auth token periodically
 func (bot *Bot) StartHeartbeat() {
 	if !bot.requireType(ChatBot) {
-		bot.logger.Log(LogLevelError, "Heartbeat only support Chat Bot")
+		bot.logger.Log(bot.ctx, LogLevelError, "Heartbeat only support Chat Bot")
 		return
 	}
 
@@ -79,7 +78,7 @@ func (bot *Bot) StartHeartbeat() {
 			next := time.Second * 10
 			resp, err := bot.GetTenantAccessTokenInternal(true)
 			if err != nil {
-				bot.logger.Log(LogLevelError, fmt.Sprintf("Heartbeat failed to get tenant access token: %s\n", err))
+				bot.httpErrorLog("Heartbeat", "failed to get tenant access token", err)
 			}
 			if resp != nil && resp.Expire-20 > 0 {
 				next = time.Duration(resp.Expire-20) * time.Second
