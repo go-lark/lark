@@ -15,7 +15,7 @@ func (bot Bot) ExpandURL(urlPath string) string {
 }
 
 func (bot Bot) httpErrorLog(prefix, text string, err error) {
-	bot.logger.Log(LogLevelError, fmt.Sprintf("[%s] %s: %+v\n", prefix, text, err))
+	bot.logger.Log(bot.ctx, LogLevelError, fmt.Sprintf("[%s] %s: %+v\n", prefix, text, err))
 }
 
 // DoAPIRequest builds http request
@@ -46,7 +46,7 @@ func (bot Bot) DoAPIRequest(
 			return err
 		}
 	} else {
-		req, err := http.NewRequest(method, url, body)
+		req, err := http.NewRequestWithContext(bot.ctx, method, url, body)
 		if err != nil {
 			bot.httpErrorLog(prefix, "init request failed", err)
 			return err

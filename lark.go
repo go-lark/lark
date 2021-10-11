@@ -1,6 +1,7 @@
 package lark
 
 import (
+	"context"
 	"net/http"
 	"time"
 )
@@ -36,6 +37,7 @@ type Bot struct {
 	heartbeat      chan bool
 	debugHeartbeat int
 
+	ctx    context.Context
 	logger LogWrapper
 }
 
@@ -53,6 +55,7 @@ func NewChatBot(appID, appSecret string) *Bot {
 		appSecret: appSecret,
 		client:    initClient(),
 		domain:    DomainFeishu,
+		ctx:       context.Background(),
 		logger:    initDefaultLogger(),
 	}
 }
@@ -63,6 +66,7 @@ func NewNotificationBot(hookURL string) *Bot {
 		botType: NotificationBot,
 		webhook: hookURL,
 		client:  initClient(),
+		ctx:     context.Background(),
 		logger:  initDefaultLogger(),
 	}
 }

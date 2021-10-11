@@ -2,6 +2,7 @@ package lark
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"log"
 	"os"
@@ -22,7 +23,7 @@ const (
 // LogWrapper interface
 type LogWrapper interface {
 	// for log print
-	Log(LogLevel, string)
+	Log(context.Context, LogLevel, string)
 	// for test redirection
 	SetOutput(io.Writer)
 }
@@ -48,7 +49,7 @@ type stdLogger struct {
 	*log.Logger
 }
 
-func (sl stdLogger) Log(level LogLevel, msg string) {
+func (sl stdLogger) Log(_ context.Context, level LogLevel, msg string) {
 	sl.Printf("[%s] %s\n", level, msg)
 }
 
@@ -70,6 +71,12 @@ func (bot *Bot) SetLogger(logger LogWrapper) {
 // Logger returns current logger
 func (bot Bot) Logger() LogWrapper {
 	return bot.logger
+}
+
+// WithContext .
+func (bot *Bot) WithContext(ctx context.Context) *Bot {
+	bot.ctx = ctx
+	return bot
 }
 
 func (bot Bot) captureOutput(f func()) string {
