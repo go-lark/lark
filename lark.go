@@ -110,6 +110,11 @@ func (bot *Bot) SetDomain(domain string) {
 	bot.domain = domain
 }
 
+// Domain returns current domain
+func (bot Bot) Domain() string {
+	return bot.domain
+}
+
 // AppID returns bot.appID for external use
 func (bot Bot) AppID() string {
 	return bot.appID

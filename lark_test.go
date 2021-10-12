@@ -100,8 +100,10 @@ func TestRequiredType(t *testing.T) {
 func TestSetDomain(t *testing.T) {
 	bot := newTestBot()
 	assert.Equal(t, DomainFeishu, bot.domain)
+	assert.Equal(t, DomainFeishu, bot.Domain())
 	bot.SetDomain("https://test.test")
 	assert.Equal(t, "https://test.test", bot.domain)
+	assert.Equal(t, "https://test.test", bot.Domain())
 }
 
 func TestBotGetters(t *testing.T) {
