@@ -79,7 +79,7 @@ func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interfac
 
 	header := make(http.Header)
 	header.Set("Content-Type", "application/json; charset=utf-8")
-	err = bot.DoAPIRequest("POST", prefix, urlPath, nil, auth, buf, output)
+	err = bot.DoAPIRequest("POST", prefix, urlPath, header, auth, buf, output)
 	if err != nil {
 		return err
 	}
