@@ -201,7 +201,7 @@ Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/main
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
-middleware.BindURLPrefix("/handle") // suppose URL is http://your.domain.com/handle
+middleware.BindURLPrefix("/handle") // supposed URL is http://your.domain.com/handle
 r.Use(middleware.LarkChallengeHandler())
 ```
 
@@ -210,6 +210,7 @@ r.Use(middleware.LarkChallengeHandler())
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
+middleware.BindURLPrefix("/handle") // supposed URL is http://your.domain.com/handle
 r.POST("/handle", func(c *gin.Context) {
     if msg, ok := middleware.GetMessage(c); ok && msg != nil {
         text := msg.Event.Text
@@ -225,7 +226,12 @@ Lark Open Platform offers AES encryption and token verification to ensure securi
 - AES Encryption: when switch on, all traffic will be encrypted with AES.
 - Token Verification: simple token verification for incoming messages.
 
-We also recommend Gin middleware to handle encryption.
+We recommend you to enable token verification. If HTTPS is not available on your host, then enable AES encryption.
+
+```go
+middleware.WithTokenVerfication("<verification-token>")
+middleware.WithEncryption("<encryption-key>")
+```
 
 ### Debugging
 

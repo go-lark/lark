@@ -199,6 +199,7 @@ r.Use(middleware.LarkChallengeHandler())
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
+middleware.BindURLPrefix("/handle") // supposed URL is http://your.domain.com/handle
 r.POST("/handle", func(c *gin.Context) {
     if msg, ok := middleware.GetMessage(c); ok && msg != nil {
         text := msg.Event.Text
@@ -215,6 +216,11 @@ r.POST("/handle", func(c *gin.Context) {
 - Token 校验：验证消息来自 Lark 开放平台。
 
 我们建议开启 Token 校验。如果没有使用 HTTPS 协议，则开启 AES。
+
+```go
+middleware.WithTokenVerfication("<verification-token>")
+middleware.WithEncryption("<encryption-key>")
+```
 
 ### 调试
 
