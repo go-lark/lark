@@ -184,8 +184,8 @@ The meaning of `Code` is defined [here](https://open.feishu.cn/document/ukTMukTM
 
 ### Event
 
-Lark provides a number of [events](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM).
-go-lark now only implements two of them, which are needed for interacting between bot and Lark server:
+Lark provides a number of [events](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM) and they are in two different schema (1.0/2.0).
+go-lark now only implements two of them in schema 1.0, which are needed for interacting between bot and Lark server:
 
 - URL Challenge
 - Receiving Messages
