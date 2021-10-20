@@ -22,8 +22,8 @@ jobs:
     - name: lint
       run: |
         export PATH=$PATH:$(go env GOPATH)/bin
-        go get -u golang.org/x/lint/golint
-        golint -set_exit_status ./...
+        go install github.com/mgechev/revive@latest
+        revive -set_exit_status ./...
 
     - name: build
       run: ./scripts/test.sh
