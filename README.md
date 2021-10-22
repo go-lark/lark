@@ -6,10 +6,10 @@
 
 [简体中文](/README_zhCN.md)
 
-go-lark is an easy-to-use unofficial SDK for Feishu and Lark Open Platform,
+go-lark is an easy-to-use SDK for Feishu and Lark Open Platform,
 which implements messaging APIs, with full-fledged supports on building Chat Bot and Notification Bot.
 
-It is widely used and tested by in-house ~450 developers with over 1.5k Go packages.
+It is widely used and tested by ~450 ByteDance in-house developers with over 1.5k Go packages.
 
 ## Features
 
@@ -78,6 +78,7 @@ Feishu/Lark API offers more features, please refers to [Usage](#usage) for furth
   We do not guarantee all of the APIs work well with Lark, until we have tested it on Lark.
 - go-lark only supports Custom App. Marketplace App is not supported yet.
 - go-lark implements bot and messaging API, other APIs such as Lark Doc, Calendar and so so are not supported.
+- go-lark implements API in v3/v4 version* (official documents may also mention im/v1 version) and event with Schema 1.0.
 
 ### Switch to Lark Endpoints
 

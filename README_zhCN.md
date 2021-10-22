@@ -4,11 +4,11 @@
 [![codecov](https://codecov.io/gh/go-lark/lark/branch/main/graph/badge.svg)](https://codecov.io/gh/go-lark/lark)
 [![Go Reference](https://pkg.go.dev/badge/github.com/go-lark/lark.svg)](https://pkg.go.dev/github.com/go-lark/lark)
 
-一个简单、开发者友好的 Lark 机器人非官方封装。
+一个简单、开发者友好的 Lark 开放平台机器人 SDK。
 
 ## 介绍
 
-go-lark 主要实现了消息类 API，提供完整的聊天机器人和通知机器人支持。在公司内部广泛应用，有大约 450 开发者和超过 1500 个 Go 仓库使用。
+go-lark 主要实现了消息类 API，提供完整的聊天机器人和通知机器人支持。在字节跳动公司内部得到广泛应用，有大约 450 开发者和超过 1500 个 Go 仓库使用。
 
 ## 功能
 
@@ -73,6 +73,7 @@ func main() {
 - go-lark 基于飞书域名进行测试，理论上可以完全兼容 Lark 平台（API 定义一致）。但我们不保证在 Lark 下完全可用，因为账户限于，没有专门测试过。
 - go-lark 仅支持企业自建应用，不支持应用商店应用（ISV）。
 - go-lark 仅实现了机器人和消息 API，对于飞书文档、日历等功能，并不支持。
+- go-lark 目前实现的是 API v3/v4 版本*（官方文档通常还会出现 im/v1 版本）以及事件 Schema 1.0 版本。
 
 ### 切换到 Lark 域名
 
