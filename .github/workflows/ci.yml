@@ -22,7 +22,7 @@ jobs:
     - name: lint
       run: |
         export PATH=$PATH:$(go env GOPATH)/bin
-        go install github.com/mgechev/revive@master
+        go get github.com/mgechev/revive@master
         revive -set_exit_status ./...
 
     - name: build
