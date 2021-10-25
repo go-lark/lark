@@ -34,7 +34,7 @@ func (bot Bot) DoAPIRequest(
 		header = make(http.Header)
 	}
 	if auth {
-		header.Add("Authorization", fmt.Sprintf("Bearer %s", bot.tenantAccessToken))
+		header.Add("Authorization", fmt.Sprintf("Bearer %s", bot.TenantAccessToken()))
 	}
 	if bot.useCustomClient {
 		if bot.customClient == nil {

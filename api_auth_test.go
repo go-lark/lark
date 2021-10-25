@@ -31,7 +31,7 @@ func TestAuthTenantAccessTokenInternal(t *testing.T) {
 
 func TestHeartbeat(t *testing.T) {
 	bot := newTestBot()
-	bot.debugHeartbeat = 1
+	bot.debugHeartbeat.Store(1)
 	assert.Nil(t, bot.heartbeat)
 	bot.StartHeartbeat()
 	time.Sleep(1 * time.Second)
