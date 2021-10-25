@@ -37,7 +37,7 @@ func (bot *Bot) GetAccessTokenInternal(updateToken bool) (*AuthTokenInternalResp
 	var respData AuthTokenInternalResponse
 	err := bot.PostAPIRequest("GetAccessTokenInternal", appAccessTokenInternalURL, false, params, &respData)
 	if err == nil && updateToken {
-		bot.accessToken = respData.AppAccessToken
+		bot.accessToken.Store(respData.AppAccessToken)
 	}
 	return &respData, err
 }
@@ -55,7 +55,7 @@ func (bot *Bot) GetTenantAccessTokenInternal(updateToken bool) (*TenantAuthToken
 	var respData TenantAuthTokenInternalResponse
 	err := bot.PostAPIRequest("GetTenantAccessTokenInternal", tenantAppAccessTokenInternalURL, false, params, &respData)
 	if err == nil && updateToken {
-		bot.tenantAccessToken = respData.TenantAppAccessToken
+		bot.tenantAccessToken.Store(respData.TenantAppAccessToken)
 	}
 	return &respData, err
 }
@@ -83,7 +83,8 @@ func (bot *Bot) StartHeartbeat() {
 			if resp != nil && resp.Expire-20 > 0 {
 				next = time.Duration(resp.Expire-20) * time.Second
 			}
-			if bot.debugHeartbeat > 0 {
+			debugHeartbeat := bot.debugHeartbeat.Load().(int)
+			if debugHeartbeat > 0 {
 				next = time.Second * 1
 			}
 			t := time.NewTimer(next)
@@ -91,8 +92,8 @@ func (bot *Bot) StartHeartbeat() {
 			case <-bot.heartbeat:
 				return
 			case <-t.C:
-				if bot.debugHeartbeat > 0 {
-					bot.debugHeartbeat++
+				if debugHeartbeat > 0 {
+					bot.debugHeartbeat.Store(debugHeartbeat + 1)
 				}
 			}
 		}

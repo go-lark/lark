@@ -3,6 +3,7 @@ package lark
 import (
 	"context"
 	"net/http"
+	"sync/atomic"
 	"time"
 )
 
@@ -22,8 +23,8 @@ type Bot struct {
 	// Auth info
 	appID             string
 	appSecret         string
-	accessToken       string
-	tenantAccessToken string
+	accessToken       atomic.Value
+	tenantAccessToken atomic.Value
 	// webhook for NotificationBot
 	webhook string
 	// API Domain
@@ -34,8 +35,9 @@ type Bot struct {
 	useCustomClient bool
 	customClient    HTTPWrapper
 	// auth heartbeat
-	heartbeat      chan bool
-	debugHeartbeat int
+	heartbeat chan bool
+	// auth heartbeat test utility integer
+	debugHeartbeat atomic.Value
 
 	ctx    context.Context
 	logger LogWrapper
@@ -49,7 +51,7 @@ const (
 
 // NewChatBot with appID and appSecret
 func NewChatBot(appID, appSecret string) *Bot {
-	return &Bot{
+	bot := &Bot{
 		botType:   ChatBot,
 		appID:     appID,
 		appSecret: appSecret,
@@ -58,17 +60,27 @@ func NewChatBot(appID, appSecret string) *Bot {
 		ctx:       context.Background(),
 		logger:    initDefaultLogger(),
 	}
+	bot.accessToken.Store("")
+	bot.tenantAccessToken.Store("")
+	bot.debugHeartbeat.Store(0)
+
+	return bot
 }
 
 // NewNotificationBot with URL
 func NewNotificationBot(hookURL string) *Bot {
-	return &Bot{
+	bot := &Bot{
 		botType: NotificationBot,
 		webhook: hookURL,
 		client:  initClient(),
 		ctx:     context.Background(),
 		logger:  initDefaultLogger(),
 	}
+	bot.accessToken.Store("")
+	bot.tenantAccessToken.Store("")
+	bot.debugHeartbeat.Store(0)
+
+	return bot
 }
 
 // requireType checks whether the action is allowed in a list of bot types
@@ -127,10 +139,10 @@ func (bot Bot) BotType() int {
 
 // AccessToken returns bot.accessToken for external use
 func (bot Bot) AccessToken() string {
-	return bot.accessToken
+	return bot.accessToken.Load().(string)
 }
 
 // TenantAccessToken returns bot.tenantAccessToken for external use
 func (bot Bot) TenantAccessToken() string {
-	return bot.tenantAccessToken
+	return bot.tenantAccessToken.Load().(string)
 }
