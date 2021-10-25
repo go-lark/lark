@@ -36,16 +36,16 @@ func TestHeartbeat(t *testing.T) {
 	bot.StartHeartbeat()
 	time.Sleep(1 * time.Second)
 	assert.NotEmpty(t, bot.tenantAccessToken)
-	assert.Equal(t, 1, bot.debugHeartbeat)
+	assert.Equal(t, 1, bot.debugHeartbeat.Load().(int))
 	time.Sleep(1 * time.Second)
-	assert.Equal(t, 2, bot.debugHeartbeat)
+	assert.Equal(t, 2, bot.debugHeartbeat.Load().(int))
 	bot.StopHeartbeat()
 	time.Sleep(2 * time.Second)
-	assert.Equal(t, 2, bot.debugHeartbeat)
+	assert.Equal(t, 2, bot.debugHeartbeat.Load().(int))
 	// restart heartbeat
 	bot.StartHeartbeat()
 	time.Sleep(2 * time.Second)
-	assert.Equal(t, 3, bot.debugHeartbeat)
+	assert.Equal(t, 3, bot.debugHeartbeat.Load().(int))
 }
 
 func TestInvalidHeartbeat(t *testing.T) {
