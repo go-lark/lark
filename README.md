@@ -173,7 +173,7 @@ Content functions:
 | Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                                                                     |
 | Image     | `MsgImage`       | Append image            | Need to upload to Lark server in advance                                                         |
 | ShareChat | `MsgShareCard`   | Append group share card |                                                                                                  |
-| Card      | `MsgInteractive` | Append interactive card | No `InteractiveBuilder` yet. You may try [Cardbuilder](https://open.feishu.cn/tool/cardbuilder). |
+| Card      | `MsgInteractive` | Append interactive card | May build with `CardBuilder`, see [Declarative card builder to Go](card/README.md) for usage     |
 
 ### Error Handling
 

@@ -165,7 +165,7 @@ Bind 函数：
 | Post      | `MsgPost`        | 添加富文本内容 | 可使用 `PostBuilder` 构造                                                                    |
 | Image     | `MsgImage`       | 添加图片       | 图片需要先上传到 飞书服务器                                                                  |
 | ShareChat | `MsgShareCard`   | 添加分享群卡片 |                                                                                              |
-| Card      | `MsgInteractive` | 添加交互式卡片 | 暂未支持构造器，建议使用[消息卡片搭建工具](https://open.feishu.cn/tool/cardbuilder)生成 JSON |
+| Card      | `MsgInteractive` | 添加交互式卡片 | 非国际化卡片可使用 `CardBuilder` 构造，详见[声明式卡片搭建工具 to Go](card/README_zhCN.md) |
 
 ### 异常处理
 
