@@ -3,6 +3,7 @@ package card
 var _ Element = (*TextBlock)(nil)
 var _ Element = (*MarkdownBlock)(nil)
 
+// TextBlock 文本元素
 type TextBlock struct {
 	tag     string
 	content string
@@ -22,6 +23,7 @@ func Text(s string) *TextBlock {
 	return &TextBlock{content: s, tag: "plain_text"}
 }
 
+// Render 渲染为 Renderer
 func (t *TextBlock) Render() Renderer {
 	ret := textRenderer{
 		ElementTag: ElementTag{
@@ -60,6 +62,7 @@ func (t *TextBlock) Href(name string, url *URLBlock) *TextBlock {
 	return t
 }
 
+// MarkdownBlock Markdown文本元素
 type MarkdownBlock struct {
 	*TextBlock
 }

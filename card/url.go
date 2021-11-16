@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*URLBlock)(nil)
 
+// URLBlock 链接模块
 type URLBlock struct {
 	href                         string
 	hrefAndroid, hrefIOS, hrefPC string
@@ -14,6 +15,7 @@ type urlRenderer struct {
 	PcURL      string `json:"pc_url,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (u *URLBlock) Render() Renderer {
 	return urlRenderer{
 		URL:        u.href,

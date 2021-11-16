@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*OverflowBlock)(nil)
 
+// OverflowBlock 折叠菜单元素
 type OverflowBlock struct {
 	options []Element
 	value   map[string]interface{}
@@ -15,12 +16,13 @@ type overflowRenderer struct {
 	Confirm Renderer               `json:"confirm,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (o *OverflowBlock) Render() Renderer {
 	ret := overflowRenderer{
 		ElementTag: ElementTag{
 			Tag: "overflow",
 		},
-		Options: RenderElements(o.options),
+		Options: renderElements(o.options),
 		Value:   o.value,
 	}
 	if o.confirm != nil {

@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*OptionBlock)(nil)
 
+// OptionBlock 选项元素
 type OptionBlock struct {
 	text, value, url string
 	multiURL         *URLBlock
@@ -14,6 +15,7 @@ type optionRenderer struct {
 	MultiURL Renderer `json:"multi_url,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (o *OptionBlock) Render() Renderer {
 	ret := optionRenderer{
 		Value: o.value,

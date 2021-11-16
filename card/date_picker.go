@@ -9,6 +9,7 @@ var (
 	_ Element = (*TimePickerBlock)(nil)
 )
 
+// PickerBlock 选择器基础元素
 type PickerBlock struct {
 	tag             string
 	initialDate     string
@@ -29,6 +30,7 @@ type pickerRenderer struct {
 	Confirm         Renderer               `json:"confirm,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (p *PickerBlock) Render() Renderer {
 	ret := pickerRenderer{
 		ElementTag: ElementTag{
@@ -66,6 +68,7 @@ func (p *PickerBlock) Confirm(title, text string) *PickerBlock {
 	return p
 }
 
+// DatePickerBlock 日期选择器元素
 type DatePickerBlock struct {
 	*PickerBlock
 }
@@ -86,6 +89,7 @@ func (d *DatePickerBlock) InitialDateString(date string) *DatePickerBlock {
 	return d
 }
 
+// DatetimePickerBlock 日期时间选择器元素
 type DatetimePickerBlock struct {
 	*PickerBlock
 }
@@ -106,6 +110,7 @@ func (d *DatetimePickerBlock) InitialDatetimeString(date string) *DatetimePicker
 	return d
 }
 
+// TimePickerBlock 时间选择器元素
 type TimePickerBlock struct {
 	*PickerBlock
 }

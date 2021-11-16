@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*ButtonBlock)(nil)
 
+// ButtonBlock 按钮元素
 type ButtonBlock struct {
 	text     *TextBlock
 	url      string
@@ -21,6 +22,7 @@ type buttonRenderer struct {
 	Confirm  Renderer               `json:"confirm,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (b *ButtonBlock) Render() Renderer {
 	ret := buttonRenderer{
 		ElementTag: ElementTag{

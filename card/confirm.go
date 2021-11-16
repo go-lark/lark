@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*ConfirmBlock)(nil)
 
+// ConfirmBlock 确认模块
 type ConfirmBlock struct {
 	title, text string
 }
@@ -11,6 +12,7 @@ type confirmRenderer struct {
 	Text  Renderer `json:"text"`
 }
 
+// Render 渲染为 Renderer
 func (c *ConfirmBlock) Render() Renderer {
 	return confirmRenderer{
 		Title: Text(c.title).Render(),

@@ -1,6 +1,6 @@
 package card
 
-func RenderElements(el []Element) []Renderer {
+func renderElements(el []Element) []Renderer {
 	ret := make([]Renderer, len(el))
 	for i, v := range el {
 		ret[i] = v.Render()

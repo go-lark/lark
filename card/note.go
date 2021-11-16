@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*NoteBlock)(nil)
 
+// NoteBlock 备注元素
 type NoteBlock struct {
 	elements []Element
 }
@@ -11,12 +12,13 @@ type noteRenderer struct {
 	Elements []Renderer `json:"elements"`
 }
 
+// Render 渲染为 Renderer
 func (n *NoteBlock) Render() Renderer {
 	return noteRenderer{
 		ElementTag: ElementTag{
 			Tag: "note",
 		},
-		Elements: RenderElements(n.elements),
+		Elements: renderElements(n.elements),
 	}
 }
 

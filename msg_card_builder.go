@@ -2,10 +2,10 @@ package lark
 
 import "github.com/go-lark/lark/card"
 
+// CardBlock 卡片元素
 type CardBlock = card.Block
-type CardElement = card.Element
-type CardRenderer = card.Renderer
 
+// CardBuilder 卡片构造方法
 type CardBuilder interface {
 	Card(elements ...card.Element) *CardBlock
 	Action(actions ...card.Element) *card.ActionBlock
@@ -29,6 +29,7 @@ type CardBuilder interface {
 
 type cardBuilder struct{}
 
+// NewCardBuilder 新建卡片构造器
 func NewCardBuilder() CardBuilder {
 	return cardBuilder{}
 }

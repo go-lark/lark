@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*ImgBlock)(nil)
 
+// ImgBlock 图片元素
 type ImgBlock struct {
 	key       string
 	alt       string
@@ -23,6 +24,7 @@ type imgRenderer struct {
 	Preview      *bool    `json:"preview,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (i *ImgBlock) Render() Renderer {
 	r := imgRenderer{
 		ElementTag: ElementTag{

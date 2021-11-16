@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*ActionBlock)(nil)
 
+// ActionBlock 交互元素
 type ActionBlock struct {
 	actions []Element
 	layout  string
@@ -13,12 +14,13 @@ type actionRenderer struct {
 	Layout  string     `json:"layout,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (a *ActionBlock) Render() Renderer {
 	return actionRenderer{
 		ElementTag: ElementTag{
 			Tag: "action",
 		},
-		Actions: RenderElements(a.actions),
+		Actions: renderElements(a.actions),
 		Layout:  a.layout,
 	}
 }

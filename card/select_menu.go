@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*SelectMenuBlock)(nil)
 
+// SelectMenuBlock 菜单元素
 type SelectMenuBlock struct {
 	tag           string
 	placeholder   string
@@ -20,13 +21,14 @@ type selectMenuRenderer struct {
 	Confirm       Renderer               `json:"confirm,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (s *SelectMenuBlock) Render() Renderer {
 	ret := selectMenuRenderer{
 		ElementTag: ElementTag{
 			Tag: s.tag,
 		},
 		InitialOption: s.initialOption,
-		Options:       RenderElements(s.options),
+		Options:       renderElements(s.options),
 		Value:         s.value,
 		Placeholder:   Text(s.placeholder).Render(),
 	}

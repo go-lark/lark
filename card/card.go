@@ -6,6 +6,7 @@ import (
 
 var _ Element = (*Block)(nil)
 
+// Block 卡片元素
 type Block struct {
 	elements       []Element
 	disableForward bool
@@ -14,10 +15,12 @@ type Block struct {
 	links          *URLBlock
 }
 
+// MarshalJSON implements json.Marshaler
 func (b *Block) MarshalJSON() ([]byte, error) {
 	return json.MarshalIndent(b.Render(), "", "  ")
 }
 
+// String implements fmt.Stringer
 func (b *Block) String() string {
 	bytes, _ := b.MarshalJSON()
 	return string(bytes)
@@ -40,6 +43,7 @@ type cardRenderer struct {
 	Elements []Renderer         `json:"elements,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (b *Block) Render() Renderer {
 	ret := cardRenderer{
 		Config: cardConfigRenderer{
@@ -50,7 +54,7 @@ func (b *Block) Render() Renderer {
 			Title:    Text(b.title).Render(),
 			Template: b.template,
 		},
-		Elements: RenderElements(b.elements),
+		Elements: renderElements(b.elements),
 	}
 	if b.links != nil {
 		ret.CardLink = b.links.Render()

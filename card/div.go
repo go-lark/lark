@@ -2,6 +2,7 @@ package card
 
 var _ Element = (*DivBlock)(nil)
 
+// DivBlock 内容元素
 type DivBlock struct {
 	fields []Element
 	text   *TextBlock
@@ -15,12 +16,13 @@ type divRenderer struct {
 	Extra  Renderer   `json:"extra,omitempty"`
 }
 
+// Render 渲染为 Renderer
 func (d *DivBlock) Render() Renderer {
 	ret := divRenderer{
 		ElementTag: ElementTag{
 			Tag: "div",
 		},
-		Fields: RenderElements(d.fields),
+		Fields: renderElements(d.fields),
 	}
 	if d.text != nil {
 		ret.Text = d.text.Render()
