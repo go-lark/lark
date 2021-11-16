@@ -1,17 +1,19 @@
-# Declarative card builder to Go
-## Basic Usage
+# Declarative Card Builder
+
+## Getting Started
+
 ```go
 b := NewCardBuilder()
 c := b.Card(
     b.Markdown("some text"),
 ).
-    Title("title"). 
+    Title("title").
     NoForward()
 
 fmt.Println(c.String())
 ```
 
-will render like below:
+which will render as following:
 
 ```json
 {
@@ -34,23 +36,19 @@ will render like below:
 }
 ```
 
-Which you can use directly in card content.
+We map every element of card (`div`, `text`, `button`, etc.) to declarative calls as shown in the demo.
 
-We mapped every element of the card (div, text, button, etc.) to declarative calls like above.
+All inner elements (e.g. `fields` of `div` blocks) are considered as arguments,
+while all element properties (e.g. `forward` property of `card` blocks) are considered as chained calls.
 
-All inner elements (e.g. `fields` of `div` blocks) are considered as `arguments`,
-while all element properties (e.g. `forward` property of `card` blocks) are considered as `chained calls`.
+Refer to [msg_card_builder_test.go](./msg_card_builder_test.go) for details.
 
-Refer to `../msg_card_builder_test.go` for more examples. 
+## Limits
 
-> NOTE
->
-> i18n cards are currently NOT YET SUPPORTED. Use raw json if necessary.
-> 
-> `CardBuilder` contains ONLY a group of card-builder-related functions and contains NO card content.
-> Thus, you can use the same `CardBuilder` whenever building a card instead of making a new one before build.
+- i18n cards are currently NOT YET SUPPORTED. Use raw json if necessary.
+- `CardBuilder` contains ONLY a group of card-builder-related functions and contains NO card content. Thus, you can use the same `CardBuilder` whenever building a card instead of making a new one before build.
 
-## Working with go-lark
+## Works with go-lark
 
 ```go
 b := lark.NewCardBuilder()
