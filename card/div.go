@@ -11,7 +11,7 @@ type DivBlock struct {
 
 type divRenderer struct {
 	ElementTag
-	Text   Renderer   `json:"text"`
+	Text   Renderer   `json:"text,omitempty"`
 	Fields []Renderer `json:"fields,omitempty"`
 	Extra  Renderer   `json:"extra,omitempty"`
 }

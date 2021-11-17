@@ -34,6 +34,7 @@ func (o *OptionBlock) Render() Renderer {
 func Option(value string) *OptionBlock {
 	return &OptionBlock{
 		value: value,
+		text:  value,
 	}
 }
 
