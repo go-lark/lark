@@ -18,10 +18,10 @@ type PostMessageResponse struct {
 }
 
 // PostEphemeralMessageResponse .
-type PostEphemeralMessageResponse PostMessageResponse
+type PostEphemeralMessageResponse = PostMessageResponse
 
 // DeleteEphemeralMessageResponse .
-type DeleteEphemeralMessageResponse BaseResponse
+type DeleteEphemeralMessageResponse = BaseResponse
 
 // RecallMessageResponse .
 type RecallMessageResponse struct {

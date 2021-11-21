@@ -87,13 +87,13 @@ type UpdateGroupInfoResponse struct {
 }
 
 // AddBotToGroupResponse .
-type AddBotToGroupResponse BaseResponse
+type AddBotToGroupResponse = BaseResponse
 
 // RemoveBotFromGroupResponse .
-type RemoveBotFromGroupResponse = AddBotToGroupResponse
+type RemoveBotFromGroupResponse = BaseResponse
 
 // DisbandGroupResponse .
-type DisbandGroupResponse AddBotToGroupResponse
+type DisbandGroupResponse = BaseResponse
 
 // GetGroupList returns group list
 func (bot *Bot) GetGroupList(pageNum, pageSize int) (*GroupListResponse, error) {
