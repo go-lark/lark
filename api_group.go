@@ -87,10 +87,7 @@ type UpdateGroupInfoResponse struct {
 }
 
 // AddBotToGroupResponse .
-type AddBotToGroupResponse struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-}
+type AddBotToGroupResponse BaseResponse
 
 // RemoveBotFromGroupResponse .
 type RemoveBotFromGroupResponse = AddBotToGroupResponse
