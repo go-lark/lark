@@ -24,10 +24,7 @@ type PostEphemeralMessageResponse = PostMessageResponse
 type DeleteEphemeralMessageResponse = BaseResponse
 
 // RecallMessageResponse .
-type RecallMessageResponse struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
-}
+type RecallMessageResponse = BaseResponse
 
 // MessageReceiptResponse .
 type MessageReceiptResponse struct {
