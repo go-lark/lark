@@ -1,10 +1,11 @@
 package lark
 
 const (
-	messageURL          = "/open-apis/message/v4/send/"
-	ephemeralMessageURL = "/open-apis/ephemeral/v1/send"
-	recallMessageURL    = "/open-apis/message/v4/recall/"
-	messageReceiptURL   = "/open-apis/message/v4/read_info/"
+	messageURL                = "/open-apis/message/v4/send/"
+	ephemeralMessageURL       = "/open-apis/ephemeral/v1/send"
+	deleteEphemeralMessageURL = "/open-apis/ephemeral/v1/delete"
+	recallMessageURL          = "/open-apis/message/v4/recall/"
+	messageReceiptURL         = "/open-apis/message/v4/read_info/"
 )
 
 // PostMessageResponse .
@@ -18,6 +19,9 @@ type PostMessageResponse struct {
 
 // PostEphemeralMessageResponse .
 type PostEphemeralMessageResponse PostMessageResponse
+
+// DeleteEphemeralMessageResponse .
+type DeleteEphemeralMessageResponse BaseResponse
 
 // RecallMessageResponse .
 type RecallMessageResponse struct {
@@ -139,6 +143,16 @@ func (bot *Bot) PostEphemeralMessage(om OutcomingMessage) (*PostEphemeralMessage
 	params := BuildOutcomingMessageReq(om)
 	var respData PostEphemeralMessageResponse
 	err := bot.PostAPIRequest("PostEphemeralMessage", ephemeralMessageURL, true, params, &respData)
+	return &respData, err
+}
+
+// DeleteEphemeralMessage deletes an ephemeral message
+func (bot *Bot) DeleteEphemeralMessage(messageID string) (*DeleteEphemeralMessageResponse, error) {
+	params := map[string]interface{}{
+		"message_id": messageID,
+	}
+	var respData DeleteEphemeralMessageResponse
+	err := bot.PostAPIRequest("DeleteEphemeralMessage", deleteEphemeralMessageURL, true, params, &respData)
 	return &respData, err
 }
 
