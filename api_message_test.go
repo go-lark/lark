@@ -256,7 +256,7 @@ func TestPostEphemeralMessage(t *testing.T) {
 		Title("Ephemeral Card")
 	msg := NewMsgBuffer(MsgInteractive)
 	om := msg.BindChatID(testGroupChatID).BindEmail(testUserEmail).Card(card.String()).Build()
-	resp, err := bot.PostMessage(om)
+	resp, err := bot.PostEphemeralMessage(om)
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
