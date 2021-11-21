@@ -235,6 +235,49 @@ func TestPostRichText(t *testing.T) {
 	}
 }
 
+func TestPostEphemeralMessage(t *testing.T) {
+	b := NewCardBuilder()
+	card := b.Card(
+		b.Div(
+			b.Field(b.Text("左侧内容")).Short(),
+			b.Field(b.Text("右侧内容")).Short(),
+			b.Field(b.Text("整排内容")),
+			b.Field(b.Text("整排**Markdown**内容").LarkMd()),
+		),
+		b.Div().
+			Text(b.Text("Text Content")).
+			Extra(b.Img("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg")),
+		b.Action(
+			b.Button(b.Text("**Primary**").LarkMd()).Primary(),
+			b.Button(b.Text("Confirm")).Confirm("Confirm", "Are you sure?"),
+			b.Overflow(
+				b.Option("Option 1"),
+				b.Option("选项2"),
+			).Value(map[string]interface{}{"k": "v"}),
+		).TrisectionLayout(),
+		b.Action(
+			b.SelectMenu(
+				b.Option("Option 1"),
+				b.Option("选项2"),
+			).
+				Placeholder("select").
+				Value(map[string]interface{}{"k": "v"}),
+		),
+		b.Note().
+			AddText(b.Text("Note **Text**").LarkMd()).
+			AddImage(b.Img("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg")),
+	).
+		Wathet().
+		Title("卡片标题 Card Title")
+	msg := NewMsgBuffer(MsgInteractive)
+	om := msg.BindChatID(testGroupChatID).BindEmail(testUserEmail).Card(card.String()).Build()
+	resp, err := bot.PostMessage(om)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
+}
+
 func TestRecallMessage(t *testing.T) {
 	resp, err := bot.PostText("PostText: open_chat_id hello, world", WithChatID(testGroupChatID))
 	if assert.NoError(t, err) {

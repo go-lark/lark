@@ -1,9 +1,10 @@
 package lark
 
 const (
-	messageURL        = "/open-apis/message/v4/send/"
-	recallMessageURL  = "/open-apis/message/v4/recall/"
-	messageReceiptURL = "/open-apis/message/v4/read_info/"
+	messageURL          = "/open-apis/message/v4/send/"
+	ephemeralMessageURL = "/open-apis/ephemeral/v1/send"
+	recallMessageURL    = "/open-apis/message/v4/recall/"
+	messageReceiptURL   = "/open-apis/message/v4/read_info/"
 )
 
 // PostMessageResponse .
@@ -14,6 +15,9 @@ type PostMessageResponse struct {
 		MessageID string `json:"message_id"`
 	} `json:"data"`
 }
+
+// PostEphemeralMessageResponse .
+type PostEphemeralMessageResponse PostMessageResponse
 
 // RecallMessageResponse .
 type RecallMessageResponse struct {
@@ -127,6 +131,14 @@ func (bot *Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	params := BuildOutcomingMessageReq(om)
 	var respData PostMessageResponse
 	err := bot.PostAPIRequest("PostMessage", messageURL, true, params, &respData)
+	return &respData, err
+}
+
+// PostEphemeralMessage posts an ephemeral message
+func (bot *Bot) PostEphemeralMessage(om OutcomingMessage) (*PostEphemeralMessageResponse, error) {
+	params := BuildOutcomingMessageReq(om)
+	var respData PostEphemeralMessageResponse
+	err := bot.PostAPIRequest("PostEphemeralMessage", ephemeralMessageURL, true, params, &respData)
 	return &respData, err
 }
 
