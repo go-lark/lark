@@ -18,7 +18,7 @@ const (
 
 // GroupListResponse .
 type GroupListResponse struct {
-	Code    int  `json:"code"`
+	BaseResponse
 	HasMore bool `json:"has_more"`
 	Chats   []struct {
 		ID      string `json:"id"`
@@ -29,7 +29,7 @@ type GroupListResponse struct {
 
 // GroupInfoResponse .
 type GroupInfoResponse struct {
-	Code int `json:"code"`
+	BaseResponse
 	Data struct {
 		AddMemberVerify        bool   `json:"add_member_verify"`
 		Avatar                 string `json:"avatar"`
@@ -51,7 +51,6 @@ type GroupInfoResponse struct {
 		ShareAllowed             bool   `json:"share_allowed"`
 		Type                     string `json:"type"`
 	} `json:"data"`
-	Msg string `json:"msg"`
 }
 
 // CreateGroupResponse .
@@ -81,8 +80,7 @@ type UpdateGroupInfoReq struct {
 
 // UpdateGroupInfoResponse .
 type UpdateGroupInfoResponse struct {
-	Code       int    `json:"code"`
-	Msg        string `json:"msg"`
+	BaseResponse
 	OpenChatID string `json:"open_chat_id"`
 }
 
