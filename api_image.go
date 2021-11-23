@@ -19,8 +19,7 @@ const (
 
 // UploadImageResponse .
 type UploadImageResponse struct {
-	Msg  string `json:"msg"`
-	Code int    `json:"code"`
+	BaseResponse
 	Data struct {
 		ImageKey string `json:"image_key"`
 	} `json:"data"`
