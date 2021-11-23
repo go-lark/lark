@@ -55,14 +55,14 @@ type GroupInfoResponse struct {
 
 // CreateGroupResponse .
 type CreateGroupResponse struct {
-	Code          int      `json:"code"`
+	BaseResponse
 	OpenChatID    string   `json:"open_chat_id"`
 	InvalidOpenID []string `json:"invalid_open_ids"`
 }
 
 // AddGroupMemberResponse .
 type AddGroupMemberResponse struct {
-	Code          int      `json:"code"`
+	BaseResponse
 	InvalidOpenID []string `json:"invalid_open_ids"`
 }
 
