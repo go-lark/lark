@@ -12,14 +12,14 @@ const (
 
 // AuthTokenInternalResponse .
 type AuthTokenInternalResponse struct {
-	Code           int    `json:"code"`
+	BaseResponse
 	AppAccessToken string `json:"app_access_token"`
 	Expire         int    `json:"expire"`
 }
 
 // TenantAuthTokenInternalResponse .
 type TenantAuthTokenInternalResponse struct {
-	Code                 int    `json:"code"`
+	BaseResponse
 	TenantAppAccessToken string `json:"tenant_access_token"`
 	Expire               int    `json:"expire"`
 }

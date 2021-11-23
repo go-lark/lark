@@ -10,8 +10,7 @@ const (
 
 // PostMessageResponse .
 type PostMessageResponse struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
+	BaseResponse
 	Data struct {
 		MessageID string `json:"message_id"`
 	} `json:"data"`
@@ -28,8 +27,7 @@ type RecallMessageResponse = BaseResponse
 
 // MessageReceiptResponse .
 type MessageReceiptResponse struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
+	BaseResponse
 	Data struct {
 		ReadUsers []struct {
 			OpenID    string `json:"open_id"`
