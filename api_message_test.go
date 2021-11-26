@@ -108,7 +108,7 @@ func TestPostPostMessage(t *testing.T) {
 		LinkTag("Google", "https://google.com/").
 		AtTag("www", testGroupChatID).
 		ImageTag("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg", 300, 300).
-		WithLocale("en_us").
+		WithLocale(LocaleEnUS).
 		Title("English Title").
 		TextTag("hello, world", 1, true).
 		Render()
