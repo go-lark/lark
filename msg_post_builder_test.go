@@ -9,10 +9,10 @@ import (
 func TestPostLocale(t *testing.T) {
 	pb := NewPostBuilder()
 	assert.Equal(t, defaultLocale, pb.curLocale)
-	pb.Locale("en_us")
-	assert.Equal(t, "en_us", pb.curLocale)
-	pb.WithLocale("ja_jp")
-	assert.Equal(t, "ja_jp", pb.curLocale)
+	pb.Locale(LocaleEnUS)
+	assert.Equal(t, LocaleEnUS, pb.curLocale)
+	pb.WithLocale(LocaleJaJP)
+	assert.Equal(t, LocaleJaJP, pb.curLocale)
 }
 
 func TestPostTitle(t *testing.T) {
@@ -75,13 +75,13 @@ func TestPostMultiLocaleContent(t *testing.T) {
 	pb.TextTag("你好世界", 1, true).TextTag("其他内容", 1, true)
 	assert.Equal(t, 2, pb.Len())
 
-	pb.WithLocale("en_us").Title("en title")
+	pb.WithLocale(LocaleEnUS).Title("en title")
 	pb.TextTag("hello, world", 1, true).LinkTag("link", "https://www.toutiao.com/")
 	assert.Equal(t, 2, pb.Len())
 	assert.Equal(t, "en title", pb.CurLocale().Title)
 
 	content := pb.Render()
 	t.Log(content)
-	assert.Equal(t, "中文标题", (*content)["zh_cn"].Title)
-	assert.Equal(t, "en title", (*content)["en_us"].Title)
+	assert.Equal(t, "中文标题", (*content)[LocaleZhCN].Title)
+	assert.Equal(t, "en title", (*content)[LocaleEnUS].Title)
 }

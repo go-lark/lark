@@ -45,7 +45,7 @@ type MsgPostBuilder struct {
 	curLocale string
 }
 
-const defaultLocale = "zh_cn"
+const defaultLocale = LocaleZhCN
 
 // NewPostBuilder creates a text builder
 func NewPostBuilder() *MsgPostBuilder {
