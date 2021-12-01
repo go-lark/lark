@@ -68,7 +68,7 @@ func (bot Bot) DoAPIRequest(
 	return err
 }
 
-// PostAPIRequest call Lark API without auth tokens
+// PostAPIRequest call Lark API
 func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	buf := new(bytes.Buffer)
 	err := json.NewEncoder(buf).Encode(params)
