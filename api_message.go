@@ -37,7 +37,7 @@ type MessageReceiptResponse struct {
 	} `json:"data"`
 }
 
-func newMsgBufWithOptionalUserID(msgType MessageType, userID *OptionalUserID) *MsgBuffer {
+func newMsgBufWithOptionalUserID(msgType string, userID *OptionalUserID) *MsgBuffer {
 	mb := NewMsgBuffer(msgType)
 	realID := userID.RealID
 	switch userID.IDType {
@@ -46,7 +46,7 @@ func newMsgBufWithOptionalUserID(msgType MessageType, userID *OptionalUserID) *M
 	case "open_id":
 		mb.BindOpenID(realID)
 	case "chat_id":
-		mb.BindOpenChatID(realID)
+		mb.BindChatID(realID)
 	case "user_id":
 		mb.BindUserID(realID)
 	default:

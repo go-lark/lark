@@ -1,76 +1,90 @@
 package lark
 
+// Msg Types
+const (
+	MsgText        = "text"
+	MsgPost        = "post"
+	MsgInteractive = "interactive"
+	MsgImage       = "image"
+	MsgShareCard   = "share_chat"
+	MsgShareUser   = "share_user"
+	MsgAudio       = "audio"
+	MsgMedia       = "media"
+	MsgFile        = "file"
+	MsgSticker     = "sticker"
+)
+
 // OutcomingMessage struct of an outcoming message
 type OutcomingMessage struct {
-	MsgType MessageType `json:"msg_type"`
+	MsgType string
+	Content MessageContent
 	// ID for user
-	OpenID *string `json:"open_id,omitempty"`
-	Email  *string `json:"email,omitempty"`
-	UserID *string `json:"user_id,omitempty"`
-	ChatID *string `json:"chat_id,omitempty"`
+	UIDType string
+	OpenID  string
+	Email   string
+	UserID  string
+	ChatID  string
+	UnionID string
 	// For reply
-	RootID *string `json:"root_id,omitempty"`
-	// Content
-	Content MessageContent `json:"content"`
-	Card    CardContent    `json:"card"`
+	RootID string
 	// UpdateMulti card
-	UpdateMulti bool `json:"update_multi"`
+	UpdateMulti bool
 }
 
 // CardContent struct of card content
-type CardContent *map[string]interface{}
+type CardContent map[string]interface{}
 
 // MessageContent struct of message content
 type MessageContent struct {
-	Text      *string      `json:"text,omitempty"`
-	ImageKey  *string      `json:"image_key,omitempty"`
-	ShareChat *string      `json:"share_open_chat_id,omitempty"`
-	Post      *PostContent `json:"post,omitempty"`
+	Text      *TextContent
+	Image     *ImageContent
+	Post      *PostContent
+	Card      *CardContent
+	ShareChat *ShareChatContent
+	ShareUser *ShareUserContent
+	Audio     *AudioContent
+	Media     *MediaContent
+	File      *FileContent
+	Sticker   *StickerContent
 }
 
-// MessageType message type
-type MessageType string
+// TextContent .
+type TextContent struct {
+	Text string `json:"text"`
+}
 
-const (
-	// MsgText simple text message
-	MsgText MessageType = "text"
-	// MsgPost rich text message
-	MsgPost MessageType = "post"
-	// MsgImage simple image message
-	MsgImage MessageType = "image"
-	// MsgShareCard share chat group card
-	MsgShareCard MessageType = "share_chat"
-	// MsgInteractive interactive widget
-	MsgInteractive MessageType = "interactive"
-)
+// ImageContent .
+type ImageContent struct {
+	ImageKey string `json:"image_key"`
+}
 
-// BuildOutcomingMessageReq for msg builder
-func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
-	params := map[string]interface{}{
-		"msg_type":     om.MsgType,
-		"root_id":      om.RootID,
-		"chat_id":      om.ChatID,
-		"open_id":      om.OpenID,
-		"email":        om.Email,
-		"user_id":      om.UserID,
-		"update_multi": om.UpdateMulti,
-	}
-	content := make(map[string]interface{})
-	if om.Content.Text != nil {
-		content["text"] = *om.Content.Text
-	}
-	if om.Content.ImageKey != nil {
-		content["image_key"] = *om.Content.ImageKey
-	}
-	if om.Content.ShareChat != nil {
-		content["share_open_chat_id"] = *om.Content.ShareChat
-	}
-	if om.Content.Post != nil {
-		content["post"] = *om.Content.Post
-	}
-	if om.MsgType == MsgInteractive && om.Card != nil {
-		params["card"] = om.Card
-	}
-	params["content"] = content
-	return params
+// ShareChatContent .
+type ShareChatContent struct {
+	ChatID string `json:"chat_id"`
+}
+
+// ShareUserContent .
+type ShareUserContent struct {
+	UserID string `json:"user_id"`
+}
+
+// AudioContent .
+type AudioContent struct {
+	FileKey string `json:"file_key"`
+}
+
+// MediaContent .
+type MediaContent struct {
+	FileKey  string `json:"file_key"`
+	ImageKey string `json:"image_key"`
+}
+
+// FileContent .
+type FileContent struct {
+	FileKey string `json:"file_key"`
+}
+
+// StickerContent .
+type StickerContent struct {
+	FileKey string `json:"file_key"`
 }

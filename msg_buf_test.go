@@ -15,32 +15,32 @@ func TestAttachText(t *testing.T) {
 func TestAttachImage(t *testing.T) {
 	mb := NewMsgBuffer(MsgImage)
 	msg := mb.Image("aaaaa").Build()
-	assert.Equal(t, "aaaaa", *msg.Content.ImageKey)
+	assert.Equal(t, "aaaaa", msg.Content.Image.ImageKey)
 }
 
 func TestMsgTextBinding(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	msg := mb.Text("hello, world").BindEmail(testUserEmail).Build()
 	assert.Equal(t, "hello, world", *msg.Content.Text)
-	assert.Equal(t, testUserEmail, *msg.Email)
+	assert.Equal(t, testUserEmail, msg.Email)
 }
 
 func TestBindingUserIDs(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	msgEmail := mb.BindEmail(testUserEmail).Build()
-	assert.Equal(t, testUserEmail, *msgEmail.Email)
+	assert.Equal(t, testUserEmail, msgEmail.Email)
 
 	mb.Clear()
 	msgOpenChatID := mb.BindOpenChatID(testGroupChatID).Build()
-	assert.Equal(t, testGroupChatID, *msgOpenChatID.ChatID)
+	assert.Equal(t, testGroupChatID, msgOpenChatID.ChatID)
 
 	mb.Clear()
 	msgUserID := mb.BindUserID("333444").Build()
-	assert.Equal(t, "333444", *msgUserID.UserID)
+	assert.Equal(t, "333444", msgUserID.UserID)
 
 	mb.Clear()
 	msgReplyID := mb.BindReply(testMessageID).Build()
-	assert.Equal(t, testMessageID, *msgReplyID.RootID)
+	assert.Equal(t, testMessageID, msgReplyID.RootID)
 }
 
 func TestMsgShareChat(t *testing.T) {
