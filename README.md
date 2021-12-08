@@ -20,6 +20,7 @@ It is widely used and tested by ~450 ByteDance in-house developers with over 1.5
 - Easy to create incoming message hook
 - Encryption and token verification supported
 - Middleware support for Gin web framework
+- Highly extensible
 - Documentation & tests
 
 ## Installation
@@ -79,7 +80,7 @@ Feishu/Lark API offers more features, please refers to [Usage](#usage) for furth
   We do not guarantee all of the APIs work well with Lark, until we have tested it on Lark.
 - go-lark only supports Custom App. Marketplace App is not supported yet.
 - go-lark implements bot and messaging API, other APIs such as Lark Doc, Calendar and so so are not supported.
-- go-lark implements API in v3/v4 version* (official documents may also mention im/v1 version) and event with Schema 1.0.
+- go-lark implements API in v3/v4 version\* (official documents may also mention im/v1 version) and event with Schema 1.0.
 
 ### Switch to Lark Endpoints
 
@@ -168,13 +169,13 @@ Binding functions:
 Content functions pair with message content types. If it mismatched, it would not have sent successfully.
 Content functions:
 
-| Function  | Message Type     | Usage                   | Comment                                                                                          |
-| --------- | ---------------- | ----------------------- | ------------------------------------------------------------------------------------------------ |
-| Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                                                                     |
-| Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                                                                     |
-| Image     | `MsgImage`       | Append image            | Need to upload to Lark server in advance                                                         |
-| ShareChat | `MsgShareCard`   | Append group share card |                                                                                                  |
-| Card      | `MsgInteractive` | Append interactive card | May build with `CardBuilder`, see [Declarative card builder to Go](card/README.md) for usage     |
+| Function  | Message Type     | Usage                   | Comment                                                                      |
+| --------- | ---------------- | ----------------------- | ---------------------------------------------------------------------------- |
+| Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                                                 |
+| Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                                                 |
+| Image     | `MsgImage`       | Append image            | Required to upload to Lark server in advance                                 |
+| ShareChat | `MsgShareCard`   | Append group share card |                                                                              |
+| Card      | `MsgInteractive` | Append interactive card | May build with `CardBuilder`, see [Declarative card builder](card/README.md) |
 
 ### Error Handling
 
@@ -244,6 +245,56 @@ We add `PostEvent` to simulate message sending to make it easier.
 Example: [examples/event-forward](https://github.com/go-lark/examples/tree/main/event-forward)
 
 > Notice: `PostEvent` does not support AES encryption at the moment.
+
+## Extensions
+
+go-lark's dev utilities (authentication, HTTP handling, and etc.) are capable for easily implementing most of APIs provided by Lark Open Platform.
+And we may use that as an extension for go-lark.
+
+Here is an example that implementing a Lark Doc API with go-lark:
+
+```go
+package lark
+
+import "github.com/go-lark/lark"
+
+const copyFileAPIPattern = "/open-apis/drive/explorer/v2/file/copy/files/%s"
+
+// CopyFileResponse .
+type CopyFileResponse struct {
+	lark.BaseResponse
+
+	Data CopyFileData `json:"data"`
+}
+
+// CopyFileData .
+type CopyFileData struct {
+	FolderToken string `json:"folderToken"`
+	Revision    int64  `json:"revision"`
+	Token       string `json:"token"`
+	Type        string `json:"type"`
+	URL         string `json:"url"`
+}
+
+// CopyFile implementation
+func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFileResponse, error) {
+	var respData model.CopyFileResponse
+	err := bot.PostAPIRequest(
+		"CopyFile",
+		fmt.Sprintf(copyFileAPIPattern, fileToken),
+		true,
+		map[string]interface{}{
+			"type":             "doc",
+			"dstFolderToken":   dstFolderToken,
+			"dstName":          dstName,
+			"permissionNeeded": true,
+			"CommentNeeded":    false,
+		},
+		&respData,
+	)
+	return &respData, err
+}
+```
 
 ## Compatibility
 
