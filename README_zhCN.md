@@ -19,6 +19,7 @@ go-lark 主要实现了消息类 API，提供完整的聊天机器人和通知�
 - 一站式解决服务器 Challenge 和聊天消息响应
 - 支持加密和校验
 - 支持 [Gin](https://github.com/go-lark/lark-gin) 框架中间件
+- 高可扩展性
 - 文档、测试覆盖
 
 ## 安装
@@ -74,7 +75,7 @@ func main() {
 - go-lark 基于飞书域名进行测试，理论上可以完全兼容 Lark 平台（API 定义一致）。但我们不保证在 Lark 下完全可用，因为账户限于，没有专门测试过。
 - go-lark 仅支持企业自建应用，不支持应用商店应用（ISV）。
 - go-lark 仅实现了机器人和消息 API，对于飞书文档、日历等功能，并不支持。
-- go-lark 目前实现的是 API v3/v4 版本*（官方文档通常还会出现 im/v1 版本）以及事件 Schema 1.0 版本。
+- go-lark 目前实现的是 API v3/v4 版本\*（官方文档通常还会出现 im/v1 版本）以及事件 Schema 1.0 版本。
 
 ### 切换到 Lark 域名
 
@@ -160,12 +161,12 @@ Bind 函数：
 
 内容函数大多跟消息类型是强关联的，类型错误不会生效。内容函数：
 
-| 函数      | 适用范围         | 作用           | 备注                                                                                         |
-| --------- | ---------------- | -------------- | -------------------------------------------------------------------------------------------- |
-| Text      | `MsgText`        | 添加文本内容   | 可使用 `TextBuilder` 构造                                                                    |
-| Post      | `MsgPost`        | 添加富文本内容 | 可使用 `PostBuilder` 构造                                                                    |
-| Image     | `MsgImage`       | 添加图片       | 图片需要先上传到 飞书服务器                                                                  |
-| ShareChat | `MsgShareCard`   | 添加分享群卡片 |                                                                                              |
+| 函数      | 适用范围         | 作用           | 备注                                                                                       |
+| --------- | ---------------- | -------------- | ------------------------------------------------------------------------------------------ |
+| Text      | `MsgText`        | 添加文本内容   | 可使用 `TextBuilder` 构造                                                                  |
+| Post      | `MsgPost`        | 添加富文本内容 | 可使用 `PostBuilder` 构造                                                                  |
+| Image     | `MsgImage`       | 添加图片       | 图片需要先上传到 飞书服务器                                                                |
+| ShareChat | `MsgShareCard`   | 添加分享群卡片 |                                                                                            |
 | Card      | `MsgInteractive` | 添加交互式卡片 | 非国际化卡片可使用 `CardBuilder` 构造，详见[声明式卡片搭建工具 to Go](card/README_zhCN.md) |
 
 ### 异常处理
@@ -235,6 +236,55 @@ middleware.WithEncryption("<encryption-key>")
 参考实例：[examples/event-forward](https://github.com/go-lark/examples/tree/main/event-forward)
 
 > `PostEvent`目前不支持 AES 加密。
+
+## 扩展
+
+go-lark 的开发设施（鉴权、HTTP 处理等）可以很方便的用来实现大部分开放平台提供的 API 能力。我们可以通过这种方式扩展 go-lark。
+
+这里是一个使用 go-lark 扩展实现飞书文档 API 的例子：
+
+```go
+package lark
+
+import "github.com/go-lark/lark"
+
+const copyFileAPIPattern = "/open-apis/drive/explorer/v2/file/copy/files/%s"
+
+// CopyFileResponse .
+type CopyFileResponse struct {
+	lark.BaseResponse
+
+	Data CopyFileData `json:"data"`
+}
+
+// CopyFileData .
+type CopyFileData struct {
+	FolderToken string `json:"folderToken"`
+	Revision    int64  `json:"revision"`
+	Token       string `json:"token"`
+	Type        string `json:"type"`
+	URL         string `json:"url"`
+}
+
+// CopyFile implementation
+func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFileResponse, error) {
+	var respData model.CopyFileResponse
+	err := bot.PostAPIRequest(
+		"CopyFile",
+		fmt.Sprintf(copyFileAPIPattern, fileToken),
+		true,
+		map[string]interface{}{
+			"type":             "doc",
+			"dstFolderToken":   dstFolderToken,
+			"dstName":          dstName,
+			"permissionNeeded": true,
+			"CommentNeeded":    false,
+		},
+		&respData,
+	)
+	return &respData, err
+}
+```
 
 ## FAQ
 
