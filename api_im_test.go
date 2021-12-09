@@ -15,6 +15,16 @@ func TestPostIMMessage(t *testing.T) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
 		t.Log(resp.Data)
+
+		// get message
+		getResp, err := bot.GetIMMessage(resp.Data.MessageID)
+		t.Log(getResp)
+		if assert.NoError(t, err) {
+			assert.Equal(t, 0, getResp.Code)
+			if assert.NotEmpty(t, getResp.Data.Items) {
+				assert.Equal(t, getResp.Data.Items[0].MessageID, resp.Data.MessageID)
+			}
+		}
 	}
 }
 

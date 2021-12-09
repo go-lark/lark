@@ -85,3 +85,39 @@ func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interfac
 	}
 	return nil
 }
+
+// GetAPIRequest call Lark API
+func (bot Bot) GetAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(params)
+	if err != nil {
+		bot.httpErrorLog(prefix, "encode JSON failed", err)
+		return err
+	}
+
+	header := make(http.Header)
+	header.Set("Content-Type", "application/json; charset=utf-8")
+	err = bot.DoAPIRequest("GET", prefix, urlPath, header, auth, buf, output)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeleteAPIRequest call Lark API
+func (bot Bot) DeleteAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(params)
+	if err != nil {
+		bot.httpErrorLog(prefix, "encode JSON failed", err)
+		return err
+	}
+
+	header := make(http.Header)
+	header.Set("Content-Type", "application/json; charset=utf-8")
+	err = bot.DoAPIRequest("DELETE", prefix, urlPath, header, auth, buf, output)
+	if err != nil {
+		return err
+	}
+	return nil
+}

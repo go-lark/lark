@@ -3,7 +3,8 @@ package lark
 import "fmt"
 
 const (
-	imMessageURL = "/open-apis/im/v1/messages?receive_id_type=%s"
+	postIMMessageURL = "/open-apis/im/v1/messages?receive_id_type=%s"
+	getIMMessageURL  = "/open-apis/im/v1/messages/%s"
 )
 
 // IMMessageRequest .
@@ -34,8 +35,8 @@ type IMBody struct {
 	Content string `json:"content"`
 }
 
-// IMData .
-type IMData struct {
+// IMMessage .
+type IMMessage struct {
 	MessageID      string `json:"message_id"`
 	UpperMessageID string `json:"upper_message_id"`
 	RootID         string `json:"root_id"`
@@ -51,20 +52,36 @@ type IMData struct {
 	Body           IMBody
 }
 
-// IMMessageResponse .
-type IMMessageResponse struct {
+// PostIMMessageResponse .
+type PostIMMessageResponse struct {
 	BaseResponse
 
-	Data IMData `json:"data"`
+	Data IMMessage `json:"data"`
+}
+
+// GetIMMessageResponse .
+type GetIMMessageResponse struct {
+	BaseResponse
+
+	Data struct {
+		Items []IMMessage `json:"items"`
+	} `json:"data"`
 }
 
 // PostIMMessage posts message with im/v1
-func (bot Bot) PostIMMessage(om OutcomingMessage) (*IMMessageResponse, error) {
+func (bot Bot) PostIMMessage(om OutcomingMessage) (*PostIMMessageResponse, error) {
 	req, err := BuildIMMessage(om)
 	if err != nil {
 		return nil, err
 	}
-	var respData IMMessageResponse
-	err = bot.PostAPIRequest("PostIMMessage", fmt.Sprintf(imMessageURL, om.UIDType), true, req, &respData)
+	var respData PostIMMessageResponse
+	err = bot.PostAPIRequest("PostIMMessage", fmt.Sprintf(postIMMessageURL, om.UIDType), true, req, &respData)
+	return &respData, err
+}
+
+// GetIMMessage posts message with im/v1
+func (bot Bot) GetIMMessage(messageID string) (*GetIMMessageResponse, error) {
+	var respData GetIMMessageResponse
+	err := bot.GetAPIRequest("GetIMMessage", fmt.Sprintf(getIMMessageURL, messageID), true, nil, &respData)
 	return &respData, err
 }

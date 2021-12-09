@@ -1,10 +1,12 @@
 package lark
 
+import "fmt"
+
 const (
 	messageURL                = "/open-apis/message/v4/send/"
 	ephemeralMessageURL       = "/open-apis/ephemeral/v1/send"
 	deleteEphemeralMessageURL = "/open-apis/ephemeral/v1/delete"
-	recallMessageURL          = "/open-apis/message/v4/recall/"
+	recallMessageURL          = "/open-apis/im/v1/messages/%s"
 	messageReceiptURL         = "/open-apis/message/v4/read_info/"
 )
 
@@ -159,11 +161,9 @@ func (bot *Bot) DeleteEphemeralMessage(messageID string) (*DeleteEphemeralMessag
 
 // RecallMessage recalls a message with ID
 func (bot *Bot) RecallMessage(messageID string) (*RecallMessageResponse, error) {
-	params := map[string]interface{}{
-		"message_id": messageID,
-	}
+	url := fmt.Sprintf(recallMessageURL, messageID)
 	var respData RecallMessageResponse
-	err := bot.PostAPIRequest("RecallMessage", recallMessageURL, true, params, &respData)
+	err := bot.DeleteAPIRequest("RecallMessage", url, true, nil, &respData)
 	return &respData, err
 }
 
