@@ -126,7 +126,7 @@ func TestPostPostMessage(t *testing.T) {
 		Title("中文标题").
 		TextTag("你好世界", 1, true).
 		TextTag("hello, world", 1, true).
-		LinkTag("Google", "https://google.com/").
+		LinkTag("ByteDance", "https://bytedance.com/").
 		AtTag("www", testGroupChatID).
 		ImageTag("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg", 300, 300).
 		WithLocale(LocaleEnUS).
