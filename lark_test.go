@@ -35,18 +35,27 @@ func newTestBot() *Bot {
 	if testMode == "local" {
 		err := godotenv.Load(".env")
 		if err != nil {
-			log.Fatal("Error loading .env file")
+			panic(err)
 		}
 	}
 	testAppID = os.Getenv("LARK_APP_ID")
 	testAppSecret = os.Getenv("LARK_APP_SECRET")
-
 	testUserEmail = os.Getenv("LARK_USER_EMAIL")
 	testUserID = os.Getenv("LARK_USER_ID")
 	testUserUnionID = os.Getenv("LARK_UNION_ID")
 	testUserOpenID = os.Getenv("LARK_OPEN_ID")
 	testGroupChatID = os.Getenv("LARK_CHAT_ID")
 	testMessageID = os.Getenv("LARK_MESSAGE_ID")
+	if len(testAppID) == 0 ||
+		len(testAppSecret) == 0 ||
+		len(testUserEmail) == 0 ||
+		len(testUserID) == 0 ||
+		len(testUserUnionID) == 0 ||
+		len(testUserOpenID) == 0 ||
+		len(testGroupChatID) == 0 ||
+		len(testMessageID) == 0 {
+		panic("insufficient test environment")
+	}
 	return NewChatBot(testAppID, testAppSecret)
 }
 
