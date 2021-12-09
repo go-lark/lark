@@ -3,23 +3,82 @@ package lark
 import "fmt"
 
 const (
-	messageURL                = "/open-apis/message/v4/send/"
-	ephemeralMessageURL       = "/open-apis/ephemeral/v1/send"
-	deleteEphemeralMessageURL = "/open-apis/ephemeral/v1/delete"
+	messageURL                = "/open-apis/im/v1/messages?receive_id_type=%s"
+	getMessageURL             = "/open-apis/im/v1/messages/%s"
 	recallMessageURL          = "/open-apis/im/v1/messages/%s"
 	messageReceiptURL         = "/open-apis/message/v4/read_info/"
+	ephemeralMessageURL       = "/open-apis/ephemeral/v1/send"
+	deleteEphemeralMessageURL = "/open-apis/ephemeral/v1/delete"
 )
 
 // PostMessageResponse .
 type PostMessageResponse struct {
 	BaseResponse
+
+	Data IMMessage `json:"data"`
+}
+
+// IMMessageRequest .
+type IMMessageRequest struct {
+	ReceiveID string `json:"receive_id"`
+	Content   string `json:"content"`
+	MsgType   string `json:"msg_type"`
+}
+
+// IMSendor .
+type IMSendor struct {
+	ID         string `json:"id"`
+	IDType     string `json:"id_type"`
+	SendorType string `json:"sendor_type"`
+	TenantKey  string `json:"tenant_key"`
+}
+
+// IMMention .
+type IMMention struct {
+	ID     string `json:"id"`
+	IDType string `json:"id_type"`
+	Key    string `json:"key"`
+	Name   string `json:"name"`
+}
+
+// IMBody .
+type IMBody struct {
+	Content string `json:"content"`
+}
+
+// IMMessage .
+type IMMessage struct {
+	MessageID      string `json:"message_id"`
+	UpperMessageID string `json:"upper_message_id"`
+	RootID         string `json:"root_id"`
+	ParentID       string `json:"parent_id"`
+	ChatID         string `json:"chat_id"`
+	MsgType        string `json:"msg_type"`
+	CreateTime     string `json:"create_time"`
+	UpdateTime     string `json:"update_time"`
+	Deleted        bool   `json:"deleted"`
+	Updated        bool   `json:"updated"`
+	Sendor         IMSendor
+	Mentions       []IMMention
+	Body           IMBody
+}
+
+// GetMessageResponse .
+type GetMessageResponse struct {
+	BaseResponse
+
 	Data struct {
-		MessageID string `json:"message_id"`
+		Items []IMMessage `json:"items"`
 	} `json:"data"`
 }
 
 // PostEphemeralMessageResponse .
-type PostEphemeralMessageResponse = PostMessageResponse
+type PostEphemeralMessageResponse struct {
+	BaseResponse
+	Data struct {
+		MessageID string `json:"message_id"`
+	} `json:"data"`
+}
 
 // DeleteEphemeralMessageResponse .
 type DeleteEphemeralMessageResponse = BaseResponse
@@ -51,6 +110,8 @@ func newMsgBufWithOptionalUserID(msgType string, userID *OptionalUserID) *MsgBuf
 		mb.BindChatID(realID)
 	case "user_id":
 		mb.BindUserID(realID)
+	case "union_id":
+		mb.BindUnionID(realID)
 	default:
 		return nil
 	}
@@ -118,23 +179,58 @@ func (bot *Bot) PostImage(imageKey string, userID *OptionalUserID) (*PostMessage
 }
 
 // PostShareChat is a simple way to share chat
-func (bot *Bot) PostShareChat(openChatID string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot *Bot) PostShareChat(chatID string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgShareCard, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
 	}
-	om := mb.ShareChat(openChatID).Build()
+	om := mb.ShareChat(chatID).Build()
+	return bot.PostMessage(om)
+}
+
+// PostShareUser is a simple way to share user
+func (bot *Bot) PostShareUser(openID string, userID *OptionalUserID) (*PostMessageResponse, error) {
+	mb := newMsgBufWithOptionalUserID(MsgShareUser, userID)
+	if mb == nil {
+		return nil, ErrParamUserID
+	}
+	om := mb.ShareUser(openID).Build()
 	return bot.PostMessage(om)
 }
 
 // PostMessage posts message
 func (bot *Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
-	if om.UIDType == UIDUnionID {
-		return nil, ErrUnsupportedUIDType
+	req, err := BuildMessage(om)
+	if err != nil {
+		return nil, err
 	}
-	params := BuildOutcomingMessageReq(om)
 	var respData PostMessageResponse
-	err := bot.PostAPIRequest("PostMessage", messageURL, true, params, &respData)
+	err = bot.PostAPIRequest("PostMessage", fmt.Sprintf(messageURL, om.UIDType), true, req, &respData)
+	return &respData, err
+}
+
+// GetMessage posts message with im/v1
+func (bot Bot) GetMessage(messageID string) (*GetMessageResponse, error) {
+	var respData GetMessageResponse
+	err := bot.GetAPIRequest("GetMessage", fmt.Sprintf(getMessageURL, messageID), true, nil, &respData)
+	return &respData, err
+}
+
+// RecallMessage recalls a message with ID
+func (bot *Bot) RecallMessage(messageID string) (*RecallMessageResponse, error) {
+	url := fmt.Sprintf(recallMessageURL, messageID)
+	var respData RecallMessageResponse
+	err := bot.DeleteAPIRequest("RecallMessage", url, true, nil, &respData)
+	return &respData, err
+}
+
+// MessageReadReceipt queries message read receipt
+func (bot *Bot) MessageReadReceipt(messageID string) (*MessageReceiptResponse, error) {
+	params := map[string]interface{}{
+		"message_id": messageID,
+	}
+	var respData MessageReceiptResponse
+	err := bot.PostAPIRequest("MessageReadReceipt", messageReceiptURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -156,23 +252,5 @@ func (bot *Bot) DeleteEphemeralMessage(messageID string) (*DeleteEphemeralMessag
 	}
 	var respData DeleteEphemeralMessageResponse
 	err := bot.PostAPIRequest("DeleteEphemeralMessage", deleteEphemeralMessageURL, true, params, &respData)
-	return &respData, err
-}
-
-// RecallMessage recalls a message with ID
-func (bot *Bot) RecallMessage(messageID string) (*RecallMessageResponse, error) {
-	url := fmt.Sprintf(recallMessageURL, messageID)
-	var respData RecallMessageResponse
-	err := bot.DeleteAPIRequest("RecallMessage", url, true, nil, &respData)
-	return &respData, err
-}
-
-// MessageReadReceipt queries message read receipt
-func (bot *Bot) MessageReadReceipt(messageID string) (*MessageReceiptResponse, error) {
-	params := map[string]interface{}{
-		"message_id": messageID,
-	}
-	var respData MessageReceiptResponse
-	err := bot.PostAPIRequest("MessageReadReceipt", messageReceiptURL, true, params, &respData)
 	return &respData, err
 }

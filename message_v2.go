@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 )
 
-// BuildIMMessage .
-func BuildIMMessage(om OutcomingMessage) (*IMMessageRequest, error) {
+// BuildMessage .
+func BuildMessage(om OutcomingMessage) (*IMMessageRequest, error) {
 	req := IMMessageRequest{
 		MsgType:   string(om.MsgType),
-		Content:   buildIMContent(om),
+		Content:   buildContent(om),
 		ReceiveID: buildReceiveID(om),
 	}
 	if req.ReceiveID == "" {
@@ -20,7 +20,7 @@ func BuildIMMessage(om OutcomingMessage) (*IMMessageRequest, error) {
 	return &req, nil
 }
 
-func buildIMContent(om OutcomingMessage) string {
+func buildContent(om OutcomingMessage) string {
 	var (
 		content = ""
 		b       []byte
