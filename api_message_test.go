@@ -33,11 +33,8 @@ func TestPostTextFailed(t *testing.T) {
 	resp, err := bot.PostText("PostText: email hello, world", WithEmail("9999@example.com"))
 	if assert.NoError(t, err) {
 		assert.NotEqual(t, 0, resp.Code)
-		assert.Equal(t, resp.Msg, "user not found")
+		assert.Contains(t, resp.Msg, "invalid receive_id")
 	}
-	resp, err = bot.PostText("union_id", WithUnionID(testUserUnionID))
-	assert.Nil(t, resp)
-	assert.Error(t, ErrUnsupportedUIDType, err)
 }
 
 func TestPostTextMention(t *testing.T) {
