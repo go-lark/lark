@@ -25,7 +25,7 @@ type OutcomingMessage struct {
 	Email   string `json:"email,omitempty"`
 	UserID  string `json:"user_id,omitempty"`
 	ChatID  string `json:"chat_id,omitempty"`
-	UnionID string `json:"-"` // TODO: try this in older version
+	UnionID string `json:"-"`
 	// For reply
 	RootID string `json:"root_id,omitempty"`
 	// UpdateMulti card

@@ -5,16 +5,19 @@ import (
 )
 
 // BuildIMMessage .
-func BuildIMMessage(om OutcomingMessage) *IMMessageRequest {
+func BuildIMMessage(om OutcomingMessage) (*IMMessageRequest, error) {
 	req := IMMessageRequest{
 		MsgType:   string(om.MsgType),
 		Content:   buildIMContent(om),
 		ReceiveID: buildReceiveID(om),
 	}
-	if req.ReceiveID == "" || req.Content == "" {
-		return nil
+	if req.ReceiveID == "" {
+		return nil, ErrInvalidReceiveID
 	}
-	return &req
+	if req.Content == "" {
+		return nil, ErrMessageNotBuild
+	}
+	return &req, nil
 }
 
 func buildIMContent(om OutcomingMessage) string {

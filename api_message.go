@@ -127,6 +127,9 @@ func (bot *Bot) PostShareChat(openChatID string, userID *OptionalUserID) (*PostM
 
 // PostMessage posts message
 func (bot *Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
+	if om.UIDType == UIDUnionID {
+		return nil, ErrUnsupportedUIDType
+	}
 	params := BuildOutcomingMessageReq(om)
 	var respData PostMessageResponse
 	err := bot.PostAPIRequest("PostMessage", messageURL, true, params, &respData)
@@ -135,6 +138,9 @@ func (bot *Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 
 // PostEphemeralMessage posts an ephemeral message
 func (bot *Bot) PostEphemeralMessage(om OutcomingMessage) (*PostEphemeralMessageResponse, error) {
+	if om.UIDType == UIDUnionID {
+		return nil, ErrUnsupportedUIDType
+	}
 	params := BuildOutcomingMessageReq(om)
 	var respData PostEphemeralMessageResponse
 	err := bot.PostAPIRequest("PostEphemeralMessage", ephemeralMessageURL, true, params, &respData)

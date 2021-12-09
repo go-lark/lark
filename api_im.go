@@ -60,11 +60,11 @@ type IMMessageResponse struct {
 
 // PostIMMessage posts message with im/v1
 func (bot Bot) PostIMMessage(om OutcomingMessage) (*IMMessageResponse, error) {
-	req := BuildIMMessage(om)
-	if req == nil {
-		return nil, ErrMessageNotBuild
+	req, err := BuildIMMessage(om)
+	if err != nil {
+		return nil, err
 	}
 	var respData IMMessageResponse
-	err := bot.PostAPIRequest("PostIMMessage", fmt.Sprintf(imMessageURL, om.UIDType), true, req, &respData)
+	err = bot.PostAPIRequest("PostIMMessage", fmt.Sprintf(imMessageURL, om.UIDType), true, req, &respData)
 	return &respData, err
 }
