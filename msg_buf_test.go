@@ -9,7 +9,7 @@ import (
 func TestAttachText(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	msg := mb.Text("hello").Build()
-	assert.Equal(t, "hello", *msg.Content.Text)
+	assert.Equal(t, "hello", msg.Content.Text.Text)
 }
 
 func TestAttachImage(t *testing.T) {
@@ -21,7 +21,7 @@ func TestAttachImage(t *testing.T) {
 func TestMsgTextBinding(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	msg := mb.Text("hello, world").BindEmail(testUserEmail).Build()
-	assert.Equal(t, "hello, world", *msg.Content.Text)
+	assert.Equal(t, "hello, world", msg.Content.Text.Text)
 	assert.Equal(t, testUserEmail, msg.Email)
 }
 
@@ -47,13 +47,22 @@ func TestMsgShareChat(t *testing.T) {
 	mb := NewMsgBuffer(MsgShareCard)
 	msg := mb.ShareChat("6559399282837815565").Build()
 	assert.Equal(t, MsgShareCard, msg.MsgType)
-	assert.Equal(t, "6559399282837815565", *msg.Content.ShareChat)
+	assert.Equal(t, "6559399282837815565", msg.Content.ShareChat.ChatID)
+}
+
+func TestMsgShareUser(t *testing.T) {
+	mb := NewMsgBuffer(MsgShareUser)
+	msg := mb.ShareUser("334455").Build()
+	assert.Equal(t, MsgShareUser, msg.MsgType)
+	assert.Equal(t, "334455", msg.Content.ShareUser.UserID)
 }
 
 func TestMsgWithWrongType(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	mb.ShareChat("6559399282837815565")
 	assert.Equal(t, mb.Error().Error(), "`ShareChat` is only available to `share_chat`")
+	mb.ShareUser("334455")
+	assert.Equal(t, mb.Error().Error(), "`ShareUser` is only available to `share_user`")
 	mb.Image("aaa")
 	assert.Equal(t, mb.Error().Error(), "`Image` is only available to `image`")
 	mb.Post(nil)

@@ -239,18 +239,7 @@ func TestPostEphemeralMessage(t *testing.T) {
 	b := NewCardBuilder()
 	card := b.Card(
 		b.Div().
-			Text(b.Text("Text Content")).
-			Extra(b.Img("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg")),
-		b.Action(
-			b.Button(b.Text("**Primary**").LarkMd()).Primary(),
-			b.Button(b.Text("Confirm")).Confirm("Confirm", "Are you sure?"),
-			b.Overflow(
-				b.Option("Option 1"),
-				b.Option("选项2"),
-			).Value(map[string]interface{}{"k": "v"}),
-		).TrisectionLayout(),
-		b.Note().
-			AddText(b.Text("Note **Text**").LarkMd()),
+			Text(b.Text("Text Content")),
 	).
 		Wathet().
 		Title("Ephemeral Card")

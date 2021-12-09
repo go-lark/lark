@@ -9,4 +9,5 @@ var (
 	ErrMessageTypeNotSuppored = errors.New("Message type not supported")
 	ErrEncryptionNotEnabled   = errors.New("Encryption is not enabled")
 	ErrCustomHTTPClientNotSet = errors.New("Custom HTTP client not set")
+	ErrMessageNotBuild        = errors.New("Message not build")
 )

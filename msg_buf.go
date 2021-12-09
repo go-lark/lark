@@ -125,6 +125,19 @@ func (m *MsgBuffer) ShareChat(chatID string) *MsgBuffer {
 	return m
 }
 
+// ShareUser attaches user id
+// for MsgShareUser only
+func (m *MsgBuffer) ShareUser(userID string) *MsgBuffer {
+	if m.msgType != MsgShareUser {
+		m.err = m.typeError("ShareUser", MsgShareUser)
+		return m
+	}
+	m.message.Content.ShareUser = &ShareUserContent{
+		UserID: userID,
+	}
+	return m
+}
+
 // Post sets raw post content
 func (m *MsgBuffer) Post(postContent *PostContent) *MsgBuffer {
 	if m.msgType != MsgPost {

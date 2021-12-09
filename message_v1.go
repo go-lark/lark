@@ -4,10 +4,13 @@ package lark
 func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
 	params := map[string]interface{}{
 		"msg_type":     om.MsgType,
-		"root_id":      om.RootID,
 		"update_multi": om.UpdateMulti,
+		"chat_id":      om.ChatID, // request must contain chat_id, even if it is empty
 	}
 	params[om.UIDType] = buildReceiveID(om)
+	if len(om.RootID) > 0 {
+		params["root_id"] = om.RootID
+	}
 	content := make(map[string]interface{})
 	if om.Content.Text != nil {
 		content["text"] = *&om.Content.Text.Text

@@ -21,6 +21,7 @@ var (
 	testAppSecret   string
 	testUserEmail   string
 	testUserOpenID  string
+	testUserID      string
 	testGroupChatID string
 	testMessageID   string
 )
@@ -40,6 +41,7 @@ func newTestBot() *Bot {
 	testAppSecret = os.Getenv("LARK_APP_SECRET")
 
 	testUserEmail = os.Getenv("LARK_USER_EMAIL")
+	testUserID = os.Getenv("LARK_USER_ID")
 	testUserOpenID = os.Getenv("LARK_OPEN_ID")
 	testGroupChatID = os.Getenv("LARK_CHAT_ID")
 	testMessageID = os.Getenv("LARK_MESSAGE_ID")

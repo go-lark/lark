@@ -16,19 +16,20 @@ const (
 
 // OutcomingMessage struct of an outcoming message
 type OutcomingMessage struct {
-	MsgType string
-	Content MessageContent
+	MsgType string         `json:"msg_type"`
+	Content MessageContent `json:"content"`
+	Card    CardContent    `json:"card"`
 	// ID for user
-	UIDType string
-	OpenID  string
-	Email   string
-	UserID  string
-	ChatID  string
-	UnionID string
+	UIDType string `json:"-"`
+	OpenID  string `json:"open_id,omitempty"`
+	Email   string `json:"email,omitempty"`
+	UserID  string `json:"user_id,omitempty"`
+	ChatID  string `json:"chat_id,omitempty"`
+	UnionID string `json:"-"` // TODO: try this in older version
 	// For reply
-	RootID string
+	RootID string `json:"root_id,omitempty"`
 	// UpdateMulti card
-	UpdateMulti bool
+	UpdateMulti bool `json:"update_multi"`
 }
 
 // CardContent struct of card content
@@ -36,16 +37,16 @@ type CardContent map[string]interface{}
 
 // MessageContent struct of message content
 type MessageContent struct {
-	Text      *TextContent
-	Image     *ImageContent
-	Post      *PostContent
-	Card      *CardContent
-	ShareChat *ShareChatContent
-	ShareUser *ShareUserContent
-	Audio     *AudioContent
-	Media     *MediaContent
-	File      *FileContent
-	Sticker   *StickerContent
+	Text      *TextContent      `json:"text,omitempty"`
+	Image     *ImageContent     `json:"image,omitempty"`
+	Post      *PostContent      `json:"post,omitempty"`
+	Card      *CardContent      `json:"card,omitempty"`
+	ShareChat *ShareChatContent `json:"share_chat,omitempty"`
+	ShareUser *ShareUserContent `json:"share_user,omitempty"`
+	Audio     *AudioContent     `json:"audio,omitempty"`
+	Media     *MediaContent     `json:"media,omitempty"`
+	File      *FileContent      `json:"file,omitempty"`
+	Sticker   *StickerContent   `json:"sticker,omitempty"`
 }
 
 // TextContent .
