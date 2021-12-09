@@ -14,6 +14,7 @@ func TestPostIMMessage(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
+		t.Log(resp.Data)
 	}
 }
 
