@@ -32,9 +32,6 @@ func (bot *Bot) PostNotificationV2(om OutcomingMessage) (*PostNotificationV2Resp
 		return nil, ErrBotTypeError
 	}
 
-	if om.MsgType == MsgInteractive {
-		return nil, ErrMessageTypeNotSuppored
-	}
 	params := BuildOutcomingMessageReq(om)
 	var respData PostNotificationV2Resp
 	err := bot.PostAPIRequest("PostNotificationV2", bot.webhook, false, params, &respData)
