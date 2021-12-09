@@ -62,6 +62,36 @@ func TestWebhookV2(t *testing.T) {
 	assert.Equal(t, "success", resp.StatusMessage)
 }
 
+func TestWebhookV2CardMessage(t *testing.T) {
+	bot := NewNotificationBot(ciHookURLV2)
+
+	b := NewCardBuilder()
+	card := b.Card(
+		b.Div(
+			b.Field(b.Text("左侧内容")).Short(),
+			b.Field(b.Text("右侧内容")).Short(),
+			b.Field(b.Text("整排内容")),
+			b.Field(b.Text("整排**Markdown**内容").LarkMd()),
+		),
+		b.Div().
+			Text(b.Text("Text Content")).
+			Extra(b.Img("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg")),
+		b.Note().
+			AddText(b.Text("Note **Text**").LarkMd()).
+			AddImage(b.Img("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg")),
+	).
+		Wathet().
+		Title("卡片标题 Card Title")
+	msgV4 := NewMsgBuffer(MsgInteractive)
+	omV4 := msgV4.Card(card.String()).Build()
+	resp, err := bot.PostNotificationV2(omV4)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.StatusCode)
+		assert.NotEmpty(t, resp.StatusMessage)
+	}
+}
+
 func TestWebhookV2Errors(t *testing.T) {
 	bot := NewNotificationBot(ciHookURLV2)
 
@@ -73,4 +103,38 @@ func TestWebhookV2Errors(t *testing.T) {
 	respV2, err := bot.PostNotificationV2(msg.Build())
 	assert.Nil(t, respV2)
 	assert.Error(t, ErrMessageTypeNotSuppored, err)
+}
+
+func TestWebhookV2InteractiveErrors(t *testing.T) {
+	bot := NewNotificationBot(ciHookURLV2)
+
+	b := NewCardBuilder()
+	card := b.Card(
+		b.Action(
+			b.Button(b.Text("**Primary**").LarkMd()).Primary(),
+			b.Button(b.Text("Confirm")).Confirm("Confirm", "Are you sure?"),
+			b.Overflow(
+				b.Option("Option 1"),
+				b.Option("选项2"),
+			).Value(map[string]interface{}{"k": "v"}),
+		).TrisectionLayout(),
+		b.Action(
+			b.SelectMenu(
+				b.Option("Option 1"),
+				b.Option("选项2"),
+			).
+				Placeholder("select").
+				Value(map[string]interface{}{"k": "v"}),
+		),
+	).
+		Wathet().
+		Title("卡片标题 Card Title")
+	msgV4 := NewMsgBuffer(MsgInteractive)
+	omV4 := msgV4.Card(card.String()).Build()
+	resp, err := bot.PostNotificationV2(omV4)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.StatusCode)
+		assert.Empty(t, resp.StatusMessage)
+	}
 }
