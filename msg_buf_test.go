@@ -77,18 +77,18 @@ func TestMsgWithWrongType(t *testing.T) {
 func TestClearMessage(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	mb.Text("hello, world").Build()
-	assert.Equal(t, "hello, world", *mb.message.Content.Text)
+	assert.Equal(t, "hello, world", mb.message.Content.Text.Text)
 	mb.Clear()
 	assert.Equal(t, MsgText, mb.msgType)
 	assert.Empty(t, mb.message.Content)
 	mb.Text("attach again").Build()
-	assert.Equal(t, "attach again", *mb.message.Content.Text)
+	assert.Equal(t, "attach again", mb.message.Content.Text.Text)
 }
 
 func TestWorkWithTextBuilder(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	mb.Text(NewTextBuilder().Textln("hello, world").Render()).Build()
-	assert.Equal(t, "hello, world\n", *mb.message.Content.Text)
+	assert.Equal(t, "hello, world\n", mb.message.Content.Text.Text)
 }
 
 func TestMsgUpdateMulti(t *testing.T) {
