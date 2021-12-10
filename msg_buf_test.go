@@ -57,6 +57,13 @@ func TestMsgShareUser(t *testing.T) {
 	assert.Equal(t, "334455", msg.Content.ShareUser.UserID)
 }
 
+func TestMsgFile(t *testing.T) {
+	mb := NewMsgBuffer(MsgFile)
+	msg := mb.File("file_v2_71cafb2c-137f-4bb0-8381-ffd4971dbecg").Build()
+	assert.Equal(t, MsgFile, msg.MsgType)
+	assert.Equal(t, "file_v2_71cafb2c-137f-4bb0-8381-ffd4971dbecg", msg.Content.File.FileKey)
+}
+
 func TestMsgWithWrongType(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	mb.ShareChat("6559399282837815565")
@@ -65,6 +72,8 @@ func TestMsgWithWrongType(t *testing.T) {
 	assert.Equal(t, mb.Error().Error(), "`ShareUser` is only available to `share_user`")
 	mb.Image("aaa")
 	assert.Equal(t, mb.Error().Error(), "`Image` is only available to `image`")
+	mb.File("aaa")
+	assert.Equal(t, mb.Error().Error(), "`File` is only available to `file`")
 	mb.Post(nil)
 	assert.Equal(t, mb.Error().Error(), "`Post` is only available to `post`")
 	mb.Card("nil")

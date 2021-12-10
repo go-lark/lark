@@ -114,7 +114,8 @@ func (bot Bot) UploadFile(req UploadFileRequest) (*UploadFileResponse, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	writer.WriteField("file_type", req.FileType)
-	if req.FileType == "mp4" {
+	writer.WriteField("file_name", req.FileName)
+	if req.FileType == "mp4" && req.Duration > 0 {
 		writer.WriteField("duration", fmt.Sprintf("%d", req.Duration))
 	}
 	part, err := writer.CreateFormFile("file", req.Path)

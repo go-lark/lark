@@ -138,6 +138,19 @@ func (m *MsgBuffer) ShareUser(userID string) *MsgBuffer {
 	return m
 }
 
+// File attaches file
+// for MsgFile only
+func (m *MsgBuffer) File(fileKey string) *MsgBuffer {
+	if m.msgType != MsgFile {
+		m.err = m.typeError("File", MsgFile)
+		return m
+	}
+	m.message.Content.File = &FileContent{
+		FileKey: fileKey,
+	}
+	return m
+}
+
 // Post sets raw post content
 func (m *MsgBuffer) Post(postContent *PostContent) *MsgBuffer {
 	if m.msgType != MsgPost {

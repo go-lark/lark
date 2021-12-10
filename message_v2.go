@@ -31,6 +31,8 @@ func buildContent(om OutcomingMessage) string {
 		b, err = json.Marshal(om.Content.Text)
 	case MsgImage:
 		b, err = json.Marshal(om.Content.Image)
+	case MsgFile:
+		b, err = json.Marshal(om.Content.File)
 	case MsgShareCard:
 		b, err = json.Marshal(om.Content.ShareChat)
 	case MsgShareUser:
@@ -39,6 +41,12 @@ func buildContent(om OutcomingMessage) string {
 		b, err = json.Marshal(om.Content.Post)
 	case MsgInteractive:
 		b, err = json.Marshal(om.Content.Card)
+	case MsgAudio:
+		b, err = json.Marshal(om.Content.Audio)
+	case MsgMedia:
+		b, err = json.Marshal(om.Content.Media)
+	case MsgSticker:
+		b, err = json.Marshal(om.Content.Sticker)
 	}
 	if err != nil {
 		return ""

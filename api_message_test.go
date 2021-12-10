@@ -118,6 +118,14 @@ func TestPostMessage(t *testing.T) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
 	}
+	// file
+	msg = NewMsgBuffer(MsgFile)
+	om = msg.BindChatID(testGroupChatID).File("file_v2_356de203-39c2-49fd-8357-70b9b311f44g").Build()
+	resp, err = bot.PostMessage(om)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
 }
 
 func TestPostPostMessage(t *testing.T) {

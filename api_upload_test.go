@@ -32,7 +32,7 @@ func TestUploadImageObject(t *testing.T) {
 func TestUploadFile(t *testing.T) {
 	resp, err := bot.UploadFile(UploadFileRequest{
 		FileType: "pdf",
-		FileName: "hello",
+		FileName: "hello.pdf",
 		Path:     "./fixtures/test.pdf",
 	})
 	if assert.NoError(t, err) {
