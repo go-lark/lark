@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	uploadImageURL = "/open-apis/image/v4/put/"
+	uploadImageURL = "/open-apis/im/v1/images"
 )
 
 // UploadImageResponse .
