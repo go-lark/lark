@@ -119,7 +119,7 @@ func newMsgBufWithOptionalUserID(msgType string, userID *OptionalUserID) *MsgBuf
 }
 
 // PostText is a simple way to send text messages
-func (bot *Bot) PostText(text string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot Bot) PostText(text string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -129,7 +129,7 @@ func (bot *Bot) PostText(text string, userID *OptionalUserID) (*PostMessageRespo
 }
 
 // PostRichText is a simple way to send rich text messages
-func (bot *Bot) PostRichText(postContent *PostContent, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot Bot) PostRichText(postContent *PostContent, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgPost, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -139,7 +139,7 @@ func (bot *Bot) PostRichText(postContent *PostContent, userID *OptionalUserID) (
 }
 
 // PostTextMention is a simple way to send text messages with @user
-func (bot *Bot) PostTextMention(text string, atUserID string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot Bot) PostTextMention(text string, atUserID string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -150,7 +150,7 @@ func (bot *Bot) PostTextMention(text string, atUserID string, userID *OptionalUs
 }
 
 // PostTextMentionAndReply is a simple way to send text messages with @user and reply a message
-func (bot *Bot) PostTextMentionAndReply(text string, atUserID string, userID *OptionalUserID, replyID string) (*PostMessageResponse, error) {
+func (bot Bot) PostTextMentionAndReply(text string, atUserID string, userID *OptionalUserID, replyID string) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -161,7 +161,7 @@ func (bot *Bot) PostTextMentionAndReply(text string, atUserID string, userID *Op
 }
 
 // PostTextMentionAll is a simple way to send text messages with @all
-func (bot *Bot) PostTextMentionAll(text string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot Bot) PostTextMentionAll(text string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -172,14 +172,14 @@ func (bot *Bot) PostTextMentionAll(text string, userID *OptionalUserID) (*PostMe
 }
 
 // PostImage is a simple way to send image
-func (bot *Bot) PostImage(imageKey string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot Bot) PostImage(imageKey string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgImage, userID)
 	om := mb.Image(imageKey).Build()
 	return bot.PostMessage(om)
 }
 
 // PostShareChat is a simple way to share chat
-func (bot *Bot) PostShareChat(chatID string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot Bot) PostShareChat(chatID string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgShareCard, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -189,7 +189,7 @@ func (bot *Bot) PostShareChat(chatID string, userID *OptionalUserID) (*PostMessa
 }
 
 // PostShareUser is a simple way to share user
-func (bot *Bot) PostShareUser(openID string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot Bot) PostShareUser(openID string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgShareUser, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -199,7 +199,7 @@ func (bot *Bot) PostShareUser(openID string, userID *OptionalUserID) (*PostMessa
 }
 
 // PostMessage posts message
-func (bot *Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
+func (bot Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	req, err := BuildMessage(om)
 	if err != nil {
 		return nil, err
@@ -217,7 +217,7 @@ func (bot Bot) GetMessage(messageID string) (*GetMessageResponse, error) {
 }
 
 // RecallMessage recalls a message with ID
-func (bot *Bot) RecallMessage(messageID string) (*RecallMessageResponse, error) {
+func (bot Bot) RecallMessage(messageID string) (*RecallMessageResponse, error) {
 	url := fmt.Sprintf(recallMessageURL, messageID)
 	var respData RecallMessageResponse
 	err := bot.DeleteAPIRequest("RecallMessage", url, true, nil, &respData)
@@ -225,7 +225,7 @@ func (bot *Bot) RecallMessage(messageID string) (*RecallMessageResponse, error) 
 }
 
 // MessageReadReceipt queries message read receipt
-func (bot *Bot) MessageReadReceipt(messageID string) (*MessageReceiptResponse, error) {
+func (bot Bot) MessageReadReceipt(messageID string) (*MessageReceiptResponse, error) {
 	params := map[string]interface{}{
 		"message_id": messageID,
 	}
@@ -235,7 +235,7 @@ func (bot *Bot) MessageReadReceipt(messageID string) (*MessageReceiptResponse, e
 }
 
 // PostEphemeralMessage posts an ephemeral message
-func (bot *Bot) PostEphemeralMessage(om OutcomingMessage) (*PostEphemeralMessageResponse, error) {
+func (bot Bot) PostEphemeralMessage(om OutcomingMessage) (*PostEphemeralMessageResponse, error) {
 	if om.UIDType == UIDUnionID {
 		return nil, ErrUnsupportedUIDType
 	}
@@ -246,7 +246,7 @@ func (bot *Bot) PostEphemeralMessage(om OutcomingMessage) (*PostEphemeralMessage
 }
 
 // DeleteEphemeralMessage deletes an ephemeral message
-func (bot *Bot) DeleteEphemeralMessage(messageID string) (*DeleteEphemeralMessageResponse, error) {
+func (bot Bot) DeleteEphemeralMessage(messageID string) (*DeleteEphemeralMessageResponse, error) {
 	params := map[string]interface{}{
 		"message_id": messageID,
 	}
