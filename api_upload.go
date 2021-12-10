@@ -5,6 +5,7 @@ package lark
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"image/jpeg"
 	"io"
@@ -15,6 +16,7 @@ import (
 
 const (
 	uploadImageURL = "/open-apis/im/v1/images"
+	uploadFileURL  = "/open-apis/im/v1/files"
 )
 
 // UploadImageResponse .
@@ -25,8 +27,24 @@ type UploadImageResponse struct {
 	} `json:"data"`
 }
 
+// UploadFileRequest .
+type UploadFileRequest struct {
+	FileType string `json:"-"`
+	FileName string `json:"-"`
+	Duration int    `json:"-"`
+	Path     string `json:"-"`
+}
+
+// UploadFileResponse .
+type UploadFileResponse struct {
+	BaseResponse
+	Data struct {
+		FileKey string `json:"file_key"`
+	} `json:"data"`
+}
+
 // UploadImage uploads image to Lark server
-func (bot *Bot) UploadImage(path string) (*UploadImageResponse, error) {
+func (bot Bot) UploadImage(path string) (*UploadImageResponse, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -59,7 +77,7 @@ func (bot *Bot) UploadImage(path string) (*UploadImageResponse, error) {
 }
 
 // UploadImageObject uploads image to Lark server
-func (bot *Bot) UploadImageObject(img image.Image) (*UploadImageResponse, error) {
+func (bot Bot) UploadImageObject(img image.Image) (*UploadImageResponse, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	writer.WriteField("image_type", "message")
@@ -79,6 +97,42 @@ func (bot *Bot) UploadImageObject(img image.Image) (*UploadImageResponse, error)
 	header := make(http.Header)
 	header.Set("Content-Type", writer.FormDataContentType())
 	err = bot.DoAPIRequest("POST", "UploadImage", uploadImageURL, header, true, body, &respData)
+	if err != nil {
+		return nil, err
+	}
+	return &respData, err
+}
+
+// UploadFile uploads file to Lark server
+func (bot Bot) UploadFile(req UploadFileRequest) (*UploadFileResponse, error) {
+	file, err := os.Open(req.Path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	writer.WriteField("file_type", req.FileType)
+	if req.FileType == "mp4" {
+		writer.WriteField("duration", fmt.Sprintf("%d", req.Duration))
+	}
+	part, err := writer.CreateFormFile("file", req.Path)
+	if err != nil {
+		return nil, err
+	}
+	_, err = io.Copy(part, file)
+	if err != nil {
+		return nil, err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, err
+	}
+	var respData UploadFileResponse
+	header := make(http.Header)
+	header.Set("Content-Type", writer.FormDataContentType())
+	err = bot.DoAPIRequest("POST", "UploadFile", uploadFileURL, header, true, body, &respData)
 	if err != nil {
 		return nil, err
 	}
