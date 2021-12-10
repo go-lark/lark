@@ -151,23 +151,29 @@ MsgBuffer 主要有两类函数，Bind 函数和内容函数。
 
 Bind 函数：
 
-| 函数       | 作用        | 备注                                  |
-| ---------- | ----------- | ------------------------------------- |
-| BindChatID | 绑定 ChatID | OpenID/UserID/Email/ChatID 四选一即可 |
-| BindOpenID | 绑定 OpenID |                                       |
-| BindUserID | 绑定 UserID |                                       |
-| BindEmail  | 绑定邮箱    |                                       |
-| BindReply  | 绑定回复    | 回复他人时需要                        |
+| 函数        | 作用         | 备注                                          |
+| ----------- | ------------ | --------------------------------------------- |
+| BindChatID  | 绑定 ChatID  | OpenID/UserID/Email/ChatID/UnionID 选一个即可 |
+| BindOpenID  | 绑定 OpenID  |                                               |
+| BindUserID  | 绑定 UserID  |                                               |
+| BindUnionID | 绑定 UnionID |                                               |
+| BindEmail   | 绑定邮箱     |                                               |
+| BindReply   | 绑定回复     | 回复他人时需要                                |
 
 内容函数大多跟消息类型是强关联的，类型错误不会生效。内容函数：
 
-| 函数      | 适用范围         | 作用           | 备注                                                                                       |
-| --------- | ---------------- | -------------- | ------------------------------------------------------------------------------------------ |
-| Text      | `MsgText`        | 添加文本内容   | 可使用 `TextBuilder` 构造                                                                  |
-| Post      | `MsgPost`        | 添加富文本内容 | 可使用 `PostBuilder` 构造                                                                  |
-| Image     | `MsgImage`       | 添加图片       | 图片需要先上传到 飞书服务器                                                                |
-| ShareChat | `MsgShareCard`   | 添加分享群卡片 |                                                                                            |
-| Card      | `MsgInteractive` | 添加交互式卡片 | 非国际化卡片可使用 `CardBuilder` 构造，详见[声明式卡片搭建工具 to Go](card/README_zhCN.md) |
+| 函数      | 适用范围         | 作用             | 备注                                                    |
+| --------- | ---------------- | ---------------- | ------------------------------------------------------- |
+| Text      | `MsgText`        | 添加文本内容     | 可使用 `TextBuilder` 构造                               |
+| Post      | `MsgPost`        | 添加富文本内容   | 可使用 `PostBuilder` 构造                               |
+| Card      | `MsgInteractive` | 添加交互式卡片   | 非国际化卡片可使用 [`CardBuilder`](card/README_zhCN.md) |
+| ShareChat | `MsgShareCard`   | 添加分享群卡片   |                                                         |
+| ShareUser | `MsgShareUser`   | 添加分享用户卡片 |                                                         |
+| Image     | `MsgImage`       | 添加图片         | 需要先上传到飞书服务器                                  |
+| File      | `MsgFile`        | 添加文件         | 需要先上传到飞书服务器                                  |
+| Audio     | `MsgAudio`       | 添加音频         | 需要先上传到飞书服务器                                  |
+| Media     | `MsgMedia`       | 添加媒体         | 需要先上传到飞书服务器                                  |
+| Sticker   | `MsgSticker`     | 添加表情         | 需要先上传到飞书服务器                                  |
 
 ### 异常处理
 
@@ -293,7 +299,7 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
 - 机器人发消息失败了
   - 常见原因：1，忘了开启授权；2，没进群发群消息；3，其它权限类问题
 - go-lark 可以发消息卡片吗？怎么发？
-  - 可以，但需要自己构造拼接消息 JSON body，然后使用`PostMessage`发送。
+  - 可以，可以使用 CardBuilder 构建
 
 ## 贡献
 

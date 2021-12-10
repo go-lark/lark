@@ -150,32 +150,43 @@ We can build message body with `MsgBuffer` and send with `PostMessage`, which su
 
 - `MsgText`: Text
 - `MsgPost`: Rich Text
-- `MsgImage`: Image
-- `MsgShareCard`: Group Share Card
 - `MsgInteractive`: Interactive Card
+- `MsgShareCard`: Group Share Card
+- `MsgShareUser`: User Share Card
+- `MsgImage`: Image
+- `MsgFile`: File
+- `MsgAudio`: Audio
+- `MsgMedia`: Media
+- `MsgSticker`: Sticker
 
 `MsgBuffer` provides binding functions and content functions.
 
 Binding functions:
 
-| Function   | Usage               | Comment                                                          |
-| ---------- | ------------------- | ---------------------------------------------------------------- |
-| BindChatID | Bind a chat ID      | Either `OpenID`, `UserID`, `Email` or `ChatID` should be present |
-| BindOpenID | Bind a user open ID |                                                                  |
-| BindUserID | Bind a user ID      |                                                                  |
-| BindEmail  | Bind a user email   |                                                                  |
-| BindReply  | Bind a reply ID     | Required when reply other message                                |
+| Function    | Usage               | Comment                                                                     |
+| ----------- | ------------------- | --------------------------------------------------------------------------- |
+| BindChatID  | Bind a chat ID      | Either `OpenID`, `UserID`, `Email`, `ChatID` or `UnionID` should be present |
+| BindOpenID  | Bind a user open ID |                                                                             |
+| BindUserID  | Bind a user ID      |                                                                             |
+| BindUnionID | Bind a union ID     |                                                                             |
+| BindEmail   | Bind a user email   |                                                                             |
+| BindReply   | Bind a reply ID     | Required when reply a message                                               |
 
 Content functions pair with message content types. If it mismatched, it would not have sent successfully.
 Content functions:
 
-| Function  | Message Type     | Usage                   | Comment                                                                      |
-| --------- | ---------------- | ----------------------- | ---------------------------------------------------------------------------- |
-| Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                                                 |
-| Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                                                 |
-| Image     | `MsgImage`       | Append image            | Required to upload to Lark server in advance                                 |
-| ShareChat | `MsgShareCard`   | Append group share card |                                                                              |
-| Card      | `MsgInteractive` | Append interactive card | May build with `CardBuilder`, see [Declarative card builder](card/README.md) |
+| Function  | Message Type     | Usage                   | Comment                                        |
+| --------- | ---------------- | ----------------------- | ---------------------------------------------- |
+| Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                   |
+| Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                   |
+| Card      | `MsgInteractive` | Append interactive card | May build with [`CardBuilder`](card/README.md) |
+| ShareChat | `MsgShareCard`   | Append group share card |                                                |
+| ShareUser | `MsgShareUser`   | Append user share card  |                                                |
+| Image     | `MsgImage`       | Append image            | Required to upload to Lark server in advance   |
+| File      | `MsgFile`        | Append file             | Required to upload to Lark server in advance   |
+| Audio     | `MsgAudio`       | Append audio            | Required to upload to Lark server in advance   |
+| Media     | `MsgMedia`       | Append media            | Required to upload to Lark server in advance   |
+| Sticker   | `MsgSticker`     | Append sticker          | Required to upload to Lark server in advance   |
 
 ### Error Handling
 
@@ -296,19 +307,6 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
 }
 ```
 
-## Compatibility
-
-go-lark is based on Lark API v3 and v4. The compatibility of each API depends on actual implementation.
-Compatibility table:
-
-| API scope        | Compatibility   | Migration              |
-| ---------------- | --------------- | ---------------------- |
-| auth             | N/A             | Lark does not offer v4 |
-| messaging        | v4 only         |                        |
-| interactive card | v4 only         |                        |
-| bot              | N/A             | Lark does not offer v4 |
-| group            | partial v3 & v4 | WIP                    |
-
 ## FAQ
 
 - I got `99991401` when sending messages
@@ -318,7 +316,7 @@ Compatibility table:
   2. not invite to the group.
   3. API permission not applied.
 - Does go-lark support interactive message card?
-  - It can send but no card builder provided. You may need to build it manually and send with go-lark.
+  - Yes, use card builder.
 
 ## Contributing
 
