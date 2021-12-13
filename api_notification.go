@@ -7,6 +7,7 @@ type PostNotificationResp struct {
 
 // PostNotificationV2Resp response of PostNotificationV2
 type PostNotificationV2Resp struct {
+	BaseResponse
 	StatusCode    int    `json:"StatusCode"`
 	StatusMessage string `json:"StatusMessage"`
 }
