@@ -101,7 +101,7 @@ type MessageReceiptResponse struct {
 func newMsgBufWithOptionalUserID(msgType string, userID *OptionalUserID) *MsgBuffer {
 	mb := NewMsgBuffer(msgType)
 	realID := userID.RealID
-	switch userID.IDType {
+	switch userID.UIDType {
 	case "email":
 		mb.BindEmail(realID)
 	case "open_id":

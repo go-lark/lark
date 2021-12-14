@@ -11,14 +11,14 @@ const (
 
 // OptionalUserID to contain openID, chatID, userID, email
 type OptionalUserID struct {
-	IDType string
-	RealID string
+	UIDType string
+	RealID  string
 }
 
-func withOneID(idType, realID string) *OptionalUserID {
+func withOneID(uidType, realID string) *OptionalUserID {
 	return &OptionalUserID{
-		IDType: idType,
-		RealID: realID,
+		UIDType: uidType,
+		RealID:  realID,
 	}
 }
 
