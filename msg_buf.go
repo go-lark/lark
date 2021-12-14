@@ -9,7 +9,7 @@ import (
 // You can call every function, but some of which is only available for specific condition
 type MsgBuffer struct {
 	// Message type
-	msgType MessageType
+	msgType string
 	// Output
 	message OutcomingMessage
 
@@ -17,7 +17,7 @@ type MsgBuffer struct {
 }
 
 // NewMsgBuffer create a message buffer
-func NewMsgBuffer(newMsgType MessageType) *MsgBuffer {
+func NewMsgBuffer(newMsgType string) *MsgBuffer {
 	msgBuffer := MsgBuffer{
 		message: OutcomingMessage{
 			MsgType: newMsgType,
@@ -29,38 +29,50 @@ func NewMsgBuffer(newMsgType MessageType) *MsgBuffer {
 
 // BindOpenID binds open_id
 func (m *MsgBuffer) BindOpenID(openID string) *MsgBuffer {
-	m.message.OpenID = &openID
+	m.message.OpenID = openID
+	m.message.UIDType = UIDOpenID
 	return m
 }
 
 // BindEmail binds email
 func (m *MsgBuffer) BindEmail(email string) *MsgBuffer {
-	m.message.Email = &email
+	m.message.Email = email
+	m.message.UIDType = UIDEmail
 	return m
 }
 
 // BindChatID binds chat_id
 func (m *MsgBuffer) BindChatID(chatID string) *MsgBuffer {
-	m.message.ChatID = &chatID
+	m.message.ChatID = chatID
+	m.message.UIDType = UIDChatID
 	return m
 }
 
 // BindOpenChatID binds open_chat_id
 func (m *MsgBuffer) BindOpenChatID(openChatID string) *MsgBuffer {
 	m.BindChatID(openChatID)
+	m.message.UIDType = UIDChatID
 	return m
 }
 
 // BindUserID binds open_id
 func (m *MsgBuffer) BindUserID(userID string) *MsgBuffer {
-	m.message.UserID = &userID
+	m.message.UserID = userID
+	m.message.UIDType = UIDUserID
+	return m
+}
+
+// BindUnionID binds union_id
+func (m *MsgBuffer) BindUnionID(unionID string) *MsgBuffer {
+	m.message.UnionID = unionID
+	m.message.UIDType = UIDUnionID
 	return m
 }
 
 // BindReply binds root id for reply
 // rootID is OpenMessageID of the message you reply
 func (m *MsgBuffer) BindReply(rootID string) *MsgBuffer {
-	m.message.RootID = &rootID
+	m.message.RootID = rootID
 	return m
 }
 
@@ -71,7 +83,7 @@ func (m *MsgBuffer) UpdateMulti(flag bool) *MsgBuffer {
 	return m
 }
 
-func (m MsgBuffer) typeError(funcName string, msgType MessageType) error {
+func (m MsgBuffer) typeError(funcName string, msgType string) error {
 	return fmt.Errorf("`%s` is only available to `%s`", funcName, msgType)
 }
 
@@ -81,7 +93,9 @@ func (m *MsgBuffer) Text(text string) *MsgBuffer {
 		m.err = m.typeError("Text", MsgText)
 		return m
 	}
-	m.message.Content.Text = &text
+	m.message.Content.Text = &TextContent{
+		Text: text,
+	}
 	return m
 }
 
@@ -92,7 +106,9 @@ func (m *MsgBuffer) Image(imageKey string) *MsgBuffer {
 		m.err = m.typeError("Image", MsgImage)
 		return m
 	}
-	m.message.Content.ImageKey = &imageKey
+	m.message.Content.Image = &ImageContent{
+		ImageKey: imageKey,
+	}
 	return m
 }
 
@@ -103,7 +119,35 @@ func (m *MsgBuffer) ShareChat(chatID string) *MsgBuffer {
 		m.err = m.typeError("ShareChat", MsgShareCard)
 		return m
 	}
-	m.message.Content.ShareChat = &chatID
+	m.message.Content.ShareChat = &ShareChatContent{
+		ChatID: chatID,
+	}
+	return m
+}
+
+// ShareUser attaches user id
+// for MsgShareUser only
+func (m *MsgBuffer) ShareUser(userID string) *MsgBuffer {
+	if m.msgType != MsgShareUser {
+		m.err = m.typeError("ShareUser", MsgShareUser)
+		return m
+	}
+	m.message.Content.ShareUser = &ShareUserContent{
+		UserID: userID,
+	}
+	return m
+}
+
+// File attaches file
+// for MsgFile only
+func (m *MsgBuffer) File(fileKey string) *MsgBuffer {
+	if m.msgType != MsgFile {
+		m.err = m.typeError("File", MsgFile)
+		return m
+	}
+	m.message.Content.File = &FileContent{
+		FileKey: fileKey,
+	}
 	return m
 }
 
@@ -123,8 +167,9 @@ func (m *MsgBuffer) Card(cardContent string) *MsgBuffer {
 		m.err = m.typeError("Card", MsgInteractive)
 		return m
 	}
-	m.message.Card = new(map[string]interface{})
-	_ = json.Unmarshal([]byte(cardContent), m.message.Card)
+	card := make(CardContent)
+	_ = json.Unmarshal([]byte(cardContent), &card)
+	m.message.Content.Card = &card
 	return m
 }
 

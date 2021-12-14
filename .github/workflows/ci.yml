@@ -39,4 +39,6 @@ jobs:
       LARK_USER_EMAIL: ${{ secrets.LARK_USER_EMAIL }}
       LARK_CHAT_ID: ${{ secrets.LARK_CHAT_ID }}
       LARK_OPEN_ID: ${{ secrets.LARK_OPEN_ID }}
+      LARK_USER_ID: ${{ secrets.LARK_USER_ID }}
+      LARK_UNION_ID: ${{ secrets.LARK_UNION_ID }}
       LARK_MESSAGE_ID: ${{ secrets.LARK_MESSAGE_ID }}

@@ -28,3 +28,16 @@ func TestUploadImageObject(t *testing.T) {
 		assert.NotEmpty(t, resp.Data.ImageKey)
 	}
 }
+
+func TestUploadFile(t *testing.T) {
+	resp, err := bot.UploadFile(UploadFileRequest{
+		FileType: "pdf",
+		FileName: "hello.pdf",
+		Path:     "./fixtures/test.pdf",
+	})
+	if assert.NoError(t, err) {
+		assert.Zero(t, resp.Code)
+		t.Log(resp.Data.FileKey)
+		assert.NotEmpty(t, resp.Data.FileKey)
+	}
+}
