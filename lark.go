@@ -41,6 +41,7 @@ type Bot struct {
 
 	ctx    context.Context
 	logger LogWrapper
+	debug  bool
 }
 
 // Domains
