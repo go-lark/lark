@@ -29,14 +29,6 @@ func TestPostText(t *testing.T) {
 	}
 }
 
-func TestPostTextFailed(t *testing.T) {
-	resp, err := bot.PostText("PostText: email hello, world", WithEmail("9999@example.com"))
-	if assert.NoError(t, err) {
-		assert.NotEqual(t, 0, resp.Code)
-		assert.Contains(t, resp.Msg, "invalid receive_id")
-	}
-}
-
 func TestPostTextMention(t *testing.T) {
 	resp, err := bot.PostTextMention("PostTextMention", testUserOpenID, WithChatID(testGroupChatID))
 	if assert.NoError(t, err) {
@@ -66,6 +58,12 @@ func TestReplyMessage(t *testing.T) {
 	}
 }
 
+func TestReplyMessageFailed(t *testing.T) {
+	om := newMsgBufWithOptionalUserID(MsgText, &OptionalUserID{UIDOpenID, testUserOpenID}).Text("will fail").Build()
+	_, err := bot.ReplyMessage(om)
+	assert.ErrorIs(t, err, ErrParamMessageID)
+}
+
 func TestPostImage(t *testing.T) {
 	resp, err := bot.PostImage("img_a97c1597-9c0a-47c1-9fb4-dd3e5e37ac9g", WithChatID(testGroupChatID))
 	if assert.NoError(t, err) {
@@ -88,6 +86,31 @@ func TestPostShareUser(t *testing.T) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
 	}
+}
+
+func TestPostTextFailed(t *testing.T) {
+	resp, err := bot.PostText("PostText: email hello, world", WithEmail("9999@example.com"))
+	if assert.NoError(t, err) {
+		assert.NotEqual(t, 0, resp.Code)
+		assert.Contains(t, resp.Msg, "invalid receive_id")
+	}
+}
+
+func TestPostFailedByUserID(t *testing.T) {
+	_, err := bot.PostText("should fail", &OptionalUserID{"some id", ""})
+	assert.ErrorIs(t, err, ErrParamUserID)
+	_, err = bot.PostTextMention("should fail", "", &OptionalUserID{"some id", ""})
+	assert.ErrorIs(t, err, ErrParamUserID)
+	_, err = bot.PostTextMentionAll("should fail", &OptionalUserID{"some id", ""})
+	assert.ErrorIs(t, err, ErrParamUserID)
+	_, err = bot.PostTextMentionAndReply("should fail", "", &OptionalUserID{"some id", ""}, "")
+	assert.ErrorIs(t, err, ErrParamUserID)
+	_, err = bot.PostImage("should fail", &OptionalUserID{"some id", ""})
+	assert.ErrorIs(t, err, ErrParamUserID)
+	_, err = bot.PostShareChat("should fail", &OptionalUserID{"some id", ""})
+	assert.ErrorIs(t, err, ErrParamUserID)
+	_, err = bot.PostShareUser("should fail", &OptionalUserID{"some id", ""})
+	assert.ErrorIs(t, err, ErrParamUserID)
 }
 
 func TestPostMessage(t *testing.T) {

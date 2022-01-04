@@ -175,6 +175,9 @@ func (bot Bot) PostTextMentionAndReply(text string, atUserID string, userID *Opt
 // PostImage is a simple way to send image
 func (bot Bot) PostImage(imageKey string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgImage, userID)
+	if mb == nil {
+		return nil, ErrParamUserID
+	}
 	om := mb.Image(imageKey).Build()
 	return bot.PostMessage(om)
 }
