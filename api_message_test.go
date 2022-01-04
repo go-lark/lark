@@ -17,12 +17,12 @@ func TestPostText(t *testing.T) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
 	}
-	resp, err = bot.PostText("PostText: chat_id hello, world", WithChatID(testGroupChatID))
+	resp, err = bot.PostText("PostText: union_id hello, world", WithUnionID(testUserUnionID))
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
 	}
-	resp, err = bot.PostText("PostText: union_id hello, world", WithUnionID(testUserUnionID))
+	resp, err = bot.PostText("PostText: chat_id hello, world", WithChatID(testGroupChatID))
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
@@ -47,6 +47,19 @@ func TestPostTextMention(t *testing.T) {
 
 func TestPostTextMentionAll(t *testing.T) {
 	resp, err := bot.PostTextMentionAll("PostTextMentionAll", WithChatID(testGroupChatID))
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
+}
+
+func TestReplyMessage(t *testing.T) {
+	resp, err := bot.PostText("Message to be replied", WithChatID(testGroupChatID))
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
+	resp, err = bot.PostTextMentionAndReply("PostTextMentionAndReply", testUserOpenID, WithChatID(testGroupChatID), resp.Data.MessageID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)

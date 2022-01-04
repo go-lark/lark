@@ -4,6 +4,7 @@ import "fmt"
 
 const (
 	messageURL                = "/open-apis/im/v1/messages?receive_id_type=%s"
+	replyMessageURL           = "/open-apis/im/v1/messages/%s/reply"
 	getMessageURL             = "/open-apis/im/v1/messages/%s"
 	recallMessageURL          = "/open-apis/im/v1/messages/%s"
 	messageReceiptURL         = "/open-apis/message/v4/read_info/"
@@ -149,17 +150,6 @@ func (bot Bot) PostTextMention(text string, atUserID string, userID *OptionalUse
 	return bot.PostMessage(om)
 }
 
-// PostTextMentionAndReply is a simple way to send text messages with @user and reply a message
-func (bot Bot) PostTextMentionAndReply(text string, atUserID string, userID *OptionalUserID, replyID string) (*PostMessageResponse, error) {
-	mb := newMsgBufWithOptionalUserID(MsgText, userID)
-	if mb == nil {
-		return nil, ErrParamUserID
-	}
-	tb := NewTextBuilder()
-	om := mb.Text(tb.Text(text).Mention(atUserID).Render()).BindReply(replyID).Build()
-	return bot.PostMessage(om)
-}
-
 // PostTextMentionAll is a simple way to send text messages with @all
 func (bot Bot) PostTextMentionAll(text string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
@@ -168,6 +158,17 @@ func (bot Bot) PostTextMentionAll(text string, userID *OptionalUserID) (*PostMes
 	}
 	tb := NewTextBuilder()
 	om := mb.Text(tb.Text(text).MentionAll().Render()).Build()
+	return bot.PostMessage(om)
+}
+
+// PostTextMentionAndReply is a simple way to send text messages with @user and reply a message
+func (bot Bot) PostTextMentionAndReply(text string, atUserID string, userID *OptionalUserID, replyID string) (*PostMessageResponse, error) {
+	mb := newMsgBufWithOptionalUserID(MsgText, userID)
+	if mb == nil {
+		return nil, ErrParamUserID
+	}
+	tb := NewTextBuilder()
+	om := mb.Text(tb.Text(text).Mention(atUserID).Render()).BindReply(replyID).Build()
 	return bot.PostMessage(om)
 }
 
@@ -205,7 +206,26 @@ func (bot Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 		return nil, err
 	}
 	var respData PostMessageResponse
-	err = bot.PostAPIRequest("PostMessage", fmt.Sprintf(messageURL, om.UIDType), true, req, &respData)
+	if om.RootID == "" {
+		err = bot.PostAPIRequest("PostMessage", fmt.Sprintf(messageURL, om.UIDType), true, req, &respData)
+	} else {
+		resp, err := bot.ReplyMessage(om)
+		return resp, err
+	}
+	return &respData, err
+}
+
+// ReplyMessage replies messages
+func (bot Bot) ReplyMessage(om OutcomingMessage) (*PostMessageResponse, error) {
+	req, err := BuildMessage(om)
+	if err != nil {
+		return nil, err
+	}
+	if om.RootID == "" {
+		return nil, ErrParamMessageID
+	}
+	var respData PostMessageResponse
+	err = bot.PostAPIRequest("ReplyMessage", fmt.Sprintf(replyMessageURL, om.RootID), true, req, &respData)
 	return &respData, err
 }
 
