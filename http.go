@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httputil"
 )
 
 // ExpandURL expands url path to full url
@@ -57,6 +58,10 @@ func (bot Bot) DoAPIRequest(
 			bot.httpErrorLog(prefix, "call failed", err)
 			return err
 		}
+		if bot.debug {
+			b, _ := httputil.DumpResponse(resp, true)
+			bot.logger.Log(bot.ctx, LogLevelDebug, string(b))
+		}
 		respBody = resp.Body
 	}
 	defer respBody.Close()
@@ -68,8 +73,7 @@ func (bot Bot) DoAPIRequest(
 	return err
 }
 
-// PostAPIRequest call Lark API
-func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+func (bot Bot) wrapAPIRequest(method, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	buf := new(bytes.Buffer)
 	err := json.NewEncoder(buf).Encode(params)
 	if err != nil {
@@ -79,9 +83,29 @@ func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interfac
 
 	header := make(http.Header)
 	header.Set("Content-Type", "application/json; charset=utf-8")
-	err = bot.DoAPIRequest("POST", prefix, urlPath, header, auth, buf, output)
+	err = bot.DoAPIRequest(method, prefix, urlPath, header, auth, buf, output)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+// PostAPIRequest call Lark API
+func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+	return bot.wrapAPIRequest("POST", prefix, urlPath, auth, params, output)
+}
+
+// GetAPIRequest call Lark API
+func (bot Bot) GetAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+	return bot.wrapAPIRequest("GET", prefix, urlPath, auth, params, output)
+}
+
+// DeleteAPIRequest call Lark API
+func (bot Bot) DeleteAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+	return bot.wrapAPIRequest("DELETE", prefix, urlPath, auth, params, output)
+}
+
+// PutAPIRequest call Lark API
+func (bot Bot) PutAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+	return bot.wrapAPIRequest("PUT", prefix, urlPath, auth, params, output)
 }
