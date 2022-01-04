@@ -6,6 +6,7 @@ import "errors"
 var (
 	ErrBotTypeError           = errors.New("Bot type error")
 	ErrParamUserID            = errors.New("Param error: UserID")
+	ErrParamMessageID         = errors.New("Param error: Message ID")
 	ErrMessageTypeNotSuppored = errors.New("Message type not supported")
 	ErrEncryptionNotEnabled   = errors.New("Encryption is not enabled")
 	ErrCustomHTTPClientNotSet = errors.New("Custom HTTP client not set")
