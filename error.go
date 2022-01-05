@@ -13,4 +13,5 @@ var (
 	ErrMessageNotBuild        = errors.New("Message not build")
 	ErrUnsupportedUIDType     = errors.New("Unsupported UID type")
 	ErrInvalidReceiveID       = errors.New("Invalid receive ID")
+	ErrEventTypeNotMatch      = errors.New("Event type not match")
 )
