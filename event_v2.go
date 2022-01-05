@@ -7,25 +7,6 @@ import (
 	"net/http"
 )
 
-// EventV2 handles events with v2 schema
-type EventV2 struct {
-	Schema string        `json:"schema,omitempty"`
-	Header EventV2Header `json:"header,omitempty"`
-	Event  interface{}   `json:"event,omitempty"`
-}
-
-// GetMessageReceived .
-func (e EventV2) GetMessageReceived() (EventV2MessageReceived, bool) {
-	body, ok := e.Event.(EventV2MessageReceived)
-	return body, ok
-}
-
-// GetChatDisbanded .
-func (e EventV2) GetChatDisbanded() (EventV2ChatDisbanded, bool) {
-	body, ok := e.Event.(EventV2ChatDisbanded)
-	return body, ok
-}
-
 // EventType definitions
 const (
 	EventTypeMessageReceived = "im.message.receive_v1"
@@ -40,17 +21,13 @@ const (
 	EventTypeUserDeleted   = "im.chat.member.user.deleted_v1"
 )
 
-// PostEvent with event v2 format
-// and it's part of EventV2 instead of package method
-func (e EventV2) PostEvent(client *http.Client, hookURL string, event EventV2) (*http.Response, error) {
-	buf := new(bytes.Buffer)
-	err := json.NewEncoder(buf).Encode(event)
-	if err != nil {
-		log.Printf("Encode json failed: %+v\n", err)
-		return nil, err
-	}
-	resp, err := client.Post(hookURL, "application/json; charset=utf-8", buf)
-	return resp, err
+// EventV2 handles events with v2 schema
+type EventV2 struct {
+	Schema string        `json:"schema,omitempty"`
+	Header EventV2Header `json:"header,omitempty"`
+
+	EventRaw json.RawMessage `json:"event,omitempty"`
+	Event    interface{}     `json:"-"`
 }
 
 // EventV2Header .
@@ -68,6 +45,35 @@ type EventV2UserID struct {
 	UnionID string `json:"union_id,omitempty"`
 	UserID  string `json:"user_id,omitempty"`
 	OpenID  string `json:"open_id,omitempty"`
+}
+
+// GetMessageReceived .
+func (e EventV2) GetMessageReceived() (EventV2MessageReceived, error) {
+	var body EventV2MessageReceived
+	err := json.Unmarshal(e.EventRaw, &body)
+	e.Event = body
+	return body, err
+}
+
+// GetChatDisbanded .
+func (e EventV2) GetChatDisbanded() (EventV2ChatDisbanded, error) {
+	var body EventV2ChatDisbanded
+	err := json.Unmarshal(e.EventRaw, &body)
+	e.Event = body
+	return body, err
+}
+
+// PostEvent with event v2 format
+// and it's part of EventV2 instead of package method
+func (e EventV2) PostEvent(client *http.Client, hookURL string, event EventV2) (*http.Response, error) {
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(event)
+	if err != nil {
+		log.Printf("Encode json failed: %+v\n", err)
+		return nil, err
+	}
+	resp, err := client.Post(hookURL, "application/json; charset=utf-8", buf)
+	return resp, err
 }
 
 // EventV2MessageReceived .
