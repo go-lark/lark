@@ -25,6 +25,9 @@ type Bot struct {
 	appSecret         string
 	accessToken       atomic.Value
 	tenantAccessToken atomic.Value
+
+	// user id type for api chat
+	userIDType string
 	// webhook for NotificationBot
 	webhook string
 	// API Domain

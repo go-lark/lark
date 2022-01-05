@@ -99,17 +99,23 @@ type UpdateChatResponse struct {
 	BaseResponse
 }
 
+// WithUserIDType .
+func (bot *Bot) WithUserIDType(userIDType string) *Bot {
+	bot.userIDType = userIDType
+	return bot
+}
+
 // GetChat .
 func (bot Bot) GetChat(chatID string) (*GetChatResponse, error) {
 	var respData GetChatResponse
-	err := bot.GetAPIRequest("GetChatInfo", fmt.Sprintf(getChatURL, chatID, "open_id"), true, nil, &respData)
+	err := bot.GetAPIRequest("GetChatInfo", fmt.Sprintf(getChatURL, chatID, bot.userIDType), true, nil, &respData)
 	return &respData, err
 }
 
 // CreateChat .
 func (bot Bot) CreateChat(req CreateChatRequest) (*CreateChatResponse, error) {
 	var respData CreateChatResponse
-	err := bot.PostAPIRequest("CreateChat", fmt.Sprintf(createChatURL, "open_id"), true, req, &respData)
+	err := bot.PostAPIRequest("CreateChat", fmt.Sprintf(createChatURL, bot.userIDType), true, req, &respData)
 	return &respData, err
 }
 
@@ -123,6 +129,6 @@ func (bot Bot) DeleteChat(chatID string) (*DeleteChatResponse, error) {
 // UpdateChat .
 func (bot Bot) UpdateChat(chatID string, req UpdateChatRequest) (*UpdateChatResponse, error) {
 	var respData UpdateChatResponse
-	err := bot.PutAPIRequest("UpdateChat", fmt.Sprintf(updateChatURL, chatID, "union_id"), true, req, &respData)
+	err := bot.PutAPIRequest("UpdateChat", fmt.Sprintf(updateChatURL, chatID, bot.userIDType), true, req, &respData)
 	return &respData, err
 }
