@@ -47,22 +47,6 @@ type EventV2UserID struct {
 	OpenID  string `json:"open_id,omitempty"`
 }
 
-// GetMessageReceived .
-func (e EventV2) GetMessageReceived() (EventV2MessageReceived, error) {
-	var body EventV2MessageReceived
-	err := json.Unmarshal(e.EventRaw, &body)
-	e.Event = body
-	return body, err
-}
-
-// GetChatDisbanded .
-func (e EventV2) GetChatDisbanded() (EventV2ChatDisbanded, error) {
-	var body EventV2ChatDisbanded
-	err := json.Unmarshal(e.EventRaw, &body)
-	e.Event = body
-	return body, err
-}
-
 // PostEvent with event v2 format
 // and it's part of EventV2 instead of package method
 func (e EventV2) PostEvent(client *http.Client, hookURL string, event EventV2) (*http.Response, error) {
@@ -107,4 +91,15 @@ type EventV2ChatDisbanded struct {
 	OperatorID        EventV2UserID `json:"operator_id,omitempty"`
 	External          bool          `json:"external,omitempty"`
 	OperatorTenantKey string        `json:"operator_tenant_key,omitempty"`
+}
+
+// GetMessageReceived .
+func (e EventV2) GetMessageReceived() (*EventV2MessageReceived, error) {
+	if e.Header.EventType != EventTypeMessageReceived {
+		return nil, ErrEventTypeNotMatch
+	}
+	var body EventV2MessageReceived
+	err := json.Unmarshal(e.EventRaw, &body)
+	e.Event = body
+	return &body, err
 }

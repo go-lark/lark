@@ -206,8 +206,32 @@ middleware.BindURLPrefix("/handle") // 假设 URL 是 http://your.domain.com/han
 r.Use(middleware.LarkChallengeHandler())
 ```
 
-#### 接收消息
+#### 事件 2.0
 
+飞书开放平台默认事件类似目前 v2，会自动在新创建的机器人中启用。
+```go
+r := gin.Default()
+middleware := larkgin.NewLarkMiddleware()
+r.Use(middleware.LarkEventHandler())
+```
+
+获取事件详情：
+```go
+r.POST("/", func(c *gin.Context) {
+    if evt, ok := middleware.GetEvent(c); ok { // => GetEvent instead of GetMessage
+        if evt.Header.EventType == lark.EventTypeMessageReceived {
+            if msg, err := evt.GetMessageReceived(); err == nil {
+                fmt.Println(msg.Message.Content)
+            }
+            // you may have to parse other events
+        }
+    }
+})
+```
+
+#### 接收消息 1.0
+
+对于较早常见的机器人，我们需要使用 v1 版本：
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
