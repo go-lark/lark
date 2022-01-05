@@ -14,7 +14,7 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(m.Event.Text))
 }
 
-func TestPostEventPrivateMessage(t *testing.T) {
+func TestPostEventMessage(t *testing.T) {
 	message := EventMessage{
 		Timestamp: "",
 		Token:     "",
@@ -35,11 +35,18 @@ func TestPostEventPrivateMessage(t *testing.T) {
 	assert.Equal(t, "private event", string(w.Body.Bytes()))
 }
 
-func TestPostEventAtMessage(t *testing.T) {
-	message := EventMessage{
-		Timestamp: "",
-		Token:     "",
-		EventType: "event_callback",
+func httpHandlerV2(w http.ResponseWriter, r *http.Request) {
+	var m EventV2
+	json.NewDecoder(r.Body).Decode(&m)
+	w.Write([]byte(m.Schema))
+}
+
+func TestPostEventV2(t *testing.T) {
+	message := EventV2{
+		Schema: "2.0",
+		Header: EventV2Header{
+			AppID: "666",
+		},
 		Event: EventBody{
 			Type:          "message",
 			ChatType:      "group",
@@ -52,6 +59,6 @@ func TestPostEventAtMessage(t *testing.T) {
 			ImageURL:      "",
 		},
 	}
-	w := performRequest(httpHandler, "POST", "/", message)
-	assert.Equal(t, "public event", string(w.Body.Bytes()))
+	w := performRequest(httpHandlerV2, "POST", "/", message)
+	assert.Equal(t, "2.0", string(w.Body.Bytes()))
 }
