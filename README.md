@@ -208,9 +208,31 @@ middleware := larkgin.NewLarkMiddleware()
 middleware.BindURLPrefix("/handle") // supposed URL is http://your.domain.com/handle
 r.Use(middleware.LarkChallengeHandler())
 ```
+#### Event V2
+
+Lark has provided event v2 and it applied automatically to newly created bots.
+```go
+r := gin.Default()
+middleware := larkgin.NewLarkMiddleware()
+r.Use(middleware.LarkEventHandler())
+```
+
+Get the event (e.g. Message):
+```go
+r.POST("/", func(c *gin.Context) {
+    if evt, ok := middleware.GetEvent(c); ok { // => GetEvent instead of GetMessage
+        if evt.Header.EventType == lark.EventTypeMessageReceived {
+            if msg, err := evt.GetMessageReceived(); err == nil {
+                fmt.Println(msg.Message.Content)
+            }
+        }
+    }
+})
+```
 
 #### Receiving Message
 
+For older bots, please use v1:
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
