@@ -64,6 +64,28 @@ func TestMsgFile(t *testing.T) {
 	assert.Equal(t, "file_v2_71cafb2c-137f-4bb0-8381-ffd4971dbecg", msg.Content.File.FileKey)
 }
 
+func TestMsgAudio(t *testing.T) {
+	mb := NewMsgBuffer(MsgAudio)
+	msg := mb.Audio("file_v2_71cafb2c-137f-4bb0-8381-ffd4971dbecg").Build()
+	assert.Equal(t, MsgAudio, msg.MsgType)
+	assert.Equal(t, "file_v2_71cafb2c-137f-4bb0-8381-ffd4971dbecg", msg.Content.Audio.FileKey)
+}
+
+func TestMsgMedia(t *testing.T) {
+	mb := NewMsgBuffer(MsgMedia)
+	msg := mb.Media("file_v2_b53cd6cc-5327-4968-8bf6-4528deb3068g", "img_v2_b276195a-9ae0-4fec-bbfe-f74b4d5a994g").Build()
+	assert.Equal(t, MsgMedia, msg.MsgType)
+	assert.Equal(t, "file_v2_b53cd6cc-5327-4968-8bf6-4528deb3068g", msg.Content.Media.FileKey)
+	assert.Equal(t, "img_v2_b276195a-9ae0-4fec-bbfe-f74b4d5a994g", msg.Content.Media.ImageKey)
+}
+
+func TestMsgSticker(t *testing.T) {
+	mb := NewMsgBuffer(MsgSticker)
+	msg := mb.Sticker("4ba009df-2453-47b3-a753-444b152217bg").Build()
+	assert.Equal(t, MsgSticker, msg.MsgType)
+	assert.Equal(t, "4ba009df-2453-47b3-a753-444b152217bg", msg.Content.Sticker.FileKey)
+}
+
 func TestMsgWithWrongType(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	mb.ShareChat("6559399282837815565")
@@ -74,6 +96,12 @@ func TestMsgWithWrongType(t *testing.T) {
 	assert.Equal(t, mb.Error().Error(), "`Image` is only available to `image`")
 	mb.File("aaa")
 	assert.Equal(t, mb.Error().Error(), "`File` is only available to `file`")
+	mb.Audio("aaa")
+	assert.Equal(t, mb.Error().Error(), "`Audio` is only available to `audio`")
+	mb.Media("aaa", "bbb")
+	assert.Equal(t, mb.Error().Error(), "`Media` is only available to `media`")
+	mb.Sticker("aaa")
+	assert.Equal(t, mb.Error().Error(), "`Sticker` is only available to `sticker`")
 	mb.Post(nil)
 	assert.Equal(t, mb.Error().Error(), "`Post` is only available to `post`")
 	mb.Card("nil")

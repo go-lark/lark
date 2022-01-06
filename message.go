@@ -76,13 +76,16 @@ type AudioContent struct {
 
 // MediaContent .
 type MediaContent struct {
+	FileName string `json:"file_name,omitempty"`
 	FileKey  string `json:"file_key"`
 	ImageKey string `json:"image_key"`
+	Duration int    `json:"duration,omitempty"`
 }
 
 // FileContent .
 type FileContent struct {
-	FileKey string `json:"file_key"`
+	FileName string `json:"file_name,omitempty"`
+	FileKey  string `json:"file_key"`
 }
 
 // StickerContent .
