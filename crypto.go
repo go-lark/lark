@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 	"crypto/sha256"
 	"encoding/base64"
+	"errors"
 )
 
 // EncryptKey .
@@ -25,6 +26,9 @@ func Decrypt(encryptedKey []byte, data string) ([]byte, error) {
 	decryptedData := make([]byte, len(data))
 	blockMode.CryptBlocks(decryptedData, ciphertext)
 	msg := unpad(decryptedData)
+	if len(msg) < block.BlockSize() {
+		return nil, errors.New("msg length is less than blocksize")
+	}
 	return msg[block.BlockSize():], err
 }
 
