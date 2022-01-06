@@ -162,6 +162,26 @@ func TestPostMessage(t *testing.T) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
 	}
+	// audio - not actually tested
+	msg = NewMsgBuffer(MsgAudio)
+	om = msg.BindChatID(testGroupChatID).File("file_v2_356de203-39c2-49fd-8357-70b9b311f44g").Build()
+	resp, err = bot.PostMessage(om)
+	assert.NotEqual(t, 0, resp.Code)
+	assert.NotEmpty(t, resp.Msg)
+	// media - not actually tested
+	msg = NewMsgBuffer(MsgMedia)
+	om = msg.BindChatID(testGroupChatID).Media("file_v2_b53cd6cc-5327-4968-8bf6-4528deb3068g", "img_v2_b276195a-9ae0-4fec-bbfe-f74b4d5a994g").Build()
+	resp, err = bot.PostMessage(om)
+	assert.NotEqual(t, 0, resp.Code)
+	assert.NotEmpty(t, resp.Msg)
+	// sticker
+	msg = NewMsgBuffer(MsgSticker)
+	om = msg.BindChatID(testGroupChatID).Sticker("4ba009df-2453-47b3-a753-444b152217bg").Build()
+	resp, err = bot.PostMessage(om)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
 }
 
 func TestPostPostMessage(t *testing.T) {

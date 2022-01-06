@@ -151,6 +151,46 @@ func (m *MsgBuffer) File(fileKey string) *MsgBuffer {
 	return m
 }
 
+// Audi attaches audio
+// for MsgAudio only
+func (m *MsgBuffer) Audio(fileKey string) *MsgBuffer {
+	if m.msgType != MsgAudio {
+		m.err = m.typeError("Audio", MsgAudio)
+		return m
+	}
+	m.message.Content.Audio = &AudioContent{
+		FileKey: fileKey,
+	}
+	return m
+}
+
+// Media attaches media
+// for MsgMedia only
+func (m *MsgBuffer) Media(fileKey, imageKey string) *MsgBuffer {
+	if m.msgType != MsgMedia {
+		m.err = m.typeError("Media", MsgMedia)
+		return m
+	}
+	m.message.Content.Media = &MediaContent{
+		FileKey:  fileKey,
+		ImageKey: imageKey,
+	}
+	return m
+}
+
+// Sticker attaches sticker
+// for MsgSticker only
+func (m *MsgBuffer) Sticker(fileKey string) *MsgBuffer {
+	if m.msgType != MsgSticker {
+		m.err = m.typeError("Sticker", MsgSticker)
+		return m
+	}
+	m.message.Content.Sticker = &StickerContent{
+		FileKey: fileKey,
+	}
+	return m
+}
+
 // Post sets raw post content
 func (m *MsgBuffer) Post(postContent *PostContent) *MsgBuffer {
 	if m.msgType != MsgPost {
