@@ -151,7 +151,7 @@ func (m *MsgBuffer) File(fileKey string) *MsgBuffer {
 	return m
 }
 
-// Audi attaches audio
+// Audio attaches audio
 // for MsgAudio only
 func (m *MsgBuffer) Audio(fileKey string) *MsgBuffer {
 	if m.msgType != MsgAudio {
