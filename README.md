@@ -350,4 +350,4 @@ Compatibility table:
 
 ## License
 
-Copyright (c) David Zhang, 2018-2021. Licensed under MIT License.
+Copyright (c) David Zhang, 2018-2022. Licensed under MIT License.

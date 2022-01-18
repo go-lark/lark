@@ -327,4 +327,4 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
 
 ## 协议
 
-Copyright (c) David Zhang, 2018-2021. Licensed under MIT License.
+Copyright (c) David Zhang, 2018-2022. Licensed under MIT License.
