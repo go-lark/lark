@@ -15,6 +15,20 @@ type Block struct {
 	links          *URLBlock
 }
 
+func (b *Block) AddElements(toAdd ...Element) *Block {
+	for _, v := range toAdd {
+		b.elements = append(b.elements, v)
+	}
+	return b
+}
+
+func (b *Block) WithCopyRight(info string) *Block {
+	text := Text(info)
+	note := Note().AddText(text)
+	b.elements = append(b.elements, note)
+	return b
+}
+
 // MarshalJSON implements json.Marshaler
 func (b *Block) MarshalJSON() ([]byte, error) {
 	return json.MarshalIndent(b.Render(), "", "  ")
