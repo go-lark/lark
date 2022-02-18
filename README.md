@@ -208,9 +208,11 @@ middleware := larkgin.NewLarkMiddleware()
 middleware.BindURLPrefix("/handle") // supposed URL is http://your.domain.com/handle
 r.Use(middleware.LarkChallengeHandler())
 ```
+
 #### Event V2
 
 Lark has provided event v2 and it applied automatically to newly created bots.
+
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
@@ -218,6 +220,7 @@ r.Use(middleware.LarkEventHandler())
 ```
 
 Get the event (e.g. Message):
+
 ```go
 r.POST("/", func(c *gin.Context) {
     if evt, ok := middleware.GetEvent(c); ok { // => GetEvent instead of GetMessage
@@ -233,6 +236,7 @@ r.POST("/", func(c *gin.Context) {
 #### Receiving Message
 
 For older bots, please use v1:
+
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
@@ -269,7 +273,34 @@ Example: [examples/event-forward](https://github.com/go-lark/examples/tree/main/
 
 > Notice: `PostEvent` does not support AES encryption at the moment.
 
-## Extensions
+## Development
+
+### Test
+
+1. Dotenv Setup
+
+   go-lark uses `godotenv` test locally. You may have to create a `.env` file in repo directory, which contains environmental variables:
+
+   ```bash
+   LARK_APP_ID
+   LARK_APP_SECRET
+   LARK_USER_EMAIL
+   LARK_USER_ID
+   LARK_UNION_ID
+   LARK_OPEN_ID
+   LARK_CHAT_ID
+   LARK_MESSAGE_ID
+   ```
+
+   `LARK_APP_ID` and `LARK_APP_SECRET` are mandatory. Others are required only by specific API tests.
+
+2. Run Test
+
+   ```bash
+   GO_LARK_TEST_MODE=local ./scripts/test.sh
+   ```
+
+### Extensions
 
 go-lark's dev utilities (authentication, HTTP handling, and etc.) are capable for easily implementing most of APIs provided by Lark Open Platform.
 And we may use that as an extension for go-lark.
