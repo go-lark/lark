@@ -268,7 +268,35 @@ middleware.WithEncryption("<encryption-key>")
 
 > `PostEvent`目前不支持 AES 加密。
 
-## 扩展
+
+## 开发
+
+### 测试
+
+1. Dotenv 配置
+
+   go-lark 使用 `godotenv` 进行本地测试。测试前需要在代码目录下创建一个 `.env` 文件，包含如下环境变量：
+
+   ```bash
+   LARK_APP_ID
+   LARK_APP_SECRET
+   LARK_USER_EMAIL
+   LARK_USER_ID
+   LARK_UNION_ID
+   LARK_OPEN_ID
+   LARK_CHAT_ID
+   LARK_MESSAGE_ID
+   ```
+
+   其中，`LARK_APP_ID` 和 `LARK_APP_SECRET` 必须配置，其它字段根据不同的测试可选择配置。
+
+2. 运行测试
+
+   ```bash
+   GO_LARK_TEST_MODE=local ./scripts/test.sh
+   ```
+
+### 扩展
 
 go-lark 的开发设施（鉴权、HTTP 处理等）可以很方便的用来实现大部分开放平台提供的 API 能力。我们可以通过这种方式扩展 go-lark。
 
