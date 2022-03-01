@@ -1,5 +1,13 @@
 package lark
 
+import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"fmt"
+	"time"
+)
+
 // PostNotificationResp response of PostNotification
 type PostNotificationResp struct {
 	Ok bool `json:"ok,omitempty"`
@@ -34,7 +42,29 @@ func (bot *Bot) PostNotificationV2(om OutcomingMessage) (*PostNotificationV2Resp
 	}
 
 	params := BuildOutcomingMessageReq(om)
+
+	if bot.webhookSignSecret != "" {
+		timestamp := time.Now().Unix()
+		params["timestamp"] = timestamp
+		params["sign"] = bot.webhookSignSecret
+	}
+
 	var respData PostNotificationV2Resp
 	err := bot.PostAPIRequest("PostNotificationV2", bot.webhook, false, params, &respData)
 	return &respData, err
+}
+
+func GenSign(secret string, timestamp int64) (string, error) {
+	//timestamp + key 做sha256, 再进行base64 encode
+	stringToSign := fmt.Sprintf("%v", timestamp) + "\n" + secret
+
+	var data []byte
+	h := hmac.New(sha256.New, []byte(stringToSign))
+	_, err := h.Write(data)
+	if err != nil {
+		return "", err
+	}
+
+	signature := base64.StdEncoding.EncodeToString(h.Sum(nil))
+	return signature, nil
 }

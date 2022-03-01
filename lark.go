@@ -30,6 +30,8 @@ type Bot struct {
 	userIDType string
 	// webhook for NotificationBot
 	webhook string
+	// secret for webhook sign
+	webhookSignSecret string
 	// API Domain
 	domain string
 	// http client
@@ -72,13 +74,14 @@ func NewChatBot(appID, appSecret string) *Bot {
 }
 
 // NewNotificationBot with URL
-func NewNotificationBot(hookURL string) *Bot {
+func NewNotificationBot(hookURL string, sign string) *Bot {
 	bot := &Bot{
-		botType: NotificationBot,
-		webhook: hookURL,
-		client:  initClient(),
-		ctx:     context.Background(),
-		logger:  initDefaultLogger(),
+		botType:           NotificationBot,
+		webhook:           hookURL,
+		client:            initClient(),
+		ctx:               context.Background(),
+		logger:            initDefaultLogger(),
+		webhookSignSecret: sign,
 	}
 	bot.accessToken.Store("")
 	bot.tenantAccessToken.Store("")

@@ -94,7 +94,7 @@ func TestBotProperties(t *testing.T) {
 	assert.NotNil(t, chatBot.client)
 	assert.NotNil(t, chatBot.logger)
 
-	notifyBot := NewNotificationBot(ciHookURLV1)
+	notifyBot := NewNotificationBot(ciHookURLV1, "")
 	assert.Empty(t, notifyBot.appID)
 	assert.Empty(t, notifyBot.appSecret)
 	assert.NotEmpty(t, notifyBot.webhook)

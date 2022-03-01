@@ -49,7 +49,7 @@ func TestHeartbeat(t *testing.T) {
 }
 
 func TestInvalidHeartbeat(t *testing.T) {
-	bot := NewNotificationBot("")
+	bot := NewNotificationBot("", "")
 	output := bot.captureOutput(func() { bot.StartHeartbeat() })
 	assert.Contains(t, output, "only support")
 }
