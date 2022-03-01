@@ -46,7 +46,11 @@ func (bot *Bot) PostNotificationV2(om OutcomingMessage) (*PostNotificationV2Resp
 	if bot.webhookSignSecret != "" {
 		timestamp := time.Now().Unix()
 		params["timestamp"] = timestamp
-		params["sign"] = bot.webhookSignSecret
+		sign, err := GenSign(bot.webhookSignSecret, timestamp)
+		if err != nil {
+			return nil, err
+		}
+		params["sign"] = sign
 	}
 
 	var respData PostNotificationV2Resp
