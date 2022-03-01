@@ -12,7 +12,7 @@ const (
 )
 
 func TestWebhookV1(t *testing.T) {
-	bot := NewNotificationBot(ciHookURLV1)
+	bot := NewNotificationBot(ciHookURLV1, "")
 	resp, err := bot.PostNotification("", "no title message")
 	assert.NoError(t, err)
 	assert.True(t, resp.Ok)
@@ -22,7 +22,7 @@ func TestWebhookV1(t *testing.T) {
 
 // A weird case which sends V2 message body with V1 URL
 func TestWebhookV1Error(t *testing.T) {
-	bot := NewNotificationBot(ciHookURLV1)
+	bot := NewNotificationBot(ciHookURLV1, "")
 	mbText := NewMsgBuffer(MsgText)
 	mbText.Text("hello")
 	resp, err := bot.PostNotificationV2(mbText.Build())
@@ -31,7 +31,7 @@ func TestWebhookV1Error(t *testing.T) {
 }
 
 func TestWebhookV2(t *testing.T) {
-	bot := NewNotificationBot(ciHookURLV2)
+	bot := NewNotificationBot(ciHookURLV2, "")
 
 	mbText := NewMsgBuffer(MsgText)
 	mbText.Text("hello")
@@ -63,7 +63,7 @@ func TestWebhookV2(t *testing.T) {
 }
 
 func TestWebhookV2CardMessage(t *testing.T) {
-	bot := NewNotificationBot(ciHookURLV2)
+	bot := NewNotificationBot(ciHookURLV2, "")
 
 	b := NewCardBuilder()
 	card := b.Card(
