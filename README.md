@@ -1,9 +1,9 @@
 # go-lark
 
-[![build](https://github.com/go-lark/lark/actions/workflows/ci.yml/badge.svg)](https://github.com/go-lark/lark/actions/workflows/ci.yml)
+[![build](https://github.com/nlimpid/lark/actions/workflows/ci.yml/badge.svg)](https://github.com/nlimpid/lark/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/go-lark/lark/branch/main/graph/badge.svg)](https://codecov.io/gh/go-lark/lark)
-[![Go Report Card](https://goreportcard.com/badge/github.com/go-lark/lark)](https://goreportcard.com/report/github.com/go-lark/lark)
-[![Go Reference](https://pkg.go.dev/badge/github.com/go-lark/lark.svg)](https://pkg.go.dev/github.com/go-lark/lark)
+[![Go Report Card](https://goreportcard.com/badge/github.com/nlimpid/lark)](https://goreportcard.com/report/github.com/nlimpid/lark)
+[![Go Reference](https://pkg.go.dev/badge/github.com/nlimpid/lark.svg)](https://pkg.go.dev/github.com/nlimpid/lark)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
 
 [简体中文](/README_zhCN.md)
@@ -27,7 +27,7 @@ It is widely used and tested by ~450 ByteDance in-house developers with over 1.5
 ## Installation
 
 ```shell
-go get github.com/go-lark/lark
+go get github.com/nlimpid/lark
 ```
 
 ## Quick Start
@@ -52,7 +52,7 @@ Notification Bot:
 Chat Bot:
 
 ```go
-import "github.com/go-lark/lark"
+import "github.com/nlimpid/lark"
 
 func main() {
     bot := lark.NewChatBot("<App ID>", "<App Secret>")
@@ -64,7 +64,7 @@ func main() {
 Notification Bot:
 
 ```go
-import "github.com/go-lark/lark"
+import "github.com/nlimpid/lark"
 
 func main() {
     bot := lark.NewNotificationBot("<WEB HOOK URL>")
@@ -207,7 +207,7 @@ go-lark now only implements two of them in schema 1.0, which are needed for inte
 
 We recommend Gin middleware to handle these events.
 
-### [Gin Middleware](https://github.com/go-lark/lark-gin)
+### [Gin Middleware](https://github.com/nlimpid/lark-gin)
 
 Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware)
 
@@ -321,7 +321,7 @@ Here is an example that implementing a Lark Doc API with go-lark:
 ```go
 package lark
 
-import "github.com/go-lark/lark"
+import "github.com/nlimpid/lark"
 
 const copyFileAPIPattern = "/open-apis/drive/explorer/v2/file/copy/files/%s"
 

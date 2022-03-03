@@ -1,9 +1,9 @@
 # go-lark
 
-[![build](https://github.com/go-lark/lark/actions/workflows/ci.yml/badge.svg)](https://github.com/go-lark/lark/actions/workflows/ci.yml)
+[![build](https://github.com/nlimpid/lark/actions/workflows/ci.yml/badge.svg)](https://github.com/nlimpid/lark/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/go-lark/lark/branch/main/graph/badge.svg)](https://codecov.io/gh/go-lark/lark)
-[![Go Report Card](https://goreportcard.com/badge/github.com/go-lark/lark)](https://goreportcard.com/report/github.com/go-lark/lark)
-[![Go Reference](https://pkg.go.dev/badge/github.com/go-lark/lark.svg)](https://pkg.go.dev/github.com/go-lark/lark)
+[![Go Report Card](https://goreportcard.com/badge/github.com/nlimpid/lark)](https://goreportcard.com/report/github.com/nlimpid/lark)
+[![Go Reference](https://pkg.go.dev/badge/github.com/nlimpid/lark.svg)](https://pkg.go.dev/github.com/nlimpid/lark)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
 
 一个简单、开发者友好的 Lark 开放平台机器人 SDK。
@@ -19,14 +19,14 @@ go-lark 主要实现了消息类 API，提供完整的聊天机器人和通知�
 - 快速消息体构造 `MsgBuffer`
 - 一站式解决服务器 Challenge 和聊天消息响应
 - 支持加密和校验
-- 支持 [Gin](https://github.com/go-lark/lark-gin) 框架中间件
+- 支持 [Gin](https://github.com/nlimpid/lark-gin) 框架中间件
 - 高可扩展性
 - 文档、测试覆盖
 
 ## 安装
 
 ```shell
-go get github.com/go-lark/lark
+go get github.com/nlimpid/lark
 ```
 
 ## 快速入门
@@ -51,7 +51,7 @@ go get github.com/go-lark/lark
 聊天机器人：
 
 ```go
-import "github.com/go-lark/lark"
+import "github.com/nlimpid/lark"
 
 func main() {
     bot := lark.NewChatBot("<App ID>", "<App Secret>")
@@ -63,7 +63,7 @@ func main() {
 通知机器人：
 
 ```go
-import "github.com/go-lark/lark"
+import "github.com/nlimpid/lark"
 
 func main() {
     bot := lark.NewNotificationBot("WEB HOOK URL")
@@ -193,7 +193,7 @@ Bind 函数：
 
 我们推荐使用 Gin 中间件处理事件。
 
-### [Gin Middleware](https://github.com/go-lark/lark-gin)
+### [Gin Middleware](https://github.com/nlimpid/lark-gin)
 
 实例：[examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware)
 
@@ -305,7 +305,7 @@ go-lark 的开发设施（鉴权、HTTP 处理等）可以很方便的用来实�
 ```go
 package lark
 
-import "github.com/go-lark/lark"
+import "github.com/nlimpid/lark"
 
 const copyFileAPIPattern = "/open-apis/drive/explorer/v2/file/copy/files/%s"
 

@@ -1,6 +1,6 @@
 package lark
 
-import "github.com/go-lark/lark/card"
+import "github.com/nlimpid/lark/card"
 
 // CardBlock 卡片元素
 type CardBlock = card.Block
