@@ -45,7 +45,7 @@ const (
 )
 
 // BuildOutcomingMessageReq for msg builder
-func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
+func (bot Bot) BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
 	params := map[string]interface{}{
 		"msg_type":     om.MsgType,
 		"root_id":      om.RootID,
@@ -54,6 +54,11 @@ func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
 		"email":        om.Email,
 		"user_id":      om.UserID,
 		"update_multi": om.UpdateMulti,
+	}
+	if bot.botType == NotificationBot {
+		params = map[string]interface{}{
+			"msg_type": om.MsgType,
+		}
 	}
 	content := make(map[string]interface{})
 	if om.Content.Text != nil {

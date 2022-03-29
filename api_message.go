@@ -129,7 +129,7 @@ func (bot *Bot) PostShareChat(openChatID string, userID *OptionalUserID) (*PostM
 
 // PostMessage posts message
 func (bot *Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
-	params := BuildOutcomingMessageReq(om)
+	params := bot.BuildOutcomingMessageReq(om)
 	var respData PostMessageResponse
 	err := bot.PostAPIRequest("PostMessage", messageURL, true, params, &respData)
 	return &respData, err
@@ -137,7 +137,7 @@ func (bot *Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 
 // PostEphemeralMessage posts an ephemeral message
 func (bot *Bot) PostEphemeralMessage(om OutcomingMessage) (*PostEphemeralMessageResponse, error) {
-	params := BuildOutcomingMessageReq(om)
+	params := bot.BuildOutcomingMessageReq(om)
 	var respData PostEphemeralMessageResponse
 	err := bot.PostAPIRequest("PostEphemeralMessage", ephemeralMessageURL, true, params, &respData)
 	return &respData, err
