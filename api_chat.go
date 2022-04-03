@@ -17,50 +17,49 @@ type GetChatResponse struct {
 	Data ChatInfo `json:"data"`
 }
 
+// I18NNames .
+type I18NNames struct {
+	ZhCN string `json:"zh_cn,omitempty"`
+	EnUS string `json:"en_us,omitempty"`
+	JaJP string `json:"ja_jp,omitempty"`
+}
+
 // ChatInfo entity of a chat, not every field is available for every API.
 type ChatInfo struct {
-	ChatID      string `json:"chat_id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Avatar      string `json:"avatar,omitempty"`
-	Description string `json:"description,omitempty"`
-	I18NNames   struct {
-		ZhCN string `json:"zh_cn,omitempty"`
-		EnUS string `json:"en_us,omitempty"`
-		JaJP string `json:"ja_jp,omitempty"`
-	} `json:"i18n_names,omitempty"`
-	AddMemberPermission    string `json:"add_member_permission,omitempty"`
-	ShareCardPermission    string `json:"share_card_permission,omitempty"`
-	AtAllPermission        string `json:"at_all_permission,omitempty"`
-	EditPermission         string `json:"edit_permission,omitempty"`
-	OwnerIDType            string `json:"owner_id_type,omitempty"`
-	OwnerID                string `json:"owner_id,omitempty"`
-	ChatMode               string `json:"chat_mode,omitempty"`
-	ChatType               string `json:"chat_type,omitempty"`
-	ChatTag                string `json:"chat_tag,omitempty"`
-	JoinMessageVisibility  string `json:"join_message_visibility,omitempty"`
-	LeaveMessageVisibility string `json:"leave_message_visibility,omitempty"`
-	MembershipApproval     string `json:"membership_approval,omitempty"`
-	ModerationPermission   string `json:"moderation_permission,omitempty"`
-	External               bool   `json:"external,omitempty"`
+	ChatID                 string    `json:"chat_id,omitempty"`
+	Name                   string    `json:"name,omitempty"`
+	Avatar                 string    `json:"avatar,omitempty"`
+	Description            string    `json:"description,omitempty"`
+	I18NNames              I18NNames `json:"i18n_names,omitempty"`
+	AddMemberPermission    string    `json:"add_member_permission,omitempty"`
+	ShareCardPermission    string    `json:"share_card_permission,omitempty"`
+	AtAllPermission        string    `json:"at_all_permission,omitempty"`
+	EditPermission         string    `json:"edit_permission,omitempty"`
+	OwnerIDType            string    `json:"owner_id_type,omitempty"`
+	OwnerID                string    `json:"owner_id,omitempty"`
+	ChatMode               string    `json:"chat_mode,omitempty"`
+	ChatType               string    `json:"chat_type,omitempty"`
+	ChatTag                string    `json:"chat_tag,omitempty"`
+	JoinMessageVisibility  string    `json:"join_message_visibility,omitempty"`
+	LeaveMessageVisibility string    `json:"leave_message_visibility,omitempty"`
+	MembershipApproval     string    `json:"membership_approval,omitempty"`
+	ModerationPermission   string    `json:"moderation_permission,omitempty"`
+	External               bool      `json:"external,omitempty"`
 }
 
 // CreateChatRequest .
 type CreateChatRequest struct {
-	Name        string `json:"name,omitempty"`
-	Avatar      string `json:"Avatar,omitempty"`
-	Description string `json:"description,omitempty"`
-	I18NNames   struct {
-		ZhCN string `json:"zh_cn,omitempty"`
-		EnUS string `json:"en_us,omitempty"`
-		JaJP string `json:"ja_jp,omitempty"`
-	} `json:"i18n_names,omitempty"`
-	OwnerID                string `json:"owner_id,omitempty"`
-	ChatMode               string `json:"chat_mode,omitempty"`
-	ChatType               string `json:"chat_type,omitempty"`
-	JoinMessageVisibility  string `json:"join_message_visibility,omitempty"`
-	LeaveMessageVisibility string `json:"leave_message_visibility,omitempty"`
-	MembershipApproval     string `json:"membership_approval,omitempty"`
-	External               bool   `json:"external,omitempty"`
+	Name                   string    `json:"name,omitempty"`
+	Avatar                 string    `json:"avatar,omitempty"`
+	Description            string    `json:"description,omitempty"`
+	I18NNames              I18NNames `json:"i18n_names,omitempty"`
+	OwnerID                string    `json:"owner_id,omitempty"`
+	ChatMode               string    `json:"chat_mode,omitempty"`
+	ChatType               string    `json:"chat_type,omitempty"`
+	JoinMessageVisibility  string    `json:"join_message_visibility,omitempty"`
+	LeaveMessageVisibility string    `json:"leave_message_visibility,omitempty"`
+	MembershipApproval     string    `json:"membership_approval,omitempty"`
+	External               bool      `json:"external,omitempty"`
 }
 
 // CreateChatResponse .
@@ -77,22 +76,18 @@ type DeleteChatResponse struct {
 
 // UpdateChatRequest .
 type UpdateChatRequest struct {
-	Name        string `json:"name,omitempty"`
-	Avatar      string `json:"Avatar,omitempty"`
-	Description string `json:"description,omitempty"`
-	I18NNames   struct {
-		ZhCN string `json:"zh_cn,omitempty"`
-		EnUS string `json:"en_us,omitempty"`
-		JaJP string `json:"ja_jp,omitempty"`
-	} `json:"i18n_names,omitempty"`
-	AddMemberPermission    string `json:"add_member_permission,omitempty"`
-	ShareCardPermission    string `json:"share_card_permission,omitempty"`
-	AtAllPermission        string `json:"at_all_permission,omitempty"`
-	EditPermission         string `json:"edit_permission,omitempty"`
-	OwnerID                string `json:"owner_id,omitempty"`
-	JoinMessageVisibility  string `json:"join_message_visibility,omitempty"`
-	LeaveMessageVisibility string `json:"leave_message_visibility,omitempty"`
-	MembershipApproval     string `json:"membership_approval,omitempty"`
+	Name                   string    `json:"name,omitempty"`
+	Avatar                 string    `json:"Avatar,omitempty"`
+	Description            string    `json:"description,omitempty"`
+	I18NNames              I18NNames `json:"i18n_names,omitempty"`
+	AddMemberPermission    string    `json:"add_member_permission,omitempty"`
+	ShareCardPermission    string    `json:"share_card_permission,omitempty"`
+	AtAllPermission        string    `json:"at_all_permission,omitempty"`
+	EditPermission         string    `json:"edit_permission,omitempty"`
+	OwnerID                string    `json:"owner_id,omitempty"`
+	JoinMessageVisibility  string    `json:"join_message_visibility,omitempty"`
+	LeaveMessageVisibility string    `json:"leave_message_visibility,omitempty"`
+	MembershipApproval     string    `json:"membership_approval,omitempty"`
 }
 
 // UpdateChatResponse .
