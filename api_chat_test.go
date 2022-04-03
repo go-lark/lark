@@ -72,3 +72,21 @@ func TestIsInChat(t *testing.T) {
 		assert.True(t, resp.Data.IsInChat)
 	}
 }
+
+func TestGetChatMembers(t *testing.T) {
+	bot.WithUserIDType(UIDOpenID)
+	resp, err := bot.GetChatMembers(testGroupChatID, "", 1)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.Items)
+		assert.NotEmpty(t, resp.Data.PageToken)
+		assert.NotEmpty(t, resp.Data.MemberTotal)
+		if assert.True(t, resp.Data.HasMore) {
+			nextResp, err := bot.GetChatMembers(testGroupChatID, resp.Data.PageToken, 1)
+			if assert.NoError(t, err) {
+				assert.Equal(t, 0, nextResp.Code)
+				t.Log(nextResp.Data.Items)
+			}
+		}
+	}
+}
