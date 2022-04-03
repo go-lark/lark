@@ -64,3 +64,11 @@ func TestChatCRUD(t *testing.T) {
 		}
 	}
 }
+
+func TestIsInChat(t *testing.T) {
+	resp, err := bot.IsInChat(testGroupChatID)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.True(t, resp.Data.IsInChat)
+	}
+}

@@ -10,6 +10,7 @@ const (
 	joinChatURL         = "/open-apis/im/v1/chats/%s/members/me_join"
 	addChatMemberURL    = "/open-apis/im/v1/chats/%s/members?member_id_type=%s"
 	removeChatMemberURL = "/open-apis/im/v1/chats/%s/members?member_id_type=%s"
+	isInChatURL         = "/open-apis/im/v1/chats/%s/members/is_in_chat"
 )
 
 // GetChatResponse .
@@ -131,6 +132,15 @@ type RemoveChatMemberResponse struct {
 	} `json:"data"`
 }
 
+// IsInChatResponse .
+type IsInChatResponse struct {
+	BaseResponse
+
+	Data struct {
+		IsInChat bool `json:"is_in_chat"`
+	} `json:"data"`
+}
+
 // WithUserIDType .
 func (bot *Bot) WithUserIDType(userIDType string) *Bot {
 	bot.userIDType = userIDType
@@ -195,5 +205,12 @@ func (bot Bot) RemoveChatMember(chatID string, idList []string) (*RemoveChatMemb
 		"RemoveChatMember",
 		fmt.Sprintf(removeChatMemberURL, chatID, bot.userIDType),
 		true, req, &respData)
+	return &respData, err
+}
+
+// IsInChat .
+func (bot Bot) IsInChat(chatID string) (*IsInChatResponse, error) {
+	var respData IsInChatResponse
+	err := bot.GetAPIRequest("IsInChat", fmt.Sprintf(isInChatURL, chatID), true, nil, &respData)
 	return &respData, err
 }
