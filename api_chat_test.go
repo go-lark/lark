@@ -39,9 +39,25 @@ func TestChatCRUD(t *testing.T) {
 			getResp, err := bot.GetChat(chatID)
 			if assert.NoError(t, err) {
 				assert.Equal(t, "new description", getResp.Data.Description)
+				// join chat
 				joinResp, err := bot.JoinChat(chatID)
 				assert.Zero(t, joinResp.Code)
 				assert.NoError(t, err)
+
+				// add chat member
+				addMemberResp, err := bot.AddChatMember(chatID, []string{testUserOpenID})
+				if assert.NoError(t, err) {
+					assert.Equal(t, 0, addMemberResp.Code)
+					assert.Empty(t, addMemberResp.Data.InvalidIDList)
+				}
+				// remove chat member
+				removeMemberResp, err := bot.RemoveChatMember(chatID, []string{testUserOpenID})
+				if assert.NoError(t, err) {
+					assert.Equal(t, 0, removeMemberResp.Code)
+					assert.Empty(t, removeMemberResp.Data.InvalidIDList)
+				}
+
+				// delete
 				_, err = bot.DeleteChat(chatID)
 				assert.NoError(t, err)
 			}

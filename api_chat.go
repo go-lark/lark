@@ -3,11 +3,13 @@ package lark
 import "fmt"
 
 const (
-	getChatURL    = "/open-apis/im/v1/chats/%s?user_id_type=%s"
-	updateChatURL = "/open-apis/im/v1/chats/%s?user_id_type=%s"
-	createChatURL = "/open-apis/im/v1/chats?user_id_type=%s"
-	deleteChatURL = "/open-apis/im/v1/chats/%s"
-	joinChatURL   = "/open-apis/im/v1/chats/%s/members/me_join"
+	getChatURL          = "/open-apis/im/v1/chats/%s?user_id_type=%s"
+	updateChatURL       = "/open-apis/im/v1/chats/%s?user_id_type=%s"
+	createChatURL       = "/open-apis/im/v1/chats?user_id_type=%s"
+	deleteChatURL       = "/open-apis/im/v1/chats/%s"
+	joinChatURL         = "/open-apis/im/v1/chats/%s/members/me_join"
+	addChatMemberURL    = "/open-apis/im/v1/chats/%s/members?member_id_type=%s"
+	removeChatMemberURL = "/open-apis/im/v1/chats/%s/members?member_id_type=%s"
 )
 
 // GetChatResponse .
@@ -100,6 +102,35 @@ type JoinChatResponse struct {
 	BaseResponse
 }
 
+// AddChatMemberRequest .
+type AddChatMemberRequest struct {
+	IDList []string `json:"id_list"`
+}
+
+// AddChatMemberResponse .
+type AddChatMemberResponse struct {
+	BaseResponse
+
+	Data struct {
+		InvalidIDList    []string `json:"invalid_id_list"`
+		NotExistedIDList []string `json:"not_existed_id_list"`
+	} `json:"data"`
+}
+
+// RemoveChatMemberRequest .
+type RemoveChatMemberRequest struct {
+	IDList []string `json:"id_list"`
+}
+
+// RemoveChatMemberResponse .
+type RemoveChatMemberResponse struct {
+	BaseResponse
+
+	Data struct {
+		InvalidIDList []string `json:"invalid_id_list"`
+	} `json:"data"`
+}
+
 // WithUserIDType .
 func (bot *Bot) WithUserIDType(userIDType string) *Bot {
 	bot.userIDType = userIDType
@@ -138,5 +169,31 @@ func (bot Bot) UpdateChat(chatID string, req UpdateChatRequest) (*UpdateChatResp
 func (bot Bot) JoinChat(chatID string) (*JoinChatResponse, error) {
 	var respData JoinChatResponse
 	err := bot.PatchAPIRequest("JoinChat", fmt.Sprintf(joinChatURL, chatID), true, nil, &respData)
+	return &respData, err
+}
+
+// AddChatMember .
+func (bot Bot) AddChatMember(chatID string, idList []string) (*AddChatMemberResponse, error) {
+	var respData AddChatMemberResponse
+	req := AddChatMemberRequest{
+		IDList: idList,
+	}
+	err := bot.PostAPIRequest(
+		"AddChatMember",
+		fmt.Sprintf(addChatMemberURL, chatID, bot.userIDType),
+		true, req, &respData)
+	return &respData, err
+}
+
+// RemoveChatMember .
+func (bot Bot) RemoveChatMember(chatID string, idList []string) (*RemoveChatMemberResponse, error) {
+	var respData RemoveChatMemberResponse
+	req := RemoveChatMemberRequest{
+		IDList: idList,
+	}
+	err := bot.PostAPIRequest(
+		"RemoveChatMember",
+		fmt.Sprintf(removeChatMemberURL, chatID, bot.userIDType),
+		true, req, &respData)
 	return &respData, err
 }
