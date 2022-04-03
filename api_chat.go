@@ -7,6 +7,7 @@ const (
 	updateChatURL = "/open-apis/im/v1/chats/%s?user_id_type=%s"
 	createChatURL = "/open-apis/im/v1/chats?user_id_type=%s"
 	deleteChatURL = "/open-apis/im/v1/chats/%s"
+	joinChatURL   = "/open-apis/im/v1/chats/%s/members/me_join"
 )
 
 // GetChatResponse .
@@ -99,6 +100,11 @@ type UpdateChatResponse struct {
 	BaseResponse
 }
 
+// JoinChatResponse .
+type JoinChatResponse struct {
+	BaseResponse
+}
+
 // WithUserIDType .
 func (bot *Bot) WithUserIDType(userIDType string) *Bot {
 	bot.userIDType = userIDType
@@ -130,5 +136,12 @@ func (bot Bot) DeleteChat(chatID string) (*DeleteChatResponse, error) {
 func (bot Bot) UpdateChat(chatID string, req UpdateChatRequest) (*UpdateChatResponse, error) {
 	var respData UpdateChatResponse
 	err := bot.PutAPIRequest("UpdateChat", fmt.Sprintf(updateChatURL, chatID, bot.userIDType), true, req, &respData)
+	return &respData, err
+}
+
+// JoinChat .
+func (bot Bot) JoinChat(chatID string) (*JoinChatResponse, error) {
+	var respData JoinChatResponse
+	err := bot.PatchAPIRequest("JoinChat", fmt.Sprintf(joinChatURL, chatID), true, nil, &respData)
 	return &respData, err
 }

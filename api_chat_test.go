@@ -24,7 +24,9 @@ func TestChatInfo(t *testing.T) {
 func TestChatCRUD(t *testing.T) {
 	bot.WithUserIDType(UIDOpenID)
 	resp, err := bot.CreateChat(CreateChatRequest{
-		Name: fmt.Sprintf("go-lark-ci-%d", time.Now().Unix()),
+		Name:     fmt.Sprintf("go-lark-ci-%d", time.Now().Unix()),
+		ChatMode: "group",
+		ChatType: "public",
 	})
 	if assert.NoError(t, err) {
 		chatID := resp.Data.ChatID
@@ -37,6 +39,9 @@ func TestChatCRUD(t *testing.T) {
 			getResp, err := bot.GetChat(chatID)
 			if assert.NoError(t, err) {
 				assert.Equal(t, "new description", getResp.Data.Description)
+				joinResp, err := bot.JoinChat(chatID)
+				assert.Zero(t, joinResp.Code)
+				assert.NoError(t, err)
 				_, err = bot.DeleteChat(chatID)
 				assert.NoError(t, err)
 			}
