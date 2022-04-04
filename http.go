@@ -109,3 +109,8 @@ func (bot Bot) DeleteAPIRequest(prefix, urlPath string, auth bool, params interf
 func (bot Bot) PutAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest("PUT", prefix, urlPath, auth, params, output)
 }
+
+// PatchAPIRequest call Lark API
+func (bot Bot) PatchAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+	return bot.wrapAPIRequest("PATCH", prefix, urlPath, auth, params, output)
+}
