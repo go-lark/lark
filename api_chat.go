@@ -240,7 +240,7 @@ func (bot Bot) IsInChat(chatID string) (*IsInChatResponse, error) {
 }
 
 // GetChatMembers .
-// NOTICE: pageSize must larger than 10, e.g. if you present pageSize=1, it returns the same pageToken as pageSize=10. So we recommend you just pass pageSize=10.
+// NOTICE: pageSize must be larger than 10, e.g. if you present pageSize=1, it returns the same pageToken as pageSize=10. So we recommend you just pass pageSize=10.
 func (bot Bot) GetChatMembers(chatID string, pageToken string, pageSize int) (*GetChatMembersResponse, error) {
 	if pageSize <= 0 || pageSize > 100 {
 		pageSize = 10
