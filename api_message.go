@@ -6,6 +6,7 @@ const (
 	messageURL                = "/open-apis/im/v1/messages?receive_id_type=%s"
 	replyMessageURL           = "/open-apis/im/v1/messages/%s/reply"
 	getMessageURL             = "/open-apis/im/v1/messages/%s"
+	updateMessageURL          = "/open-apis/im/v1/messages/%s"
 	recallMessageURL          = "/open-apis/im/v1/messages/%s"
 	messageReceiptURL         = "/open-apis/message/v4/read_info/"
 	ephemeralMessageURL       = "/open-apis/ephemeral/v1/send"
@@ -86,6 +87,9 @@ type DeleteEphemeralMessageResponse = BaseResponse
 
 // RecallMessageResponse .
 type RecallMessageResponse = BaseResponse
+
+// UpdateMessageResponse .
+type UpdateMessageResponse = BaseResponse
 
 // MessageReceiptResponse .
 type MessageReceiptResponse struct {
@@ -229,6 +233,21 @@ func (bot Bot) ReplyMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	}
 	var respData PostMessageResponse
 	err = bot.PostAPIRequest("ReplyMessage", fmt.Sprintf(replyMessageURL, om.RootID), true, req, &respData)
+	return &respData, err
+}
+
+// UpdateMessage update message card
+func (bot Bot) UpdateMessage(messageID string, om OutcomingMessage) (*UpdateMessageResponse, error) {
+	if om.MsgType != MsgInteractive {
+		return nil, ErrMessageType
+	}
+	req, err := BuildMessage(om)
+	if err != nil {
+		return nil, err
+	}
+	url := fmt.Sprintf(updateMessageURL, messageID)
+	var respData UpdateMessageResponse
+	err = bot.PatchAPIRequest("UpdateMessage", url, true, req, &respData)
 	return &respData, err
 }
 

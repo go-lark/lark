@@ -2,6 +2,7 @@ package lark
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -239,12 +240,24 @@ func TestPostCardMessage(t *testing.T) {
 	).
 		Wathet().
 		Title("卡片标题 Card Title")
-	msgV4 := NewMsgBuffer(MsgInteractive)
+	msgV4 := NewMsgBuffer(MsgInteractive).UpdateMulti(true)
 	omV4 := msgV4.BindEmail(testUserEmail).Card(card.String()).Build()
 	resp, err := bot.PostMessage(omV4)
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
+		time.Sleep(time.Second * 1)
+		newCard := NewCardBuilder().Card(
+			b.Div(
+				b.Field(b.Text("左侧内容")).Short(),
+				b.Field(b.Text("右侧内容")).Short(),
+				b.Field(b.Text("整排内容")),
+				b.Field(b.Text("整排**Markdown**内容").LarkMd()),
+			),
+		).Title("Updated title")
+		newOM := msgV4.BindEmail(testUserEmail).Card(newCard.String()).Build()
+		resp, err := bot.UpdateMessage(resp.Data.MessageID, newOM)
+		t.Log(err, resp)
 	}
 }
 
