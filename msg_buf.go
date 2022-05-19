@@ -76,8 +76,8 @@ func (m *MsgBuffer) BindReply(rootID string) *MsgBuffer {
 	return m
 }
 
-// UpdateMulti set multi, shared card
-// default false, not share
+// UpdateMulti deprecated in the latest version, please use card.UpdateMulti instead
+// set multi for shared card. Default false, not share
 func (m *MsgBuffer) UpdateMulti(flag bool) *MsgBuffer {
 	m.message.UpdateMulti = flag
 	return m
