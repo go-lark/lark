@@ -10,6 +10,7 @@ var _ Element = (*Block)(nil)
 type Block struct {
 	elements       []Element
 	disableForward bool
+	updateMulti    bool
 	title          string
 	template       string
 	links          *URLBlock
@@ -29,6 +30,7 @@ func (b *Block) String() string {
 type cardConfigRenderer struct {
 	WideScreenMode bool `json:"wide_screen_mode"`
 	EnableForward  bool `json:"enable_forward"`
+	UpdateMulti    bool `json:"update_multi"`
 }
 
 type cardHeaderRenderer struct {
@@ -49,6 +51,7 @@ func (b *Block) Render() Renderer {
 		Config: cardConfigRenderer{
 			WideScreenMode: true,
 			EnableForward:  !b.disableForward,
+			UpdateMulti:    b.updateMulti,
 		},
 		Header: cardHeaderRenderer{
 			Title:    Text(b.title).Render(),
@@ -70,6 +73,12 @@ func Card(el ...Element) *Block {
 // NoForward 设置后，卡片将不可转发
 func (b *Block) NoForward() *Block {
 	b.disableForward = true
+	return b
+}
+
+// UpdateMulti set card can be updated
+func (b *Block) UpdateMulti(updateMulti bool) *Block {
+	b.updateMulti = updateMulti
 	return b
 }
 

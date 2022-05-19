@@ -209,7 +209,8 @@ func TestPostCardBuilderMessage(t *testing.T) {
 			AddImage(b.Img("img_a7c6aa35-382a-48ad-839d-d0182a69b4dg")),
 	).
 		Wathet().
-		Title("卡片标题 Card Title")
+		Title("卡片标题 Card Title").
+		UpdateMulti(true)
 	msgV4 := NewMsgBuffer(MsgInteractive)
 	omV4 := msgV4.BindEmail(testUserEmail).Card(card.String()).Build()
 	resp, err := bot.PostMessage(omV4)
