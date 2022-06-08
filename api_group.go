@@ -100,7 +100,7 @@ func (bot *Bot) GetGroupList(pageNum, pageSize int) (*GroupListResponse, error) 
 		"page_size": pageSize,
 	}
 	var respData GroupListResponse
-	err := bot.PostAPIRequest("GetGroupList", groupListURL, true, params, &respData)
+	err := bot.GetAPIRequest("GetGroupList", groupListURL, true, params, &respData)
 	return &respData, err
 }
 
