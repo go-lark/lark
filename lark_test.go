@@ -149,3 +149,10 @@ func TestCustomClient(t *testing.T) {
 	bot.SetCustomClient(c)
 	assert.NotNil(t, bot.customClient)
 }
+
+func TestUpdateWebhook(t *testing.T) {
+	bot := NewNotificationBot("abc")
+	assert.Equal(t, "abc", bot.webhook)
+	bot.SetWebhook("def")
+	assert.Equal(t, "def", bot.webhook)
+}
