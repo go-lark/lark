@@ -1,3 +1,4 @@
+// Package card provides declarative card builder
 package card
 
 import (

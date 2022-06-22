@@ -1,3 +1,5 @@
+// Package lark is an easy-to-use SDK for Feishu and Lark Open Platform,
+// which implements messaging APIs, with full-fledged supports on building Chat Bot and Notification Bot.
 package lark
 
 import (
