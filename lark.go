@@ -152,3 +152,8 @@ func (bot Bot) AccessToken() string {
 func (bot Bot) TenantAccessToken() string {
 	return bot.tenantAccessToken.Load().(string)
 }
+
+// SetWebhook updates webhook URL
+func (bot *Bot) SetWebhook(url string) {
+	bot.webhook = url
+}
