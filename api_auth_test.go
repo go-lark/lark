@@ -32,16 +32,16 @@ func TestAuthTenantAccessTokenInternal(t *testing.T) {
 func TestHeartbeat(t *testing.T) {
 	bot := newTestBot()
 	assert.Nil(t, bot.heartbeat)
-	assert.Nil(t, bot.startHeartbeat(time.Millisecond*800))
+	assert.Nil(t, bot.startHeartbeat(time.Second*1))
 	assert.NotEmpty(t, bot.tenantAccessToken)
 	assert.Equal(t, int64(1), bot.heartbeatCounter)
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 	assert.Equal(t, int64(2), bot.heartbeatCounter)
 	bot.StopHeartbeat()
 	time.Sleep(2 * time.Second)
 	assert.Equal(t, int64(2), bot.heartbeatCounter)
 	// restart heartbeat
-	assert.Nil(t, bot.startHeartbeat(time.Millisecond*900))
+	assert.Nil(t, bot.startHeartbeat(time.Second*1))
 	time.Sleep(2 * time.Second)
 	assert.Equal(t, int64(4), bot.heartbeatCounter)
 }
@@ -49,6 +49,5 @@ func TestHeartbeat(t *testing.T) {
 func TestInvalidHeartbeat(t *testing.T) {
 	bot := NewNotificationBot("")
 	err := bot.StartHeartbeat()
-	assert.NotNil(t, err)
 	assert.Error(t, err, ErrBotTypeError)
 }
