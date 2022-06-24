@@ -66,36 +66,44 @@ func (bot *Bot) StopHeartbeat() {
 }
 
 // StartHeartbeat renew auth token periodically
-func (bot *Bot) StartHeartbeat() {
+func (bot *Bot) StartHeartbeat() error {
 	if !bot.requireType(ChatBot) {
-		bot.logger.Log(bot.ctx, LogLevelError, "Heartbeat only support Chat Bot")
-		return
+		return ErrBotTypeError
 	}
 
+	// First initialize the token in blocking mode
+	_, err := bot.GetTenantAccessTokenInternal(true)
+	if err != nil {
+		bot.httpErrorLog("Heartbeat", "failed to get tenant access token", err)
+		return err
+	}
+
+	interval := time.Second * 10
 	bot.heartbeat = make(chan bool)
 	go func() {
 		for {
-			next := time.Second * 10
-			resp, err := bot.GetTenantAccessTokenInternal(true)
-			if err != nil {
-				bot.httpErrorLog("Heartbeat", "failed to get tenant access token", err)
-			}
-			if resp != nil && resp.Expire-20 > 0 {
-				next = time.Duration(resp.Expire-20) * time.Second
-			}
-			debugHeartbeat := bot.debugHeartbeat.Load().(int)
-			if debugHeartbeat > 0 {
-				next = time.Second * 1
-			}
-			t := time.NewTimer(next)
+			t := time.NewTimer(interval)
 			select {
 			case <-bot.heartbeat:
 				return
 			case <-t.C:
+				interval = time.Second * 10
+				resp, err := bot.GetTenantAccessTokenInternal(true)
+				if err != nil {
+					bot.httpErrorLog("Heartbeat", "failed to get tenant access token", err)
+				}
+				if resp != nil && resp.Expire-20 > 0 {
+					interval = time.Duration(resp.Expire-20) * time.Second
+				}
+				debugHeartbeat := bot.debugHeartbeat.Load().(int)
+				if debugHeartbeat > 0 {
+					interval = time.Second * 1
+				}
 				if debugHeartbeat > 0 {
 					bot.debugHeartbeat.Store(debugHeartbeat + 1)
 				}
 			}
 		}
 	}()
+	return nil
 }
