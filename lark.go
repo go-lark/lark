@@ -41,8 +41,8 @@ type Bot struct {
 	customClient    HTTPWrapper
 	// auth heartbeat
 	heartbeat chan bool
-	// auth heartbeat test utility integer
-	debugHeartbeat atomic.Value
+	// auth heartbeat counter (for testing)
+	heartbeatCounter int64
 
 	ctx    context.Context
 	logger LogWrapper
@@ -68,7 +68,6 @@ func NewChatBot(appID, appSecret string) *Bot {
 	}
 	bot.accessToken.Store("")
 	bot.tenantAccessToken.Store("")
-	bot.debugHeartbeat.Store(0)
 
 	return bot
 }
@@ -84,7 +83,6 @@ func NewNotificationBot(hookURL string) *Bot {
 	}
 	bot.accessToken.Store("")
 	bot.tenantAccessToken.Store("")
-	bot.debugHeartbeat.Store(0)
 
 	return bot
 }
