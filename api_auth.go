@@ -1,6 +1,7 @@
 package lark
 
 import (
+	"sync/atomic"
 	"time"
 )
 
@@ -67,6 +68,10 @@ func (bot *Bot) StopHeartbeat() {
 
 // StartHeartbeat renew auth token periodically
 func (bot *Bot) StartHeartbeat() error {
+	return bot.startHeartbeat(10 * time.Second)
+}
+
+func (bot *Bot) startHeartbeat(defaultInterval time.Duration) error {
 	if !bot.requireType(ChatBot) {
 		return ErrBotTypeError
 	}
@@ -77,8 +82,9 @@ func (bot *Bot) StartHeartbeat() error {
 		bot.httpErrorLog("Heartbeat", "failed to get tenant access token", err)
 		return err
 	}
+	atomic.AddInt64(&bot.heartbeatCounter, 1)
 
-	interval := time.Second * 10
+	interval := defaultInterval
 	bot.heartbeat = make(chan bool)
 	go func() {
 		for {
@@ -87,20 +93,14 @@ func (bot *Bot) StartHeartbeat() error {
 			case <-bot.heartbeat:
 				return
 			case <-t.C:
-				interval = time.Second * 10
+				interval = defaultInterval
 				resp, err := bot.GetTenantAccessTokenInternal(true)
 				if err != nil {
 					bot.httpErrorLog("Heartbeat", "failed to get tenant access token", err)
 				}
+				atomic.AddInt64(&bot.heartbeatCounter, 1)
 				if resp != nil && resp.Expire-20 > 0 {
 					interval = time.Duration(resp.Expire-20) * time.Second
-				}
-				debugHeartbeat := bot.debugHeartbeat.Load().(int)
-				if debugHeartbeat > 0 {
-					interval = time.Second * 1
-				}
-				if debugHeartbeat > 0 {
-					bot.debugHeartbeat.Store(debugHeartbeat + 1)
 				}
 			}
 		}

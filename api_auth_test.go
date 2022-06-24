@@ -31,21 +31,19 @@ func TestAuthTenantAccessTokenInternal(t *testing.T) {
 
 func TestHeartbeat(t *testing.T) {
 	bot := newTestBot()
-	bot.debugHeartbeat.Store(1)
 	assert.Nil(t, bot.heartbeat)
-	bot.StartHeartbeat()
-	time.Sleep(1 * time.Second)
+	assert.Nil(t, bot.startHeartbeat(time.Millisecond*900))
 	assert.NotEmpty(t, bot.tenantAccessToken)
-	assert.Equal(t, 1, bot.debugHeartbeat.Load().(int))
+	assert.Equal(t, int64(1), bot.heartbeatCounter)
 	time.Sleep(1 * time.Second)
-	assert.Equal(t, 2, bot.debugHeartbeat.Load().(int))
+	assert.Equal(t, int64(2), bot.heartbeatCounter)
 	bot.StopHeartbeat()
 	time.Sleep(2 * time.Second)
-	assert.Equal(t, 2, bot.debugHeartbeat.Load().(int))
+	assert.Equal(t, int64(2), bot.heartbeatCounter)
 	// restart heartbeat
-	bot.StartHeartbeat()
+	assert.Nil(t, bot.startHeartbeat(time.Millisecond*900))
 	time.Sleep(2 * time.Second)
-	assert.Equal(t, 3, bot.debugHeartbeat.Load().(int))
+	assert.Equal(t, int64(4), bot.heartbeatCounter)
 }
 
 func TestInvalidHeartbeat(t *testing.T) {
