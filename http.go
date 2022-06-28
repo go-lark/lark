@@ -25,7 +25,8 @@ func (bot Bot) DoAPIRequest(
 	prefix, urlPath string,
 	header http.Header, auth bool,
 	body io.Reader,
-	output interface{}) error {
+	output interface{},
+) error {
 	var (
 		err      error
 		respBody io.ReadCloser
@@ -47,7 +48,7 @@ func (bot Bot) DoAPIRequest(
 			return err
 		}
 	} else {
-		req, err := http.NewRequestWithContext(bot.ctx, method, url, body)
+		req, err := http.NewRequest(method, url, body)
 		if err != nil {
 			bot.httpErrorLog(prefix, "init request failed", err)
 			return err
