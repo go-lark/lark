@@ -83,7 +83,7 @@ func TestPostMessage(t *testing.T) {
 	}
 	// image
 	msg = NewMsgBuffer(MsgImage)
-	om = msg.BindOpenChatID(testGroupChatID).Image("96f394ba-fc6a-4f38-b515-7b8b98160012").Build()
+	om = msg.BindOpenChatID(testGroupChatID).Image("img_v2_bd72e090-3e6a-42bf-b0b0-fead4a11c9cg").Build()
 	resp, err = bot.PostMessage(om)
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
