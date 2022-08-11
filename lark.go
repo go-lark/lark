@@ -104,7 +104,7 @@ func (bot *Bot) SetClient(c *http.Client) {
 
 func initClient() *http.Client {
 	return &http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: 10 * time.Second,
 	}
 }
 
