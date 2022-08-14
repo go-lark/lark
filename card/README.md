@@ -2,6 +2,7 @@
 
 ## Getting Started
 
+card:
 ```go
 b := NewCardBuilder()
 c := b.Card(
@@ -36,16 +37,38 @@ which will render as following:
 }
 ```
 
+i18n card:
+```go
+
+b := NewI18NCardBuilder()
+c := b.NewI18NCard().Purple().
+	CnTitle("zh-cn title").
+	EnTitle("en-us title").
+	JpTitle("ja-jp title").
+    NoForward()
+
+// Add content for Chinese, English and Japanese cards respectively
+c.AddCnContent(
+	// ...elems
+).AddEnContent(
+	// ...elems
+).AddJpContent(
+	// ...elems
+)
+
+fmt.Println(c.String())
+```
+
+
 We map every element of card (`div`, `text`, `button`, etc.) to declarative calls as shown in the demo.
 
 All inner elements (e.g. `fields` of `div` blocks) are considered as arguments,
 while all element properties (e.g. `forward` property of `card` blocks) are considered as chained calls.
 
-Refer to [msg_card_builder_test.go](./msg_card_builder_test.go) for details.
+Refer to [msg_card_builder_test.go](./msg_card_builder_test.go) and [msg_i18n_card_builder_test.go](./msg_i18n_card_builder_test.go) for details.
 
 ## Limits
 
-- i18n cards are currently NOT YET SUPPORTED. Use raw json if necessary.
 - `CardBuilder` contains ONLY a group of card-builder-related functions and contains NO card content. Thus, you can use the same `CardBuilder` whenever building a card instead of making a new one before build.
 
 ## Works with go-lark
