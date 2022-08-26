@@ -93,25 +93,25 @@ func (bot Bot) wrapAPIRequest(method, prefix, urlPath string, auth bool, params 
 
 // PostAPIRequest call Lark API
 func (bot Bot) PostAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
-	return bot.wrapAPIRequest("POST", prefix, urlPath, auth, params, output)
+	return bot.wrapAPIRequest(http.MethodPost, prefix, urlPath, auth, params, output)
 }
 
 // GetAPIRequest call Lark API
 func (bot Bot) GetAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
-	return bot.wrapAPIRequest("GET", prefix, urlPath, auth, params, output)
+	return bot.wrapAPIRequest(http.MethodGet, prefix, urlPath, auth, params, output)
 }
 
 // DeleteAPIRequest call Lark API
 func (bot Bot) DeleteAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
-	return bot.wrapAPIRequest("DELETE", prefix, urlPath, auth, params, output)
+	return bot.wrapAPIRequest(http.MethodDelete, prefix, urlPath, auth, params, output)
 }
 
 // PutAPIRequest call Lark API
 func (bot Bot) PutAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
-	return bot.wrapAPIRequest("PUT", prefix, urlPath, auth, params, output)
+	return bot.wrapAPIRequest(http.MethodPut, prefix, urlPath, auth, params, output)
 }
 
 // PatchAPIRequest call Lark API
 func (bot Bot) PatchAPIRequest(prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
-	return bot.wrapAPIRequest("PATCH", prefix, urlPath, auth, params, output)
+	return bot.wrapAPIRequest(http.MethodPatch, prefix, urlPath, auth, params, output)
 }
