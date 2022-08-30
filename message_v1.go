@@ -27,6 +27,9 @@ func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
 	if om.MsgType == MsgInteractive && om.Content.Card != nil {
 		params["card"] = *om.Content.Card
 	}
+	if len(om.Sign) > 0 {
+		params["sign"] = om.Sign
+	}
 	params["content"] = content
 	return params
 }

@@ -83,6 +83,12 @@ func (m *MsgBuffer) UpdateMulti(flag bool) *MsgBuffer {
 	return m
 }
 
+// WithSign generates sign for notification bot check
+func (m *MsgBuffer) WithSign(secret string, ts int64) *MsgBuffer {
+	m.message.Sign, _ = GenSign(secret, ts)
+	return m
+}
+
 func (m MsgBuffer) typeError(funcName string, msgType string) error {
 	return fmt.Errorf("`%s` is only available to `%s`", funcName, msgType)
 }

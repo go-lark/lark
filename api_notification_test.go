@@ -2,17 +2,13 @@ package lark
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-const (
-	ciHookURLV1 = "https://open.feishu.cn/open-apis/bot/hook/e197c5f5e65f4778b9e7a89bf23a5d4c"
-	ciHookURLV2 = "https://open.feishu.cn/open-apis/bot/v2/hook/7b01451f-113b-4296-8f0d-9615499d6545"
-)
-
 func TestWebhookV1(t *testing.T) {
-	bot := NewNotificationBot(ciHookURLV1)
+	bot := NewNotificationBot(testWebhookV1)
 	resp, err := bot.PostNotification("", "no title message")
 	assert.NoError(t, err)
 	assert.True(t, resp.Ok)
@@ -22,7 +18,7 @@ func TestWebhookV1(t *testing.T) {
 
 // A weird case which sends V2 message body with V1 URL
 func TestWebhookV1Error(t *testing.T) {
-	bot := NewNotificationBot(ciHookURLV1)
+	bot := NewNotificationBot(testWebhookV1)
 	mbText := NewMsgBuffer(MsgText)
 	mbText.Text("hello")
 	resp, err := bot.PostNotificationV2(mbText.Build())
@@ -31,7 +27,7 @@ func TestWebhookV1Error(t *testing.T) {
 }
 
 func TestWebhookV2(t *testing.T) {
-	bot := NewNotificationBot(ciHookURLV2)
+	bot := NewNotificationBot(testWebhookV2)
 
 	mbText := NewMsgBuffer(MsgText)
 	mbText.Text("hello")
@@ -63,7 +59,7 @@ func TestWebhookV2(t *testing.T) {
 }
 
 func TestWebhookV2CardMessage(t *testing.T) {
-	bot := NewNotificationBot(ciHookURLV2)
+	bot := NewNotificationBot(testWebhookV2)
 
 	b := NewCardBuilder()
 	card := b.Card(
@@ -90,4 +86,15 @@ func TestWebhookV2CardMessage(t *testing.T) {
 		assert.Equal(t, 0, resp.StatusCode)
 		assert.NotEmpty(t, resp.StatusMessage)
 	}
+}
+
+func TestWebhookV2Signed(t *testing.T) {
+	bot := NewNotificationBot(testWebhookV2Signed)
+
+	mbText := NewMsgBuffer(MsgText)
+	mbText.Text("hello sign").WithSign("LIpnNexV7rwOyOebKoqSdb", time.Now().Unix())
+	resp, err := bot.PostNotificationV2(mbText.Build())
+	assert.NoError(t, err)
+	assert.Zero(t, resp.StatusCode)
+	assert.Equal(t, "success", resp.StatusMessage)
 }

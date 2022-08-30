@@ -17,14 +17,17 @@ import (
 
 // This appID & appSecret is for test use
 var (
-	testAppID       string
-	testAppSecret   string
-	testUserEmail   string
-	testUserOpenID  string
-	testUserID      string
-	testUserUnionID string
-	testGroupChatID string
-	testMessageID   string
+	testAppID           string
+	testAppSecret       string
+	testUserEmail       string
+	testUserOpenID      string
+	testUserID          string
+	testUserUnionID     string
+	testGroupChatID     string
+	testMessageID       string
+	testWebhookV1       string
+	testWebhookV2       string
+	testWebhookV2Signed string
 )
 
 func newTestBot() *Bot {
@@ -46,6 +49,9 @@ func newTestBot() *Bot {
 	testUserOpenID = os.Getenv("LARK_OPEN_ID")
 	testGroupChatID = os.Getenv("LARK_CHAT_ID")
 	testMessageID = os.Getenv("LARK_MESSAGE_ID")
+	testWebhookV1 = os.Getenv("LARK_WEBHOOK_V1")
+	testWebhookV2 = os.Getenv("LARK_WEBHOOK_V2")
+	testWebhookV2Signed = os.Getenv("LARK_WEBHOOK_V2_SIGNED")
 	if len(testAppID) == 0 ||
 		len(testAppSecret) == 0 ||
 		len(testUserEmail) == 0 ||
@@ -94,7 +100,7 @@ func TestBotProperties(t *testing.T) {
 	assert.NotNil(t, chatBot.client)
 	assert.NotNil(t, chatBot.logger)
 
-	notifyBot := NewNotificationBot(ciHookURLV1)
+	notifyBot := NewNotificationBot(testWebhookV1)
 	assert.Empty(t, notifyBot.appID)
 	assert.Empty(t, notifyBot.appSecret)
 	assert.NotEmpty(t, notifyBot.webhook)
