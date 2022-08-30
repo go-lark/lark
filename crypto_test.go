@@ -2,7 +2,6 @@ package lark
 
 import (
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -15,8 +14,8 @@ func TestAESDecrypt(t *testing.T) {
 }
 
 func TestGenSign(t *testing.T) {
-	sign, err := GenSign("xxx", time.Now().Unix())
+	sign, err := GenSign("xxx", 1661860880)
 	if assert.NoError(t, err) {
-		assert.Equal(t, "pmFOXqGI9z7QepNkBUWbdAZs7TQQ9yx1uqAPK44BPG4=", sign)
+		assert.Equal(t, "QnWVTSBe6FmQDE0bG6X0mURbI+DnvVyu1h+j5dHOjrU=", sign)
 	}
 }
