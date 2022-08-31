@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.7.3
+
+- feat(notification): support sign
+
 ## v1.7.2
 
 - fix(http): remove shared context for requests
