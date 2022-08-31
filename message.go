@@ -30,6 +30,8 @@ type OutcomingMessage struct {
 	RootID string `json:"root_id,omitempty"`
 	// UpdateMulti card
 	UpdateMulti bool `json:"update_multi"`
+	// Sign for notification bot
+	Sign string  `json:"sign"`
 }
 
 // CardContent struct of card content

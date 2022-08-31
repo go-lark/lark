@@ -134,3 +134,11 @@ func TestMsgUpdateMulti(t *testing.T) {
 	assert.Equal(t, MsgInteractive, msg.MsgType)
 	assert.True(t, msg.UpdateMulti)
 }
+
+func TestWithSign(t *testing.T) {
+	mb := NewMsgBuffer(MsgText)
+	assert.Empty(t, mb.message.Sign)
+	msg := mb.WithSign("xxx", 1661860880).Build()
+	assert.NotEmpty(t, mb.message.Sign)
+	assert.Equal(t, "QnWVTSBe6FmQDE0bG6X0mURbI+DnvVyu1h+j5dHOjrU=", msg.Sign)
+}

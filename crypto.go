@@ -3,9 +3,11 @@ package lark
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
 	"errors"
+	"fmt"
 )
 
 // EncryptKey .
@@ -43,4 +45,19 @@ func unpad(data []byte) []byte {
 		}
 	}
 	return data[:(length - unpaddingIdx - unpadding)]
+}
+
+// GenSign generate sign for notification bot
+func GenSign(secret string, timestamp int64) (string, error) {
+	stringToSign := fmt.Sprintf("%v", timestamp) + "\n" + secret
+
+	var data []byte
+	h := hmac.New(sha256.New, []byte(stringToSign))
+	_, err := h.Write(data)
+	if err != nil {
+		return "", err
+	}
+
+	signature := base64.StdEncoding.EncodeToString(h.Sum(nil))
+	return signature, nil
 }

@@ -44,6 +44,9 @@ jobs:
         LARK_USER_ID: ${{ secrets.LARK_USER_ID }}
         LARK_UNION_ID: ${{ secrets.LARK_UNION_ID }}
         LARK_MESSAGE_ID: ${{ secrets.LARK_MESSAGE_ID }}
+        LARK_WEBHOOK_V1: ${{ secrets.LARK_WEBHOOK_V1 }}
+        LARK_WEBHOOK_V2: ${{ secrets.LARK_WEBHOOK_V2 }}
+        LARK_WEBHOOK_V2_SIGNED: ${{ secrets.LARK_WEBHOOK_V2_SIGNED }}
 
     - name: codecov
       uses: codecov/codecov-action@v1
