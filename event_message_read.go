@@ -1,7 +1,5 @@
 package lark
 
-import "encoding/json"
-
 // EventV2MessageRead .
 type EventV2MessageRead struct {
 	Reader struct {
@@ -14,11 +12,7 @@ type EventV2MessageRead struct {
 
 // GetMessageRead .
 func (e EventV2) GetMessageRead() (*EventV2MessageRead, error) {
-	if e.Header.EventType != EventTypeMessageRead {
-		return nil, ErrEventTypeNotMatch
-	}
 	var body EventV2MessageRead
-	err := json.Unmarshal(e.EventRaw, &body)
-	e.Event = body
+	err := e.GetEvent(EventTypeMessageRead, body)
 	return &body, err
 }

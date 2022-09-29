@@ -59,3 +59,13 @@ func (e EventV2) PostEvent(client *http.Client, hookURL string, event EventV2) (
 	resp, err := client.Post(hookURL, "application/json; charset=utf-8", buf)
 	return resp, err
 }
+
+// GetEvent .
+func (e EventV2) GetEvent(eventType string, body interface{}) error {
+	if e.Header.EventType != eventType {
+		return ErrEventTypeNotMatch
+	}
+	err := json.Unmarshal(e.EventRaw, &body)
+	e.Event = body
+	return err
+}

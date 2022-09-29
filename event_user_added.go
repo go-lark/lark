@@ -1,7 +1,5 @@
 package lark
 
-import "encoding/json"
-
 // EventV2UserAdded .
 type EventV2UserAdded struct {
 	ChatID            string        `json:"chat_id,omitempty"`
@@ -17,11 +15,7 @@ type EventV2UserAdded struct {
 
 // GetUserAdded .
 func (e EventV2) GetUserAdded() (*EventV2UserAdded, error) {
-	if e.Header.EventType != EventTypeUserAdded {
-		return nil, ErrEventTypeNotMatch
-	}
 	var body EventV2UserAdded
-	err := json.Unmarshal(e.EventRaw, &body)
-	e.Event = body
+	err := e.GetEvent(EventTypeUserAdded, body)
 	return &body, err
 }
