@@ -11,6 +11,6 @@ type EventV2BotAdded struct {
 // GetBotAdded .
 func (e EventV2) GetBotAdded() (*EventV2BotAdded, error) {
 	var body EventV2BotAdded
-	err := e.GetEvent(EventTypeBotAdded, body)
+	err := e.GetEvent(EventTypeBotAdded, &body)
 	return &body, err
 }

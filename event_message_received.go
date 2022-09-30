@@ -28,6 +28,6 @@ type EventV2MessageReceived struct {
 // GetMessageReceived .
 func (e EventV2) GetMessageReceived() (*EventV2MessageReceived, error) {
 	var body EventV2MessageReceived
-	err := e.GetEvent(EventTypeMessageReceived, body)
+	err := e.GetEvent(EventTypeMessageReceived, &body)
 	return &body, err
 }

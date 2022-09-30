@@ -11,6 +11,6 @@ type EventV2ChatDisbanded struct {
 // GetChatDisbanded .
 func (e EventV2) GetChatDisbanded() (*EventV2ChatDisbanded, error) {
 	var body EventV2ChatDisbanded
-	err := e.GetEvent(EventTypeChatDisbanded, body)
+	err := e.GetEvent(EventTypeChatDisbanded, &body)
 	return &body, err
 }

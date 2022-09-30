@@ -13,6 +13,6 @@ type EventV2MessageRead struct {
 // GetMessageRead .
 func (e EventV2) GetMessageRead() (*EventV2MessageRead, error) {
 	var body EventV2MessageRead
-	err := e.GetEvent(EventTypeMessageRead, body)
+	err := e.GetEvent(EventTypeMessageRead, &body)
 	return &body, err
 }

@@ -66,6 +66,5 @@ func (e EventV2) GetEvent(eventType string, body interface{}) error {
 		return ErrEventTypeNotMatch
 	}
 	err := json.Unmarshal(e.EventRaw, &body)
-	e.Event = body
 	return err
 }
