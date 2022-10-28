@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.7.4
+
+- feat(message): support UUID (#40)
+
 ## v1.7.3
 
 - feat(notification): support sign
