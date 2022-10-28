@@ -17,6 +17,9 @@ func BuildMessage(om OutcomingMessage) (*IMMessageRequest, error) {
 	if req.Content == "" {
 		return nil, ErrMessageNotBuild
 	}
+	if om.UUID != "" {
+		req.UUID = om.UUID
+	}
 	return &req, nil
 }
 

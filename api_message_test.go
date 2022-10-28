@@ -1,6 +1,8 @@
 package lark
 
 import (
+	"fmt"
+	"math/rand"
 	"testing"
 	"time"
 
@@ -317,4 +319,22 @@ func TestMessageCRUD(t *testing.T) {
 		// assert.NotEmpty(t, receiptOld.Data.ReadUsers)
 		t.Log(receiptOld.Data.ReadUsers)
 	}
+}
+
+func TestIdempotentMessage(t *testing.T) {
+	uuid := fmt.Sprintf("%s-%d", "abc", rand.Intn(999))
+	msg := NewMsgBuffer(MsgText)
+	om := msg.BindChatID(testGroupChatID).WithUUID(uuid).Text("hello, UUID").Build()
+	resp, err := bot.PostMessage(om)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
+	msg.Clear()
+	om = msg.BindChatID(testGroupChatID).WithUUID(uuid).Text("goodbye, UUID").Build()
+	_, _ = bot.PostMessage(om)
+	// you will then only receive the first one
+	msg.Clear()
+	om = msg.BindChatID(testGroupChatID).Text("goodbye, without UUID").Build()
+	_, _ = bot.PostMessage(om)
 }

@@ -142,3 +142,11 @@ func TestWithSign(t *testing.T) {
 	assert.NotEmpty(t, mb.message.Sign)
 	assert.Equal(t, "QnWVTSBe6FmQDE0bG6X0mURbI+DnvVyu1h+j5dHOjrU=", msg.Sign)
 }
+
+func TestWithUUID(t *testing.T) {
+	mb := NewMsgBuffer(MsgText)
+	assert.Empty(t, mb.message.UUID)
+	msg := mb.WithUUID("abc-def-0000").Build()
+	assert.NotEmpty(t, mb.message.UUID)
+	assert.Equal(t, "abc-def-0000", msg.UUID)
+}

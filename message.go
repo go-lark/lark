@@ -31,7 +31,9 @@ type OutcomingMessage struct {
 	// UpdateMulti card
 	UpdateMulti bool `json:"update_multi"`
 	// Sign for notification bot
-	Sign string  `json:"sign"`
+	Sign string `json:"sign"`
+	// UUID for idempotency
+	UUID string `json:"uuid"`
 }
 
 // CardContent struct of card content
