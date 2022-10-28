@@ -25,6 +25,7 @@ type IMMessageRequest struct {
 	ReceiveID string `json:"receive_id"`
 	Content   string `json:"content"`
 	MsgType   string `json:"msg_type"`
+	UUID      string `json:"uuid,omitempty"`
 }
 
 // IMSendor .

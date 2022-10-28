@@ -89,6 +89,12 @@ func (m *MsgBuffer) WithSign(secret string, ts int64) *MsgBuffer {
 	return m
 }
 
+// WithUUID add UUID to message for idempotency
+func (m *MsgBuffer) WithUUID(uuid string) *MsgBuffer {
+	m.message.UUID = uuid
+	return m
+}
+
 func (m MsgBuffer) typeError(funcName string, msgType string) error {
 	return fmt.Errorf("`%s` is only available to `%s`", funcName, msgType)
 }
