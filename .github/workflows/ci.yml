@@ -28,10 +28,7 @@ jobs:
         go-version: '1.13.0'
 
     - name: lint
-      run: |
-        export PATH=$PATH:$(go env GOPATH)/bin
-        go get github.com/mgechev/revive@master
-        revive -set_exit_status ./...
+      uses: morphy2k/revive-action@v2
 
     - name: build
       run: ./scripts/test.sh
