@@ -29,6 +29,7 @@ func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
 	}
 	if len(om.Sign) > 0 {
 		params["sign"] = om.Sign
+		params["timestamp"] = om.Timestamp
 	}
 	params["content"] = content
 	return params

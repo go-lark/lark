@@ -32,6 +32,8 @@ type OutcomingMessage struct {
 	UpdateMulti bool `json:"update_multi"`
 	// Sign for notification bot
 	Sign string `json:"sign"`
+	// Timestamp for sign
+	Timestamp int64 `json:"timestamp"`
 	// UUID for idempotency
 	UUID string `json:"uuid"`
 }
