@@ -86,6 +86,7 @@ func (m *MsgBuffer) UpdateMulti(flag bool) *MsgBuffer {
 // WithSign generates sign for notification bot check
 func (m *MsgBuffer) WithSign(secret string, ts int64) *MsgBuffer {
 	m.message.Sign, _ = GenSign(secret, ts)
+	m.message.Timestamp = ts
 	return m
 }
 

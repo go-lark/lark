@@ -98,3 +98,14 @@ func TestWebhookV2Signed(t *testing.T) {
 	assert.Zero(t, resp.StatusCode)
 	assert.Equal(t, "success", resp.StatusMessage)
 }
+
+func TestWebhookV2SignedError(t *testing.T) {
+	bot := NewNotificationBot("https://open.feishu.cn/open-apis/bot/v2/hook/749be902-6eaa-4cc3-9325-be4126164b02")
+
+	mbText := NewMsgBuffer(MsgText)
+	mbText.Text("hello sign").WithSign("LIpnNexV7rwOyOebKoqSdb", time.Now().Unix())
+	resp, err := bot.PostNotificationV2(mbText.Build())
+	assert.NoError(t, err)
+	assert.Zero(t, resp.StatusCode)
+	assert.Equal(t, "sign match fail or timestamp is not within one hour from current time", resp.Msg)
+}
