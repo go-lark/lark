@@ -1,4 +1,6 @@
-# Declarative Card Builder
+# Card Builder
+
+Interactive card is rich in formats. However, it takes much efforts to build one. Thus, we provide a declarative card builder to make it easier.
 
 ## Getting Started
 
@@ -48,13 +50,18 @@ Refer to [msg_card_builder_test.go](./msg_card_builder_test.go) for details.
 - i18n cards are currently NOT YET SUPPORTED. Use raw json if necessary.
 - `CardBuilder` contains ONLY a group of card-builder-related functions and contains NO card content. Thus, you can use the same `CardBuilder` whenever building a card instead of making a new one before build.
 
-## Works with go-lark
+## Sending Message
 
 ```go
 b := lark.NewCardBuilder()
-c := b.Card(...Elements)
-// Use c.String() or c.MarshalJSON() to render card content to string or []byte
+card := b.Card(
+    b.Div(
+        b.Field(b.Text("Content")).Short(),
+    ),
+).
+    Wathet().
+    Title("Card Title")
 msg := lark.NewMsgBuffer(lark.MsgInteractive)
-om := msg.BindEmail("youremail@example.com").Card(c.String()).Build()
-bot.PostMessage(om)
+om := msg.BindEmail("youremail@example.com").Card(card.String()).Build()
+resp, err := bot.PostMessage(om)
 ```
