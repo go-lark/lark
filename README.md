@@ -11,7 +11,7 @@
 go-lark is an easy-to-use SDK for Feishu and Lark Open Platform,
 which implements messaging APIs, with full-fledged supports on building Chat Bot and Notification Bot.
 
-It is widely used and tested by ~450 ByteDance in-house developers with over 1.5k Go packages.
+It is widely used and tested by ~650 ByteDance in-house developers with over 3k Go packages.
 
 ## Features
 
@@ -194,13 +194,13 @@ Content functions:
 Each `go-lark` API function returns `response` and `err`.
 `err` is the error from HTTP client, when it was not `nil`, HTTP might have gone wrong.
 
-While `response` is HTTP response from Lark API server, in which `Code` and `Ok` represent whether it succeeds.
+While `response` is HTTP response from Lark API server, in which `Code` and `OK` represent whether it succeeds.
 The meaning of `Code` is defined [here](https://open.feishu.cn/document/ukTMukTMukTM/ugjM14COyUjL4ITN).
 
 ### Event
 
 Lark provides a number of [events](https://open.feishu.cn/document/ukTMukTMukTM/uUTNz4SN1MjL1UzM) and they are in two different schema (1.0/2.0).
-go-lark now only implements two of them in schema 1.0, which are needed for interacting between bot and Lark server:
+go-lark now only implements a few of them, which are needed for interacting between bot and Lark server:
 
 - URL Challenge
 - Receiving Messages
