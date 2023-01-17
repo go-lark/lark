@@ -10,15 +10,15 @@ import (
 // EventType definitions
 const (
 	EventTypeMessageReceived = "im.message.receive_v1"
+	EventTypeMessageRead     = "im.message.message_read_v1"
 	EventTypeChatDisbanded   = "im.chat.disbanded_v1"
+	EventTypeBotAdded        = "im.chat.member.bot.added_v1"
+	EventTypeBotDeleted      = "im.chat.member.bot.deleted_v1"
+	EventTypeUserAdded       = "im.chat.member.user.added_v1"
+	EventTypeUserDeleted     = "im.chat.member.user.deleted_v1"
 	// not supported yet
-	EventTypeMessageRead   = "im.message.message_read_v1"
 	EventTypeChatUpdated   = "im.chat.updated_v1"
-	EventTypeBotAdded      = "im.chat.member.bot.added_v1"
-	EventTypeBotDeleted    = "im.chat.member.bot.deleted_v1"
-	EventTypeUserAdded     = "im.chat.member.user.added_v1"
 	EventTypeUserWithdrawn = "im.chat.member.user.withdrawn_v1"
-	EventTypeUserDeleted   = "im.chat.member.user.deleted_v1"
 )
 
 // EventV2 handles events with v2 schema
@@ -60,46 +60,11 @@ func (e EventV2) PostEvent(client *http.Client, hookURL string, event EventV2) (
 	return resp, err
 }
 
-// EventV2MessageReceived .
-type EventV2MessageReceived struct {
-	Sender struct {
-		SenderID   EventV2UserID `json:"sender_id,omitempty"`
-		SenderType string        `json:"sender_type,omitempty"`
-		TenantKey  string        `json:"tenant_key,omitempty"`
-	} `json:"sender,omitempty"`
-	Message struct {
-		MessageID   string `json:"message_id,omitempty"`
-		RootID      string `json:"root_id,omitempty"`
-		ParentID    string `json:"parent_id,omitempty"`
-		CreateTime  string `json:"create_time,omitempty"`
-		ChatID      string `json:"chat_id,omitempty"`
-		ChatType    string `json:"chat_type,omitempty"`
-		MessageType string `json:"message_type,omitempty"`
-		Content     string `json:"content,omitempty"`
-		Mentions    []struct {
-			Key       string        `json:"key,omitempty"`
-			ID        EventV2UserID `json:"id,omitempty"`
-			Name      string        `json:"name,omitempty"`
-			TenantKey string        `json:"tenant_key,omitempty"`
-		} `json:"mentions,omitempty"`
-	} `json:"message,omitempty"`
-}
-
-// EventV2ChatDisbanded .
-type EventV2ChatDisbanded struct {
-	ChatID            string        `json:"chat_id,omitempty"`
-	OperatorID        EventV2UserID `json:"operator_id,omitempty"`
-	External          bool          `json:"external,omitempty"`
-	OperatorTenantKey string        `json:"operator_tenant_key,omitempty"`
-}
-
-// GetMessageReceived .
-func (e EventV2) GetMessageReceived() (*EventV2MessageReceived, error) {
-	if e.Header.EventType != EventTypeMessageReceived {
-		return nil, ErrEventTypeNotMatch
+// GetEvent .
+func (e EventV2) GetEvent(eventType string, body interface{}) error {
+	if e.Header.EventType != eventType {
+		return ErrEventTypeNotMatch
 	}
-	var body EventV2MessageReceived
 	err := json.Unmarshal(e.EventRaw, &body)
-	e.Event = body
-	return &body, err
+	return err
 }
