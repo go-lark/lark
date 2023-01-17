@@ -80,8 +80,8 @@ Feishu/Lark API offers more features, please refers to [Usage](#usage) for furth
   because Feishu and Lark basically shares the same API specification.
   We do not guarantee all of the APIs work well with Lark, until we have tested it on Lark.
 - go-lark only supports Custom App. Marketplace App is not supported yet.
-- go-lark implements bot and messaging API, other APIs such as Lark Doc, Calendar and so so are not supported.
-- go-lark implements API in v3/v4 version\* (official documents may also mention im/v1 version) and event with Schema 1.0.
+- go-lark implements bot and messaging API, other APIs such as Lark Doc, Calendar and so on are not supported.
+- go-lark implements API in v3/v4 version\* (official documents may also mention im/v1 version) and event with Schema 1.0 and 2.0 (partially).
 
 ### Switch to Lark Endpoints
 
