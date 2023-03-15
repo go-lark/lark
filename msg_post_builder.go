@@ -35,8 +35,8 @@ const (
 
 // PostBuf .
 type PostBuf struct {
-	Title   string     `json:"title"`
-	Content []PostElem `json:"content"`
+	Title   string       `json:"title"`
+	Content [][]PostElem `json:"content"`
 }
 
 // MsgPostBuilder for build text buf
@@ -63,7 +63,8 @@ func (pb *MsgPostBuilder) Locale(locale string) *MsgPostBuilder {
 // WithLocale switches to locale and returns self
 func (pb *MsgPostBuilder) WithLocale(locale string) *MsgPostBuilder {
 	if _, ok := pb.buf[locale]; !ok {
-		pb.buf[locale] = &PostBuf{}
+		buf := &PostBuf{Content: make([][]PostElem, 1)}
+		pb.buf[locale] = buf
 	}
 
 	pb.curLocale = locale
@@ -89,7 +90,7 @@ func (pb *MsgPostBuilder) TextTag(text string, lines int, unescape bool) *MsgPos
 		Lines:    &lines,
 		UnEscape: &unescape,
 	}
-	pb.CurLocale().Content = append(pb.CurLocale().Content, pe)
+	pb.addElem(pe)
 	return pb
 }
 
@@ -100,7 +101,7 @@ func (pb *MsgPostBuilder) LinkTag(text, href string) *MsgPostBuilder {
 		Text: &text,
 		Href: &href,
 	}
-	pb.CurLocale().Content = append(pb.CurLocale().Content, pe)
+	pb.addElem(pe)
 	return pb
 }
 
@@ -111,7 +112,7 @@ func (pb *MsgPostBuilder) AtTag(text, userID string) *MsgPostBuilder {
 		Text:   &text,
 		UserID: &userID,
 	}
-	pb.CurLocale().Content = append(pb.CurLocale().Content, pe)
+	pb.addElem(pe)
 	return pb
 }
 
@@ -123,8 +124,25 @@ func (pb *MsgPostBuilder) ImageTag(imageKey string, imageWidth, imageHeight int)
 		ImageWidth:  &imageWidth,
 		ImageHeight: &imageHeight,
 	}
-	pb.CurLocale().Content = append(pb.CurLocale().Content, pe)
+	pb.addElem(pe)
 	return pb
+}
+
+// NewLine starts a new line
+func (pb *MsgPostBuilder) NewLine() *MsgPostBuilder {
+	// if pb.Len() == 0 then there's no need to start a new line
+	if pb.Len() > 0 {
+		buf := pb.CurLocale()
+		buf.Content = append(buf.Content, make([]PostElem, 0))
+	}
+	return pb
+}
+
+// addElem adds a PostElem to the latest line
+func (pb *MsgPostBuilder) addElem(pe PostElem) {
+	buf := pb.CurLocale()
+	idx := len(buf.Content) - 1
+	buf.Content[idx] = append(buf.Content[idx], pe)
 }
 
 // Clear all message
@@ -139,13 +157,20 @@ func (pb *MsgPostBuilder) Render() *PostContent {
 	for locale, buf := range pb.buf {
 		content[locale] = PostBody{
 			Title:   buf.Title,
-			Content: [][]PostElem{buf.Content},
+			Content: buf.Content,
 		}
 	}
 	return &content
 }
 
-// Len returns buf len
+// Len returns the latest line buf len
 func (pb MsgPostBuilder) Len() int {
+	buf := pb.CurLocale()
+	idx := len(buf.Content) - 1
+	return len(buf.Content[idx])
+}
+
+// Len returns the lines count
+func (pb MsgPostBuilder) Lines() int {
 	return len(pb.CurLocale().Content)
 }
