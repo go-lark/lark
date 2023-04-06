@@ -67,8 +67,8 @@ func main() {
 import "github.com/go-lark/lark"
 
 func main() {
-    bot := lark.NewNotificationBot("WEB HOOK URL")
-    bot.PostNotification("go-lark", "example")
+    bot := lark.NewNotificationBot("<WEB HOOK URL>")
+    bot.PostNotificationV2(lark.NewMsgBuffer(lark.MsgText).Text("hello, wolrd").Build())
 }
 ```
 
