@@ -86,7 +86,7 @@ type DeleteChatResponse struct {
 // UpdateChatRequest .
 type UpdateChatRequest struct {
 	Name                   string    `json:"name,omitempty"`
-	Avatar                 string    `json:"Avatar,omitempty"`
+	Avatar                 string    `json:"avatar,omitempty"`
 	Description            string    `json:"description,omitempty"`
 	I18NNames              I18NNames `json:"i18n_names,omitempty"`
 	AddMemberPermission    string    `json:"add_member_permission,omitempty"`
