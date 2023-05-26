@@ -338,3 +338,14 @@ func TestIdempotentMessage(t *testing.T) {
 	om = msg.BindChatID(testGroupChatID).Text("goodbye, without UUID").Build()
 	_, _ = bot.PostMessage(om)
 }
+
+func TestPinMessages(t *testing.T) {
+	resp, err := bot.PinMessage(testMessageID)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.Equal(t, testMessageID, resp.Data.Pin.MessageID)
+		unpinResp, err := bot.UnpinMessage(testMessageID)
+		assert.NoError(t, err)
+		assert.Equal(t, 0, unpinResp.Code)
+	}
+}
