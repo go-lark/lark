@@ -11,6 +11,8 @@ const (
 	messageReceiptURL         = "/open-apis/message/v4/read_info/"
 	ephemeralMessageURL       = "/open-apis/ephemeral/v1/send"
 	deleteEphemeralMessageURL = "/open-apis/ephemeral/v1/delete"
+	pinMessageURL             = "/open-apis/im/v1/pins"
+	unpinMessageURL           = "/open-apis/im/v1/pins/%s"
 )
 
 // PostMessageResponse .
@@ -103,6 +105,23 @@ type MessageReceiptResponse struct {
 		} `json:"read_users"`
 	} `json:"data"`
 }
+
+// PinMessageResponse .
+type PinMessageResponse struct {
+	BaseResponse
+	Data struct {
+		Pin struct {
+			MessageID      string `json:"message_id"`
+			ChatID         string `json:"chat_id"`
+			OperatorID     string `json:"operator_id"`
+			OperatorIDType string `json:"operator_id_type"`
+			CreateTime     string `json:"create_time"`
+		} `json:"pin"`
+	} `json:"data"`
+}
+
+// UnpinMessageResponse .
+type UnpinMessageResponse = BaseResponse
 
 func newMsgBufWithOptionalUserID(msgType string, userID *OptionalUserID) *MsgBuffer {
 	mb := NewMsgBuffer(msgType)
@@ -295,5 +314,23 @@ func (bot Bot) DeleteEphemeralMessage(messageID string) (*DeleteEphemeralMessage
 	}
 	var respData DeleteEphemeralMessageResponse
 	err := bot.PostAPIRequest("DeleteEphemeralMessage", deleteEphemeralMessageURL, true, params, &respData)
+	return &respData, err
+}
+
+// PinMessage pin a message
+func (bot Bot) PinMessage(messageID string) (*PinMessageResponse, error) {
+	params := map[string]interface{}{
+		"message_id": messageID,
+	}
+	var respData PinMessageResponse
+	err := bot.PostAPIRequest("PinMessage", pinMessageURL, true, params, &respData)
+	return &respData, err
+}
+
+// UnpinMessage unpin a message
+func (bot Bot) UnpinMessage(messageID string) (*UnpinMessageResponse, error) {
+	url := fmt.Sprintf(unpinMessageURL, messageID)
+	var respData UnpinMessageResponse
+	err := bot.DeleteAPIRequest("PinMessage", url, true, nil, &respData)
 	return &respData, err
 }
