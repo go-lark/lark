@@ -15,6 +15,8 @@ const (
 	removeChatMemberURL = "/open-apis/im/v1/chats/%s/members?member_id_type=%s"
 	isInChatURL         = "/open-apis/im/v1/chats/%s/members/is_in_chat"
 	getChatMembersURL   = "/open-apis/im/v1/chats/%s/members?member_id_type=%s"
+	setTopNoticeURL     = "/open-apis/im/v1/chats/%s/top_notice/put_top_notice"
+	deleteTopNoticeURL  = "/open-apis/im/v1/chats/%s/top_notice/delete_top_notice"
 )
 
 // GetChatResponse .
@@ -165,6 +167,23 @@ type ChatMember struct {
 	TenantKey    string `json:"tenant_key"`
 }
 
+// SetTopNoticeRequest .
+type SetTopNoticeRequest struct {
+	ChatTopNotice []ChatTopNoticeAction `json:"chat_top_notice"`
+}
+
+// ChatTopNoticeAction .
+type ChatTopNoticeAction struct {
+	ActionType string `json:"action_type"`
+	MessageID  string `json:"message_id"`
+}
+
+// SetTopNoticeResponse .
+type SetTopNoticeResponse = BaseResponse
+
+// DeleteTopNoticeResponse .
+type DeleteTopNoticeResponse = BaseResponse
+
 // WithUserIDType .
 func (bot *Bot) WithUserIDType(userIDType string) *Bot {
 	bot.userIDType = userIDType
@@ -253,5 +272,29 @@ func (bot Bot) GetChatMembers(chatID string, pageToken string, pageSize int) (*G
 	}
 	fullURL := fmt.Sprintf(getChatMembersURL, chatID, bot.userIDType) + "&" + v.Encode()
 	err := bot.GetAPIRequest("GetChatMembers", fullURL, true, nil, &respData)
+	return &respData, err
+}
+
+// SetTopNotice .
+func (bot Bot) SetTopNotice(chatID, actionType, messageID string) (*SetTopNoticeResponse, error) {
+	var respData SetTopNoticeResponse
+	req := SetTopNoticeRequest{
+		ChatTopNotice: []ChatTopNoticeAction{
+			{
+				ActionType: actionType,
+				MessageID:  messageID,
+			},
+		},
+	}
+	url := fmt.Sprintf(setTopNoticeURL, chatID)
+	err := bot.PostAPIRequest("SetTopNotice", url, true, req, &respData)
+	return &respData, err
+}
+
+// DeleteTopNotice .
+func (bot Bot) DeleteTopNotice(chatID string) (*DeleteChatResponse, error) {
+	var respData DeleteChatResponse
+	url := fmt.Sprintf(deleteTopNoticeURL, chatID)
+	err := bot.PostAPIRequest("DeleteTopNotice", url, true, nil, &respData)
 	return &respData, err
 }
