@@ -90,3 +90,13 @@ func TestGetChatMembers(t *testing.T) {
 		}
 	}
 }
+
+func TestChatTopNotice(t *testing.T) {
+	resp, err := bot.PostText("group notice", WithChatID(testGroupChatID))
+	if assert.NoError(t, err) {
+		setResp, _ := bot.SetTopNotice(testGroupChatID, "2", resp.Data.MessageID)
+		assert.Equal(t, 0, setResp.Code)
+		delResp, _ := bot.DeleteTopNotice(testGroupChatID)
+		assert.Equal(t, 0, delResp.Code)
+	}
+}
