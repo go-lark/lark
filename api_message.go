@@ -30,11 +30,11 @@ type IMMessageRequest struct {
 	UUID      string `json:"uuid,omitempty"`
 }
 
-// IMSendor .
-type IMSendor struct {
+// IMSender .
+type IMSender struct {
 	ID         string `json:"id"`
 	IDType     string `json:"id_type"`
-	SendorType string `json:"sendor_type"`
+	SenderType string `json:"sender_type"`
 	TenantKey  string `json:"tenant_key"`
 }
 
@@ -63,7 +63,7 @@ type IMMessage struct {
 	UpdateTime     string `json:"update_time"`
 	Deleted        bool   `json:"deleted"`
 	Updated        bool   `json:"updated"`
-	Sendor         IMSendor
+	Sender         IMSender
 	Mentions       []IMMention
 	Body           IMBody
 }
