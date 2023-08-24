@@ -25,6 +25,9 @@ type CardBuilder interface {
 	Text(s string) *card.TextBlock
 	Markdown(s string) *card.MarkdownBlock
 	URL() *card.URLBlock
+	ColumnSet(columns ...*card.ColumnBlock) *card.ColumnSetBlock
+	Column(elements ...card.Element) *card.ColumnBlock
+	ColumnAction(url *card.URLBlock) *card.ColumnActionBlock
 }
 
 type cardBuilder struct{}
@@ -122,4 +125,19 @@ func (cardBuilder) Markdown(s string) *card.MarkdownBlock {
 // URL 链接模块
 func (cardBuilder) URL() *card.URLBlock {
 	return card.URL()
+}
+
+// ColumnSet column set module
+func (cardBuilder) ColumnSet(columns ...*card.ColumnBlock) *card.ColumnSetBlock {
+	return card.ColumnSet(columns...)
+}
+
+// Column column module
+func (cardBuilder) Column(elements ...card.Element) *card.ColumnBlock {
+	return card.Column(elements...)
+}
+
+// ColumnAction column action module
+func (cardBuilder) ColumnAction(url *card.URLBlock) *card.ColumnActionBlock {
+	return card.ColumnAction(url)
 }

@@ -264,6 +264,59 @@ func TestPostCardMessage(t *testing.T) {
 	}
 }
 
+func TestColumnSet(t *testing.T) {
+	b := NewCardBuilder()
+	card := b.Card(
+		b.ColumnSet(
+			b.Column(
+				b.Markdown("已审批单量\n**29单**\n<font color='green'>领先团队59%</font>").AlignCenter(),
+			).Width("weighted").Weight(1),
+			b.Column(
+				b.Markdown("平均审批耗时\n**0.9小时**\n<font color='green'>领先团队100%</font>").AlignCenter(),
+			).Width("weighted").Weight(1),
+			b.Column(
+				b.Markdown("待批率\n**25%**\n<font color='red'>落后团队29%</font>").AlignCenter(),
+			).Width("weighted").Weight(1),
+		).
+			FlexMode("bisect").
+			BackgroundStyle("grey").
+			HorizontalSpacing("default"),
+		b.Hr(),
+		b.Markdown("**团队审批效率总览**"),
+		b.ColumnSet(
+			b.Column(
+				b.Markdown("**审批人**\n王大明\n张军\n李小方"),
+			).Width("weighted").Weight(1),
+			b.Column(
+				b.Markdown("**审批时长**\n小于1小时\n2小时\n3小时"),
+			).Width("weighted").Weight(1),
+			b.Column(
+				b.Markdown("**对比上周变化**\n<font color='green'>↓12%</font>\n<font color='red'>↑5%</font>\n<font color='green'>↓25%</font>"),
+			).Width("weighted").Weight(1),
+		).Action(
+			b.ColumnAction(
+				b.URL().
+					Href("https://open.feishu.cn").
+					MultiHref(
+						"https://developer.android.com/",
+						"https://developer.apple.com/",
+						"https://www.windows.com",
+					),
+			),
+		),
+	).
+		Wathet().
+		Title("Card with Column Set").
+		UpdateMulti(true)
+	msgV4 := NewMsgBuffer(MsgInteractive)
+	omV4 := msgV4.BindEmail(testUserEmail).Card(card.String()).Build()
+	resp, err := bot.PostMessage(omV4)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
+}
+
 func TestEphemeralMessage(t *testing.T) {
 	b := NewCardBuilder()
 	card := b.Card(
