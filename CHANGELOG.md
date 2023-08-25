@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v1.9.0
+
+- feat(im): support column set (#57)
+
+## v1.8.0
+
+- feat(im): IMMessage use Sender rather than Sendor (#54)
+- feat(chat): set and delete notice (#53)
+- feat(im): pin and unpin message (#47)
+- fix: update chat avatar field (#46)
+- feat(event): add more events (#38)
+- fix(sign): fix missing timestamp in signed message
+
 ## v1.7.4
 
 - feat(message): support UUID (#40)
