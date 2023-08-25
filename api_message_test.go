@@ -294,7 +294,7 @@ func TestColumnSet(t *testing.T) {
 				b.Markdown("**对比上周变化**\n<font color='green'>↓12%</font>\n<font color='red'>↑5%</font>\n<font color='green'>↓25%</font>"),
 			).Width("weighted").Weight(1),
 		).Action(
-			b.ColumnAction(
+			b.ColumnSetAction(
 				b.URL().
 					Href("https://open.feishu.cn").
 					MultiHref(

@@ -2,7 +2,7 @@ package card
 
 var _ Element = (*ColumnSetBlock)(nil)
 var _ Element = (*ColumnBlock)(nil)
-var _ Element = (*ColumnActionBlock)(nil)
+var _ Element = (*ColumnSetActionBlock)(nil)
 
 // ColumnSetBlock column set element
 type ColumnSetBlock struct {
@@ -10,7 +10,7 @@ type ColumnSetBlock struct {
 	backgroundStyle   string
 	horizontalSpacing string
 	columns           []*ColumnBlock
-	action            *ColumnActionBlock
+	action            *ColumnSetActionBlock
 }
 
 type columnSetRenderer struct {
@@ -67,7 +67,7 @@ func (c *ColumnSetBlock) HorizontalSpacing(hs string) *ColumnSetBlock {
 }
 
 // Action add column set action
-func (c *ColumnSetBlock) Action(action *ColumnActionBlock) *ColumnSetBlock {
+func (c *ColumnSetBlock) Action(action *ColumnSetActionBlock) *ColumnSetBlock {
 	c.action = action
 	return c
 }
@@ -125,8 +125,8 @@ func (c *ColumnBlock) Render() Renderer {
 	return ret
 }
 
-// ColumnActionBlock column action element
-type ColumnActionBlock struct {
+// ColumnSetActionBlock column action element
+type ColumnSetActionBlock struct {
 	multiURL *URLBlock
 }
 
@@ -134,15 +134,15 @@ type columnActionRenderer struct {
 	MultiURL Renderer `json:"multi_url,omitempty"`
 }
 
-// ColumnAction .
-func ColumnAction(url *URLBlock) *ColumnActionBlock {
-	return &ColumnActionBlock{
+// ColumnSetAction .
+func ColumnSetAction(url *URLBlock) *ColumnSetActionBlock {
+	return &ColumnSetActionBlock{
 		multiURL: url,
 	}
 }
 
 // Render .
-func (c *ColumnActionBlock) Render() Renderer {
+func (c *ColumnSetActionBlock) Render() Renderer {
 	ret := columnActionRenderer{
 		MultiURL: c.multiURL.Render(),
 	}

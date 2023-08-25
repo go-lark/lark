@@ -26,8 +26,8 @@ type CardBuilder interface {
 	Markdown(s string) *card.MarkdownBlock
 	URL() *card.URLBlock
 	ColumnSet(columns ...*card.ColumnBlock) *card.ColumnSetBlock
+	ColumnSetAction(url *card.URLBlock) *card.ColumnSetActionBlock
 	Column(elements ...card.Element) *card.ColumnBlock
-	ColumnAction(url *card.URLBlock) *card.ColumnActionBlock
 }
 
 type cardBuilder struct{}
@@ -137,7 +137,7 @@ func (cardBuilder) Column(elements ...card.Element) *card.ColumnBlock {
 	return card.Column(elements...)
 }
 
-// ColumnAction column action module
-func (cardBuilder) ColumnAction(url *card.URLBlock) *card.ColumnActionBlock {
-	return card.ColumnAction(url)
+// ColumnSetAction column action module
+func (cardBuilder) ColumnSetAction(url *card.URLBlock) *card.ColumnSetActionBlock {
+	return card.ColumnSetAction(url)
 }
