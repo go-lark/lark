@@ -350,7 +350,6 @@ func TestI18NCard(t *testing.T) {
 		UpdateMulti(true)
 	msgV4 := NewMsgBuffer(MsgInteractive)
 	omV4 := msgV4.BindEmail(testUserEmail).Card(card.String()).Build()
-	t.Log(card.String())
 	resp, err := bot.PostMessage(omV4)
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
