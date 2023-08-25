@@ -8,6 +8,12 @@ type CardBlock = card.Block
 // CardBuilder 卡片构造方法
 type CardBuilder interface {
 	Card(elements ...card.Element) *CardBlock
+	CardWithLocale(elements ...*card.I18NBlock) *CardBlock
+
+	BlockWithLocale(locale string, elements ...card.Element) *card.I18NBlock
+	TitleWithLocale(titles ...*card.I18NTextBlock) *card.I18NTitleBlock
+	TextWithLocale(locale, text string) *card.I18NTextBlock
+
 	Action(actions ...card.Element) *card.ActionBlock
 	Button(text *card.TextBlock) *card.ButtonBlock
 	Confirm(title, text string) *card.ConfirmBlock
@@ -140,4 +146,24 @@ func (cardBuilder) Column(elements ...card.Element) *card.ColumnBlock {
 // ColumnSetAction column action module
 func (cardBuilder) ColumnSetAction(url *card.URLBlock) *card.ColumnSetActionBlock {
 	return card.ColumnSetAction(url)
+}
+
+// CardWithLocale support card with multiple locales
+func (cardBuilder) CardWithLocale(elements ...*card.I18NBlock) *CardBlock {
+	return card.WithLocale(elements...)
+}
+
+// BlockWithLocale wraps block with locale
+func (cardBuilder) BlockWithLocale(locale string, elements ...card.Element) *card.I18NBlock {
+	return card.BlockWithLocale(locale, elements...)
+}
+
+// TitleWithLocale wraps title with locale
+func (cardBuilder) TitleWithLocale(titles ...*card.I18NTextBlock) *card.I18NTitleBlock {
+	return card.TitleWithLocale(titles...)
+}
+
+// TextWithLocale wraps text with locale
+func (cardBuilder) TextWithLocale(locale, text string) *card.I18NTextBlock {
+	return card.TextWithLocale(locale, text)
 }

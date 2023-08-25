@@ -15,6 +15,10 @@ type Block struct {
 	title          string
 	template       string
 	links          *URLBlock
+
+	i18n               bool
+	titleWithLocale    *I18NTitleBlock
+	elementsWithLocale []*I18NBlock
 }
 
 // MarshalJSON implements json.Marshaler
@@ -40,10 +44,11 @@ type cardHeaderRenderer struct {
 }
 
 type cardRenderer struct {
-	Config   cardConfigRenderer `json:"config,omitempty"`
-	Header   cardHeaderRenderer `json:"header,omitempty"`
-	CardLink Renderer           `json:"card_link,omitempty"`
-	Elements []Renderer         `json:"elements,omitempty"`
+	Config       cardConfigRenderer  `json:"config,omitempty"`
+	Header       cardHeaderRenderer  `json:"header,omitempty"`
+	CardLink     Renderer            `json:"card_link,omitempty"`
+	Elements     []Renderer          `json:"elements,omitempty"`
+	I18NElements map[string]Renderer `json:"i18n_elements,omitempty"`
 }
 
 // Render 渲染为 Renderer
@@ -54,11 +59,24 @@ func (b *Block) Render() Renderer {
 			EnableForward:  !b.disableForward,
 			UpdateMulti:    b.updateMulti,
 		},
-		Header: cardHeaderRenderer{
-			Title:    Text(b.title).Render(),
+	}
+	if b.i18n {
+		// render i18n
+		ret.I18NElements = make(map[string]Renderer)
+		for _, el := range b.elementsWithLocale {
+			ret.I18NElements[el.locale] = el.Render()
+		}
+		ret.Header = cardHeaderRenderer{
 			Template: b.template,
-		},
-		Elements: renderElements(b.elements),
+			Title:    b.titleWithLocale.Render(),
+		}
+	} else {
+		// render title and elements
+		ret.Header = cardHeaderRenderer{
+			Template: b.template,
+			Title:    Text(b.title).Render(),
+		}
+		ret.Elements = renderElements(b.elements)
 	}
 	if b.links != nil {
 		ret.CardLink = b.links.Render()
@@ -69,6 +87,11 @@ func (b *Block) Render() Renderer {
 // Card 包裹了最外层的卡片结构
 func Card(el ...Element) *Block {
 	return &Block{elements: el}
+}
+
+// WithLocale support multi-locale card
+func WithLocale(el ...*I18NBlock) *Block {
+	return &Block{i18n: true, elementsWithLocale: el}
 }
 
 // NoForward 设置后，卡片将不可转发
@@ -86,6 +109,12 @@ func (b *Block) UpdateMulti(updateMulti bool) *Block {
 // Title 卡片标题
 func (b *Block) Title(title string) *Block {
 	b.title = title
+	return b
+}
+
+// titleWithLocale .
+func (b *Block) TitleWithLocale(title *I18NTitleBlock) *Block {
+	b.titleWithLocale = title
 	return b
 }
 

@@ -317,6 +317,47 @@ func TestColumnSet(t *testing.T) {
 	}
 }
 
+func TestI18NCard(t *testing.T) {
+	b := NewCardBuilder()
+	card := b.CardWithLocale(
+		b.BlockWithLocale(
+			LocaleEnUS,
+			b.Div(
+				b.Field(b.Text("English Content")),
+			),
+		),
+		b.BlockWithLocale(
+			LocaleZhCN,
+			b.Div(
+				b.Field(b.Text("中文内容")),
+			),
+		),
+		b.BlockWithLocale(
+			LocaleJaJP,
+			b.Div(
+				b.Field(b.Text("日本語コンテンツ")),
+			),
+		),
+	).
+		Wathet().
+		TitleWithLocale(
+			b.TitleWithLocale(
+				b.TextWithLocale(LocaleEnUS, "English Title"),
+				b.TextWithLocale(LocaleZhCN, "中文标题"),
+				b.TextWithLocale(LocaleJaJP, "日本語タイトル"),
+			),
+		).
+		UpdateMulti(true)
+	msgV4 := NewMsgBuffer(MsgInteractive)
+	omV4 := msgV4.BindEmail(testUserEmail).Card(card.String()).Build()
+	t.Log(card.String())
+	resp, err := bot.PostMessage(omV4)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
+}
+
 func TestEphemeralMessage(t *testing.T) {
 	b := NewCardBuilder()
 	card := b.Card(
