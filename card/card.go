@@ -112,7 +112,7 @@ func (b *Block) Title(title string) *Block {
 	return b
 }
 
-// titleWithLocale .
+// TitleWithLocale title with i18n support
 func (b *Block) TitleWithLocale(title *I18NTitleBlock) *Block {
 	b.titleWithLocale = title
 	return b
