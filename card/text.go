@@ -64,15 +64,66 @@ func (t *TextBlock) Href(name string, url *URLBlock) *TextBlock {
 
 // MarkdownBlock Markdown文本元素
 type MarkdownBlock struct {
-	*TextBlock
+	content   string
+	textAlign string
+	href      map[string]*URLBlock
+}
+
+type markdownRenderer struct {
+	ElementTag
+	Content   string              `json:"content"`
+	TextAlign string              `json:"text_align,omitempty"`
+	Href      map[string]Renderer `json:"href,omitempty"`
 }
 
 // Markdown 单独使用的 Markdown 文本模块
 func Markdown(s string) *MarkdownBlock {
 	return &MarkdownBlock{
-		TextBlock: &TextBlock{
-			content: s,
-			tag:     "markdown",
-		},
+		content: s,
 	}
+}
+
+// AlignCenter .
+func (m *MarkdownBlock) AlignCenter() *MarkdownBlock {
+	m.textAlign = "center"
+	return m
+}
+
+// AlignLeft .
+func (m *MarkdownBlock) AlignLeft() *MarkdownBlock {
+	m.textAlign = "left"
+	return m
+}
+
+// AlignRight .
+func (m *MarkdownBlock) AlignRight() *MarkdownBlock {
+	m.textAlign = "right"
+	return m
+}
+
+// Href 设置文本中 []($urlVal) 格式的链接值，仅在 LarkMd 和 Markdown 模块中可用
+func (m *MarkdownBlock) Href(name string, url *URLBlock) *MarkdownBlock {
+	if m.href == nil {
+		m.href = make(map[string]*URLBlock)
+	}
+	m.href[name] = url
+	return m
+}
+
+// Render 渲染为 Renderer
+func (m *MarkdownBlock) Render() Renderer {
+	ret := markdownRenderer{
+		ElementTag: ElementTag{
+			Tag: "markdown",
+		},
+		Content:   m.content,
+		TextAlign: m.textAlign,
+	}
+	if len(m.href) > 0 {
+		ret.Href = make(map[string]Renderer, len(m.href))
+		for k, v := range m.href {
+			ret.Href[k] = v.Render()
+		}
+	}
+	return ret
 }
