@@ -5,10 +5,11 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/go-lark/lark/card"
 	"github.com/stretchr/testify/assert"
 )
 
-func assertCard(t *testing.T, c *CardBlock, s string) {
+func assertCard(t *testing.T, c *card.Block, s string) {
 	actMap := map[string]interface{}{}
 	err := json.Unmarshal([]byte(c.String()), &actMap)
 	assert.Nil(t, err)
@@ -105,7 +106,6 @@ func TestExample3(t *testing.T) {
 		b.Div().Text(b.Text("如有其它疑问及反馈，请点击下方按钮联系行政值班号。").LarkMd()),
 		b.Action(b.Button(b.Text("联系值班号")).Primary().URL("https://open.feishu.cn/")),
 	).Orange().Title("物品借用满意度调查")
-	//fmt.Println(c.String())
 	exp := "{\n  \"config\": {\n    \"wide_screen_mode\": true\n  },\n  \"elements\": [\n    {\n      \"content\": \"感谢同学使用物品借用服务并及时归还物品～\",\n      \"href\": {\n        \"urlVal\": {\n          \"android_url\": \"https://developer.android.com/\",\n          \"ios_url\": \"lark://msgcard/unsupported_action\",\n          \"pc_url\": \"https://www.feishu.com\",\n          \"url\": \"https://www.feishu.com\"\n        }\n      },\n      \"tag\": \"markdown\"\n    },\n    {\n      \"extra\": {\n        \"options\": [\n          {\n            \"text\": {\n              \"content\": \"很好\",\n              \"tag\": \"plain_text\"\n            },\n            \"value\": \"1\"\n          },\n          {\n            \"text\": {\n              \"content\": \"好\",\n              \"tag\": \"plain_text\"\n            },\n            \"value\": \"2\"\n          },\n          {\n            \"text\": {\n              \"content\": \"一般\",\n              \"tag\": \"plain_text\"\n            },\n            \"value\": \"3\"\n          },\n          {\n            \"text\": {\n              \"content\": \"差\",\n              \"tag\": \"plain_text\"\n            },\n            \"value\": \"4\"\n          },\n          {\n            \"text\": {\n              \"content\": \"很差\",\n              \"tag\": \"plain_text\"\n            },\n            \"value\": \"5\"\n          }\n        ],\n        \"placeholder\": {\n          \"content\": \"请选择满意度评价\",\n          \"tag\": \"plain_text\"\n        },\n        \"tag\": \"select_static\",\n        \"value\": {\n          \"key\": \"value\"\n        }\n      },\n      \"tag\": \"div\",\n      \"text\": {\n        \"content\": \"请对本次服务和系统使用体验进行满意度评价：\",\n        \"tag\": \"lark_md\"\n      }\n    },\n    {\n      \"tag\": \"div\",\n      \"text\": {\n        \"content\": \"如有其它疑问及反馈，请点击下方按钮联系行政值班号。\",\n        \"tag\": \"lark_md\"\n      }\n    },\n    {\n      \"actions\": [\n        {\n          \"tag\": \"button\",\n          \"text\": {\n            \"content\": \"联系值班号\",\n            \"tag\": \"plain_text\"\n          },\n          \"type\": \"primary\",\n          \"url\": \"https://open.feishu.cn/\"\n        }\n      ],\n      \"tag\": \"action\"\n    }\n  ],\n  \"header\": {\n    \"template\": \"orange\",\n    \"title\": {\n      \"content\": \"物品借用满意度调查\",\n      \"tag\": \"plain_text\"\n    }\n  }\n}"
 	assertCard(t, c, exp)
 }
