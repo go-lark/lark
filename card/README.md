@@ -2,6 +2,11 @@
 
 Interactive card is rich in formats. However, it takes much efforts to build one. Thus, we provide a declarative card builder to make it easier.
 
+We map every element of card (`div`, `text`, `button`, etc.) to declarative calls as shown in the demo.
+
+All inner elements (e.g. `fields` of `div` blocks) are considered as arguments,
+while all element properties (e.g. `forward` property of `card` blocks) are considered as chained calls.
+
 ## Getting Started
 
 ```go
@@ -38,17 +43,33 @@ which will render as following:
 }
 ```
 
-We map every element of card (`div`, `text`, `button`, etc.) to declarative calls as shown in the demo.
+Example: [examples/interactive-message](https://github.com/go-lark/examples/tree/main/interactive-message)
 
-All inner elements (e.g. `fields` of `div` blocks) are considered as arguments,
-while all element properties (e.g. `forward` property of `card` blocks) are considered as chained calls.
+## I18N
 
-Refer to [msg_card_builder_test.go](./msg_card_builder_test.go) for details.
+Card with I18N support is also supported. We introduce a `I18N` struct to build localizable parts (e.g. title and contents):
 
-## Limits
-
-- i18n cards are currently NOT YET SUPPORTED. Use raw json if necessary.
-- `CardBuilder` contains ONLY a group of card-builder-related functions and contains NO card content. Thus, you can use the same `CardBuilder` whenever building a card instead of making a new one before build.
+```go
+b := lark.NewCardBuilder()
+c := b.I18N.Card(
+        b.I18N.WithLocale(
+            LocaleEnUS,
+            b.Div(
+                b.Field(b.Text("English Content")),
+            ),
+        ),
+        b.I18N.WithLocale(
+            LocaleZhCN,
+            b.Div(
+                b.Field(b.Text("中文内容")),
+            ),
+        ),
+    ).
+    Title(
+        b.I18N.LocalizedText(LocaleEnUS, "English Title"),
+        b.I18N.LocalizedText(LocaleZhCN, "中文标题"),
+    )
+```
 
 ## Sending Message
 

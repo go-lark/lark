@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.10.0
+
+- feat(im): support card with i18n (#59)
+
 ## v1.9.0
 
 - feat(im): support column set (#57)

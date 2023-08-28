@@ -131,10 +131,10 @@ resp, err := bot.GetTenantAccessTokenInternal(true)
 
 - [鉴权](https://github.com/go-lark/examples/tree/main/auth)
 - [基本消息](https://github.com/go-lark/examples/tree/main/basic-message)
-- [图片消息](https://github.com/go-lark/examples/tree/main/image-message)
 - [富文本消息](https://github.com/go-lark/examples/tree/main/rich-text-message)
-- [分享群卡片](https://github.com/go-lark/examples/tree/main/share-chat)
 - [交互卡片](https://github.com/go-lark/examples/tree/main/interactive-message)
+- [图片消息](https://github.com/go-lark/examples/tree/main/image-message)
+- [分享群卡片](https://github.com/go-lark/examples/tree/main/share-chat)
 - [群操作](https://github.com/go-lark/examples/tree/main/group)
 
 ### Message Buffer
@@ -145,9 +145,14 @@ MsgBuffer 支持多种类型的消息：
 
 - `MsgText`：文本
 - `MsgPost`：富文本
-- `MsgImage`：图片
-- `MsgShareCard`：群名片
 - `MsgInteractive`：交互式卡片
+- `MsgShareUser`: 用户名片
+- `MsgShareCard`：群名片
+- `MsgImage`：图片
+- `MsgFile`: 文件
+- `MsgAudio`: 音频
+- `MsgMedia`: 媒体
+- `MsgSticker`: 表情
 
 MsgBuffer 主要有两类函数，Bind 函数和内容函数。
 
@@ -362,4 +367,4 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
 
 ## 协议
 
-Copyright (c) David Zhang, 2018-2022. Licensed under MIT License.
+Copyright (c) David Zhang, 2018-2023. Licensed under MIT License.

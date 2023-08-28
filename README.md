@@ -140,10 +140,10 @@ Here is a collection of ready-to-run examples for each part of `go-lark`:
 
 - [examples/auth](https://github.com/go-lark/examples/tree/main/auth)
 - [examples/basic-message](https://github.com/go-lark/examples/tree/main/basic-message)
-- [examples/image-message](https://github.com/go-lark/examples/tree/main/image-message)
 - [examples/rich-text-message](https://github.com/go-lark/examples/tree/main/rich-text-message)
-- [examples/share-chat](https://github.com/go-lark/examples/tree/main/share-chat)
 - [examples/interactive-message](https://github.com/go-lark/examples/tree/main/interactive-message)
+- [examples/image-message](https://github.com/go-lark/examples/tree/main/image-message)
+- [examples/share-chat](https://github.com/go-lark/examples/tree/main/share-chat)
 - [examples/group](https://github.com/go-lark/examples/tree/main/group)
 
 ### Message Buffer
@@ -380,4 +380,4 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
 
 ## License
 
-Copyright (c) David Zhang, 2018-2022. Licensed under MIT License.
+Copyright (c) David Zhang, 2018-2023. Licensed under MIT License.
