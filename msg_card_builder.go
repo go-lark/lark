@@ -1,143 +1,139 @@
 package lark
 
-import "github.com/go-lark/lark/card"
+import (
+	"github.com/go-lark/lark/card"
+	"github.com/go-lark/lark/card/i18n"
+)
 
-// CardBlock 卡片元素
-type CardBlock = card.Block
+type i18nCardBuilder struct{}
 
-// CardBuilder 卡片构造方法
-type CardBuilder interface {
-	Card(elements ...card.Element) *CardBlock
-	Action(actions ...card.Element) *card.ActionBlock
-	Button(text *card.TextBlock) *card.ButtonBlock
-	Confirm(title, text string) *card.ConfirmBlock
-	DatePicker() *card.DatePickerBlock
-	TimePicker() *card.TimePickerBlock
-	DatetimePicker() *card.DatetimePickerBlock
-	Div(fields ...*card.FieldBlock) *card.DivBlock
-	Field(text *card.TextBlock) *card.FieldBlock
-	Hr() *card.HrBlock
-	Img(key string) *card.ImgBlock
-	Note() *card.NoteBlock
-	Option(value string) *card.OptionBlock
-	Overflow(options ...*card.OptionBlock) *card.OverflowBlock
-	SelectMenu(options ...*card.OptionBlock) *card.SelectMenuBlock
-	Text(s string) *card.TextBlock
-	Markdown(s string) *card.MarkdownBlock
-	URL() *card.URLBlock
-	ColumnSet(columns ...*card.ColumnBlock) *card.ColumnSetBlock
-	ColumnSetAction(url *card.URLBlock) *card.ColumnSetActionBlock
-	Column(elements ...card.Element) *card.ColumnBlock
+// CardBuilder .
+type CardBuilder struct {
+	I18N *i18nCardBuilder
 }
 
-type cardBuilder struct{}
+// Card wraps i18n card
+func (i18nCardBuilder) Card(blocks ...*i18n.LocalizedBlock) *i18n.Block {
+	return i18n.Card(blocks...)
+}
+
+func (i18nCardBuilder) WithLocale(locale string, elements ...card.Element) *i18n.LocalizedBlock {
+	return i18n.WithLocale(locale, elements...)
+}
+
+// Title wraps i18n title block
+func (i18nCardBuilder) LocalizedText(locale, s string) *i18n.LocalizedTextBlock {
+	return i18n.LocalizedText(locale, s)
+}
 
 // NewCardBuilder 新建卡片构造器
-func NewCardBuilder() CardBuilder {
-	return cardBuilder{}
+func NewCardBuilder() *CardBuilder {
+	return &CardBuilder{
+		I18N: &i18nCardBuilder{},
+	}
 }
 
 // Card 包裹了最外层的卡片结构
-func (cardBuilder) Card(elements ...card.Element) *CardBlock {
+func (CardBuilder) Card(elements ...card.Element) *card.Block {
 	return card.Card(elements...)
 }
 
 // Action 交互元素，可添加 Button, SelectMenu, Overflow, DatePicker, TimePicker, DatetimePicker
-func (cardBuilder) Action(actions ...card.Element) *card.ActionBlock {
+func (CardBuilder) Action(actions ...card.Element) *card.ActionBlock {
 	return card.Action(actions...)
 }
 
 // Button 按钮交互元素
-func (cardBuilder) Button(text *card.TextBlock) *card.ButtonBlock {
+func (CardBuilder) Button(text *card.TextBlock) *card.ButtonBlock {
 	return card.Button(text)
 }
 
 // Confirm 用于交互元素的二次确认
-func (cardBuilder) Confirm(title, text string) *card.ConfirmBlock {
+func (CardBuilder) Confirm(title, text string) *card.ConfirmBlock {
 	return card.Confirm(title, text)
 }
 
 // DatePicker 日期选择器
-func (cardBuilder) DatePicker() *card.DatePickerBlock {
+func (CardBuilder) DatePicker() *card.DatePickerBlock {
 	return card.DatePicker()
 }
 
 // TimePicker 时间选择器
-func (cardBuilder) TimePicker() *card.TimePickerBlock {
+func (CardBuilder) TimePicker() *card.TimePickerBlock {
 	return card.TimePicker()
 }
 
 // DatetimePicker 日期时间选择器
-func (cardBuilder) DatetimePicker() *card.DatetimePickerBlock {
+func (CardBuilder) DatetimePicker() *card.DatetimePickerBlock {
 	return card.DatetimePicker()
 }
 
 // Div 内容模块
-func (cardBuilder) Div(fields ...*card.FieldBlock) *card.DivBlock {
+func (CardBuilder) Div(fields ...*card.FieldBlock) *card.DivBlock {
 	return card.Div(fields...)
 }
 
 // Field 内容模块的排版元素
-func (cardBuilder) Field(text *card.TextBlock) *card.FieldBlock {
+func (CardBuilder) Field(text *card.TextBlock) *card.FieldBlock {
 	return card.Field(text)
 }
 
 // Hr 分割线模块
-func (cardBuilder) Hr() *card.HrBlock {
+func (CardBuilder) Hr() *card.HrBlock {
 	return card.Hr()
 }
 
 // Img 图片展示模块
-func (cardBuilder) Img(key string) *card.ImgBlock {
+func (CardBuilder) Img(key string) *card.ImgBlock {
 	return card.Img(key)
 }
 
 // Note 备注模块
-func (cardBuilder) Note() *card.NoteBlock {
+func (CardBuilder) Note() *card.NoteBlock {
 	return card.Note()
 }
 
 // Option 选项模块，可用于 SelectMenu 和 Overflow
-func (cardBuilder) Option(value string) *card.OptionBlock {
+func (CardBuilder) Option(value string) *card.OptionBlock {
 	return card.Option(value)
 }
 
 // Overflow 折叠按钮菜单组件
-func (cardBuilder) Overflow(options ...*card.OptionBlock) *card.OverflowBlock {
+func (CardBuilder) Overflow(options ...*card.OptionBlock) *card.OverflowBlock {
 	return card.Overflow(options...)
 }
 
 // SelectMenu 菜单组件
-func (cardBuilder) SelectMenu(options ...*card.OptionBlock) *card.SelectMenuBlock {
+func (CardBuilder) SelectMenu(options ...*card.OptionBlock) *card.SelectMenuBlock {
 	return card.SelectMenu(options...)
 }
 
 // Text 文本模块
-func (cardBuilder) Text(s string) *card.TextBlock {
+func (CardBuilder) Text(s string) *card.TextBlock {
 	return card.Text(s)
 }
 
 // Markdown 单独使用的 Markdown 文本模块
-func (cardBuilder) Markdown(s string) *card.MarkdownBlock {
+func (CardBuilder) Markdown(s string) *card.MarkdownBlock {
 	return card.Markdown(s)
 }
 
 // URL 链接模块
-func (cardBuilder) URL() *card.URLBlock {
+func (CardBuilder) URL() *card.URLBlock {
 	return card.URL()
 }
 
 // ColumnSet column set module
-func (cardBuilder) ColumnSet(columns ...*card.ColumnBlock) *card.ColumnSetBlock {
+func (CardBuilder) ColumnSet(columns ...*card.ColumnBlock) *card.ColumnSetBlock {
 	return card.ColumnSet(columns...)
 }
 
 // Column column module
-func (cardBuilder) Column(elements ...card.Element) *card.ColumnBlock {
+func (CardBuilder) Column(elements ...card.Element) *card.ColumnBlock {
 	return card.Column(elements...)
 }
 
 // ColumnSetAction column action module
-func (cardBuilder) ColumnSetAction(url *card.URLBlock) *card.ColumnSetActionBlock {
+func (CardBuilder) ColumnSetAction(url *card.URLBlock) *card.ColumnSetActionBlock {
 	return card.ColumnSetAction(url)
 }
