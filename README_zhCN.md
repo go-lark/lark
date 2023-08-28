@@ -20,7 +20,7 @@ go-lark 主要实现了消息类 API，提供完整的聊天机器人和通知�
 - 快速消息体构造 `MsgBuffer`
 - 一站式解决服务器 Challenge 和聊天消息响应
 - 支持加密和校验
-- 支持 [Gin](https://github.com/go-lark/lark-gin) 框架中间件
+- 支持 Gin 和 Hertz 框架中间件
 - 高可扩展性
 - 文档、测试覆盖
 
@@ -108,7 +108,7 @@ bot.StopHeartbeat()
 ```go
 bot := lark.NewChatBot(appID, appSecret)
 resp, err := bot.GetTenantAccessTokenInternal(true)
-// and we can now access the token value with `bot.tenantAccessToken()`
+// and we can now access the token value with `bot.TenantAccessToken()`
 ```
 
 参考实例：[鉴权](https://github.com/go-lark/examples/tree/main/auth)
@@ -197,9 +197,14 @@ Bind 函数：
 - URL 挑战
 - 接收消息
 
-我们推荐使用 Gin 中间件处理事件。
+我们推荐使用 HTTP 中间件处理事件。
 
-### [Gin Middleware](https://github.com/go-lark/lark-gin)
+### 中间件
+
+我们实现了 Gin 和 Hertz 框架的中间件：
+
+- [Gin Middleware](https://github.com/go-lark/lark-gin)
+- [Hertz Middleware](https://github.com/go-lark/lark-hertz)
 
 实例：[examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware)
 

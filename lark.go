@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	// ChatBot should call NewChatBot
+	// ChatBot should be created with NewChatBot
 	// Create from https://open.feishu.cn/ or https://open.larksuite.com/
 	ChatBot = iota
 	// NotificationBot for webhook, behave as a simpler notification bot

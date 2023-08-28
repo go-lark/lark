@@ -21,7 +21,7 @@ It is widely used and tested by ~650 ByteDance in-house developers with over 3k 
 - Quick to build message with `MsgBuffer`
 - Easy to create incoming message hook
 - Encryption and token verification supported
-- Middleware support for Gin web framework
+- Middleware support for Gin & Hertz web framework
 - Highly extensible
 - Documentation & tests
 
@@ -113,7 +113,7 @@ Single-pass authentication:
 ```go
 bot := lark.NewChatBot(appID, appSecret)
 resp, err := bot.GetTenantAccessTokenInternal(true)
-// and we can now access the token value with `bot.tenantAccessToken()`
+// and we can now access the token value with `bot.TenantAccessToken()`
 ```
 
 Example: [examples/auth](https://github.com/go-lark/examples/tree/main/auth)
@@ -206,9 +206,14 @@ go-lark now only implements a few of them, which are needed for interacting betw
 - URL Challenge
 - Receiving Messages
 
-We recommend Gin middleware to handle these events.
+We recommend HTTP middlewares to handle these events.
 
-### [Gin Middleware](https://github.com/go-lark/lark-gin)
+### Middlewares
+
+We have already implemented HTTP middlewares to support event handling:
+
+- [Gin Middleware](https://github.com/go-lark/lark-gin)
+- [Hertz Middleware](https://github.com/go-lark/lark-hertz)
 
 Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware)
 
