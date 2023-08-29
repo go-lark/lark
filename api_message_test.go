@@ -30,6 +30,11 @@ func TestPostText(t *testing.T) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
 	}
+	resp, err = bot.PostText("PostText: with formats <b>Bold</b> <i>italic</i> <u>Underline</u> <s>strikethrough</s> [Link](https://bytedance.com/)", WithChatID(testGroupChatID))
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
 }
 
 func TestPostTextMention(t *testing.T) {
