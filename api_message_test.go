@@ -409,13 +409,6 @@ func TestMessageCRUD(t *testing.T) {
 	if assert.NoError(t, err) {
 		t.Log(receipt.Data.ReadUsers)
 	}
-	// receipt read
-	receiptOld, err := bot.MessageReadReceipt(testMessageID)
-	if assert.NoError(t, err) {
-		// failed because the message ID will be outdated after tens of days
-		// assert.NotEmpty(t, receiptOld.Data.ReadUsers)
-		t.Log(receiptOld.Data.ReadUsers)
-	}
 }
 
 func TestIdempotentMessage(t *testing.T) {
@@ -437,12 +430,18 @@ func TestIdempotentMessage(t *testing.T) {
 }
 
 func TestPinMessages(t *testing.T) {
-	resp, err := bot.PinMessage(testMessageID)
+	msg := NewMsgBuffer(MsgText)
+	om := msg.BindEmail(testUserEmail).Text("hello, world").Build()
+	resp, err := bot.PostMessage(om)
 	if assert.NoError(t, err) {
-		assert.Equal(t, 0, resp.Code)
-		assert.Equal(t, testMessageID, resp.Data.Pin.MessageID)
-		unpinResp, err := bot.UnpinMessage(testMessageID)
-		assert.NoError(t, err)
-		assert.Equal(t, 0, unpinResp.Code)
+		messageID := resp.Data.MessageID
+		resp, err := bot.PinMessage(messageID)
+		if assert.NoError(t, err) {
+			assert.Equal(t, 0, resp.Code)
+			assert.Equal(t, messageID, resp.Data.Pin.MessageID)
+			unpinResp, err := bot.UnpinMessage(messageID)
+			assert.NoError(t, err)
+			assert.Equal(t, 0, unpinResp.Code)
+		}
 	}
 }

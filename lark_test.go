@@ -24,7 +24,6 @@ var (
 	testUserID          string
 	testUserUnionID     string
 	testGroupChatID     string
-	testMessageID       string
 	testWebhookV1       string
 	testWebhookV2       string
 	testWebhookV2Signed string
@@ -48,7 +47,6 @@ func newTestBot() *Bot {
 	testUserUnionID = os.Getenv("LARK_UNION_ID")
 	testUserOpenID = os.Getenv("LARK_OPEN_ID")
 	testGroupChatID = os.Getenv("LARK_CHAT_ID")
-	testMessageID = os.Getenv("LARK_MESSAGE_ID")
 	testWebhookV1 = os.Getenv("LARK_WEBHOOK_V1")
 	testWebhookV2 = os.Getenv("LARK_WEBHOOK_V2")
 	testWebhookV2Signed = os.Getenv("LARK_WEBHOOK_V2_SIGNED")
@@ -58,8 +56,7 @@ func newTestBot() *Bot {
 		len(testUserID) == 0 ||
 		len(testUserUnionID) == 0 ||
 		len(testUserOpenID) == 0 ||
-		len(testGroupChatID) == 0 ||
-		len(testMessageID) == 0 {
+		len(testGroupChatID) == 0 {
 		panic("insufficient test environment")
 	}
 	return NewChatBot(testAppID, testAppSecret)

@@ -39,8 +39,8 @@ func TestBindingUserIDs(t *testing.T) {
 	assert.Equal(t, "333444", msgUserID.UserID)
 
 	mb.Clear()
-	msgReplyID := mb.BindReply(testMessageID).Build()
-	assert.Equal(t, testMessageID, msgReplyID.RootID)
+	msgReplyID := mb.BindReply("om_f779ffe0ffa3d1b94fc1ef5fcb6f1063").Build()
+	assert.Equal(t, "om_f779ffe0ffa3d1b94fc1ef5fcb6f1063", msgReplyID.RootID)
 }
 
 func TestMsgShareChat(t *testing.T) {
