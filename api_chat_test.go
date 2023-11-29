@@ -2,6 +2,7 @@ package lark
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
@@ -18,6 +19,34 @@ func TestChatInfo(t *testing.T) {
 		assert.Equal(t, "group", resp.Data.ChatMode)
 		assert.Equal(t, testUserOpenID, resp.Data.OwnerID)
 		t.Log(resp.Data)
+	}
+}
+
+func TestChatList(t *testing.T) {
+	bot.WithUserIDType(UIDOpenID)
+	assert.Equal(t, UIDOpenID, bot.userIDType)
+	resp, err := bot.ListChat("ByCreateTimeAsc", "", 10)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.Items)
+		t.Log(resp.Data.Items[0])
+	}
+}
+
+func TestChatSearch(t *testing.T) {
+	bot.WithUserIDType(UIDOpenID)
+	assert.Equal(t, UIDOpenID, bot.userIDType)
+	resp, err := bot.SearchChat("go-lark", "", 10)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		if assert.NotEmpty(t, resp.Data.Items) {
+			for _, item := range resp.Data.Items {
+				if !strings.Contains(item.Name, "go-lark") {
+					t.Error(item.Name, "does not contain go-lark")
+				}
+			}
+		}
+		t.Log(resp.Data.Items)
 	}
 }
 

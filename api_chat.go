@@ -7,6 +7,8 @@ import (
 
 const (
 	getChatURL          = "/open-apis/im/v1/chats/%s?user_id_type=%s"
+	listChatURL         = "/open-apis/im/v1/chats?user_id_type=%s&sort_type=%s&page_token=%s&page_size=%d"
+	searchChatURL       = "/open-apis/im/v1/chats/search?user_id_type=%s&query=%s&page_token=%s&page_size=%d"
 	updateChatURL       = "/open-apis/im/v1/chats/%s?user_id_type=%s"
 	createChatURL       = "/open-apis/im/v1/chats?user_id_type=%s"
 	deleteChatURL       = "/open-apis/im/v1/chats/%s"
@@ -24,13 +26,6 @@ type GetChatResponse struct {
 	BaseResponse
 
 	Data ChatInfo `json:"data"`
-}
-
-// I18NNames .
-type I18NNames struct {
-	ZhCN string `json:"zh_cn,omitempty"`
-	EnUS string `json:"en_us,omitempty"`
-	JaJP string `json:"ja_jp,omitempty"`
 }
 
 // ChatInfo entity of a chat, not every field is available for every API.
@@ -54,6 +49,29 @@ type ChatInfo struct {
 	MembershipApproval     string    `json:"membership_approval,omitempty"`
 	ModerationPermission   string    `json:"moderation_permission,omitempty"`
 	External               bool      `json:"external,omitempty"`
+}
+
+// ListChatResponse .
+type ListChatResponse struct {
+	BaseResponse
+
+	Data struct {
+		Items     []ChatListInfo `json:"items"`
+		PageToken string         `json:"page_token"`
+		HasMore   bool           `json:"has_more"`
+	} `json:"data"`
+}
+
+// ChatListInfo .
+type ChatListInfo struct {
+	ChatID      string `json:"chat_id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Avatar      string `json:"avatar,omitempty"`
+	Description string `json:"description,omitempty"`
+	OwnerIDType string `json:"owner_id_type,omitempty"`
+	OwnerID     string `json:"owner_id,omitempty"`
+	External    bool   `json:"external,omitempty"`
+	TenantKey   string `json:"tenant_key"`
 }
 
 // CreateChatRequest .
@@ -184,16 +202,34 @@ type SetTopNoticeResponse = BaseResponse
 // DeleteTopNoticeResponse .
 type DeleteTopNoticeResponse = BaseResponse
 
-// WithUserIDType .
-func (bot *Bot) WithUserIDType(userIDType string) *Bot {
-	bot.userIDType = userIDType
-	return bot
-}
-
 // GetChat .
 func (bot Bot) GetChat(chatID string) (*GetChatResponse, error) {
 	var respData GetChatResponse
 	err := bot.GetAPIRequest("GetChatInfo", fmt.Sprintf(getChatURL, chatID, bot.userIDType), true, nil, &respData)
+	return &respData, err
+}
+
+// ListChat list chats
+// sortType: ByCreateTimeAsc/ByActiveTimeDesc
+func (bot Bot) ListChat(sortType string, pageToken string, pageSize int) (*ListChatResponse, error) {
+	var respData ListChatResponse
+	if sortType == "" {
+		sortType = "ByCreateTimeAsc"
+	}
+	err := bot.GetAPIRequest(
+		"ListChat",
+		fmt.Sprintf(listChatURL, bot.userIDType, sortType, pageToken, pageSize),
+		true, nil, &respData)
+	return &respData, err
+}
+
+// SearchChat search chat
+func (bot Bot) SearchChat(query string, pageToken string, pageSize int) (*ListChatResponse, error) {
+	var respData ListChatResponse
+	err := bot.GetAPIRequest(
+		"SearchChat",
+		fmt.Sprintf(searchChatURL, bot.userIDType, query, pageToken, pageSize),
+		true, nil, &respData)
 	return &respData, err
 }
 
