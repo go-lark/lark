@@ -100,7 +100,7 @@ func (bot *Bot) GetGroupList(pageNum, pageSize int) (*GroupListResponse, error) 
 		"page_size": pageSize,
 	}
 	var respData GroupListResponse
-	err := bot.GetAPIRequest("GetGroupList", groupListURL, true, params, &respData)
+	err := bot.PostAPIRequest("GetGroupList", groupListURL, true, params, &respData)
 	return &respData, err
 }
 
@@ -110,7 +110,7 @@ func (bot *Bot) GetGroupInfo(openChatID string) (*GroupInfoResponse, error) {
 		"chat_id": openChatID,
 	}
 	var respData GroupInfoResponse
-	err := bot.GetAPIRequest("GetGroupInfo", groupInfoURL, true, params, &respData)
+	err := bot.PostAPIRequest("GetGroupInfo", groupInfoURL, true, params, &respData)
 	return &respData, err
 }
 
