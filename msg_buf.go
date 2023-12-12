@@ -76,13 +76,6 @@ func (m *MsgBuffer) BindReply(rootID string) *MsgBuffer {
 	return m
 }
 
-// UpdateMulti deprecated in the latest version, please use card.UpdateMulti instead
-// set multi for shared card. Default false, not share
-func (m *MsgBuffer) UpdateMulti(flag bool) *MsgBuffer {
-	m.message.UpdateMulti = flag
-	return m
-}
-
 // WithSign generates sign for notification bot check
 func (m *MsgBuffer) WithSign(secret string, ts int64) *MsgBuffer {
 	m.message.Sign, _ = GenSign(secret, ts)

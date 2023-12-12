@@ -5,9 +5,8 @@ import "strconv"
 // BuildOutcomingMessageReq for msg builder
 func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
 	params := map[string]interface{}{
-		"msg_type":     om.MsgType,
-		"update_multi": om.UpdateMulti,
-		"chat_id":      om.ChatID, // request must contain chat_id, even if it is empty
+		"msg_type": om.MsgType,
+		"chat_id":  om.ChatID, // request must contain chat_id, even if it is empty
 	}
 	params[om.UIDType] = buildReceiveID(om)
 	if len(om.RootID) > 0 {
