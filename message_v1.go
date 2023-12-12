@@ -1,5 +1,7 @@
 package lark
 
+import "strconv"
+
 // BuildOutcomingMessageReq for msg builder
 func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
 	params := map[string]interface{}{
@@ -29,7 +31,7 @@ func BuildOutcomingMessageReq(om OutcomingMessage) map[string]interface{} {
 	}
 	if len(om.Sign) > 0 {
 		params["sign"] = om.Sign
-		params["timestamp"] = om.Timestamp
+		params["timestamp"] = strconv.FormatInt(om.Timestamp, 10)
 	}
 	params["content"] = content
 	return params
