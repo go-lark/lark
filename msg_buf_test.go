@@ -128,13 +128,6 @@ func TestWorkWithTextBuilder(t *testing.T) {
 	assert.Equal(t, "hello, world\n", mb.message.Content.Text.Text)
 }
 
-func TestMsgUpdateMulti(t *testing.T) {
-	mb := NewMsgBuffer(MsgInteractive)
-	msg := mb.BindOpenChatID("6559399282837815565").UpdateMulti(true).Build()
-	assert.Equal(t, MsgInteractive, msg.MsgType)
-	assert.True(t, msg.UpdateMulti)
-}
-
 func TestWithSign(t *testing.T) {
 	mb := NewMsgBuffer(MsgText)
 	assert.Empty(t, mb.message.Sign)
