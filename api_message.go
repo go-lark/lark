@@ -5,6 +5,8 @@ import "fmt"
 const (
 	messageURL                = "/open-apis/im/v1/messages?receive_id_type=%s"
 	replyMessageURL           = "/open-apis/im/v1/messages/%s/reply"
+	reactionsMessageUrl       = "/open-apis/im/v1/messages/%s/reactions"
+	deleteReactionsMessageUrl = "/open-apis/im/v1/messages/%s/reactions/%s"
 	getMessageURL             = "/open-apis/im/v1/messages/%s"
 	updateMessageURL          = "/open-apis/im/v1/messages/%s"
 	recallMessageURL          = "/open-apis/im/v1/messages/%s"
@@ -13,6 +15,182 @@ const (
 	deleteEphemeralMessageURL = "/open-apis/ephemeral/v1/delete"
 	pinMessageURL             = "/open-apis/im/v1/pins"
 	unpinMessageURL           = "/open-apis/im/v1/pins/%s"
+)
+
+type EmojiType string
+
+const (
+	EmojiTypeOK                       EmojiType = "OK"
+	EmojiTypeTHUMBSUP                 EmojiType = "THUMBSUP"
+	EmojiTypeTHANKS                   EmojiType = "THANKS"
+	EmojiTypeMUSCLE                   EmojiType = "MUSCLE"
+	EmojiTypeFINGERHEART              EmojiType = "FINGERHEART"
+	EmojiTypeAPPLAUSE                 EmojiType = "APPLAUSE"
+	EmojiTypeFISTBUMP                 EmojiType = "FISTBUMP"
+	EmojiTypeJIAYI                    EmojiType = "JIAYI"
+	EmojiTypeDONE                     EmojiType = "DONE"
+	EmojiTypeSMILE                    EmojiType = "SMILE"
+	EmojiTypeBLUSH                    EmojiType = "BLUSH"
+	EmojiTypeLAUGH                    EmojiType = "LAUGH"
+	EmojiTypeSMIRK                    EmojiType = "SMIRK"
+	EmojiTypeLOL                      EmojiType = "LOL"
+	EmojiTypeFACEPALM                 EmojiType = "FACEPALM"
+	EmojiTypeLOVE                     EmojiType = "LOVE"
+	EmojiTypeWINK                     EmojiType = "WINK"
+	EmojiTypePROUD                    EmojiType = "PROUD"
+	EmojiTypeWITTY                    EmojiType = "WITTY"
+	EmojiTypeSMART                    EmojiType = "SMART"
+	EmojiTypeSCOWL                    EmojiType = "SCOWL"
+	EmojiTypeTHINKING                 EmojiType = "THINKING"
+	EmojiTypeSOB                      EmojiType = "SOB"
+	EmojiTypeCRY                      EmojiType = "CRY"
+	EmojiTypeERROR                    EmojiType = "ERROR"
+	EmojiTypeNOSEPICK                 EmojiType = "NOSEPICK"
+	EmojiTypeHAUGHTY                  EmojiType = "HAUGHTY"
+	EmojiTypeSLAP                     EmojiType = "SLAP"
+	EmojiTypeSPITBLOOD                EmojiType = "SPITBLOOD"
+	EmojiTypeTOASTED                  EmojiType = "TOASTED"
+	EmojiTypeGLANCE                   EmojiType = "GLANCE"
+	EmojiTypeDULL                     EmojiType = "DULL"
+	EmojiTypeINNOCENTSMILE            EmojiType = "INNOCENTSMILE"
+	EmojiTypeJOYFUL                   EmojiType = "JOYFUL"
+	EmojiTypeWOW                      EmojiType = "WOW"
+	EmojiTypeTRICK                    EmojiType = "TRICK"
+	EmojiTypeYEAH                     EmojiType = "YEAH"
+	EmojiTypeENOUGH                   EmojiType = "ENOUGH"
+	EmojiTypeTEARS                    EmojiType = "TEARS"
+	EmojiTypeEMBARRASSED              EmojiType = "EMBARRASSED"
+	EmojiTypeKISS                     EmojiType = "KISS"
+	EmojiTypeSMOOCH                   EmojiType = "SMOOCH"
+	EmojiTypeDROOL                    EmojiType = "DROOL"
+	EmojiTypeOBSESSED                 EmojiType = "OBSESSED"
+	EmojiTypeMONEY                    EmojiType = "MONEY"
+	EmojiTypeTEASE                    EmojiType = "TEASE"
+	EmojiTypeSHOWOFF                  EmojiType = "SHOWOFF"
+	EmojiTypeCOMFORT                  EmojiType = "COMFORT"
+	EmojiTypeCLAP                     EmojiType = "CLAP"
+	EmojiTypePRAISE                   EmojiType = "PRAISE"
+	EmojiTypeSTRIVE                   EmojiType = "STRIVE"
+	EmojiTypeXBLUSH                   EmojiType = "XBLUSH"
+	EmojiTypeSILENT                   EmojiType = "SILENT"
+	EmojiTypeWAVE                     EmojiType = "WAVE"
+	EmojiTypeWHAT                     EmojiType = "WHAT"
+	EmojiTypeFROWN                    EmojiType = "FROWN"
+	EmojiTypeSHY                      EmojiType = "SHY"
+	EmojiTypeDIZZY                    EmojiType = "DIZZY"
+	EmojiTypeLOOKDOWN                 EmojiType = "LOOKDOWN"
+	EmojiTypeCHUCKLE                  EmojiType = "CHUCKLE"
+	EmojiTypeWAIL                     EmojiType = "WAIL"
+	EmojiTypeCRAZY                    EmojiType = "CRAZY"
+	EmojiTypeWHIMPER                  EmojiType = "WHIMPER"
+	EmojiTypeHUG                      EmojiType = "HUG"
+	EmojiTypeBLUBBER                  EmojiType = "BLUBBER"
+	EmojiTypeWRONGED                  EmojiType = "WRONGED"
+	EmojiTypeHUSKY                    EmojiType = "HUSKY"
+	EmojiTypeSHHH                     EmojiType = "SHHH"
+	EmojiTypeSMUG                     EmojiType = "SMUG"
+	EmojiTypeANGRY                    EmojiType = "ANGRY"
+	EmojiTypeHAMMER                   EmojiType = "HAMMER"
+	EmojiTypeSHOCKED                  EmojiType = "SHOCKED"
+	EmojiTypeTERROR                   EmojiType = "TERROR"
+	EmojiTypePETRIFIED                EmojiType = "PETRIFIED"
+	EmojiTypeSKULL                    EmojiType = "SKULL"
+	EmojiTypeSWEAT                    EmojiType = "SWEAT"
+	EmojiTypeSPEECHLESS               EmojiType = "SPEECHLESS"
+	EmojiTypeSLEEP                    EmojiType = "SLEEP"
+	EmojiTypeDROWSY                   EmojiType = "DROWSY"
+	EmojiTypeYAWN                     EmojiType = "YAWN"
+	EmojiTypeSICK                     EmojiType = "SICK"
+	EmojiTypePUKE                     EmojiType = "PUKE"
+	EmojiTypeBETRAYED                 EmojiType = "BETRAYED"
+	EmojiTypeHEADSET                  EmojiType = "HEADSET"
+	EmojiTypeEatingFood               EmojiType = "EatingFood"
+	EmojiTypeMeMeMe                   EmojiType = "MeMeMe"
+	EmojiTypeSigh                     EmojiType = "Sigh"
+	EmojiTypeTyping                   EmojiType = "Typing"
+	EmojiTypeLemon                    EmojiType = "Lemon"
+	EmojiTypeGet                      EmojiType = "Get"
+	EmojiTypeLGTM                     EmojiType = "LGTM"
+	EmojiTypeOnIt                     EmojiType = "OnIt"
+	EmojiTypeOneSecond                EmojiType = "OneSecond"
+	EmojiTypeVRHeadset                EmojiType = "VRHeadset"
+	EmojiTypeYouAreTheBest            EmojiType = "YouAreTheBest"
+	EmojiTypeSALUTE                   EmojiType = "SALUTE"
+	EmojiTypeSHAKE                    EmojiType = "SHAKE"
+	EmojiTypeHIGHFIVE                 EmojiType = "HIGHFIVE"
+	EmojiTypeUPPERLEFT                EmojiType = "UPPERLEFT"
+	EmojiTypeThumbsDown               EmojiType = "ThumbsDown"
+	EmojiTypeSLIGHT                   EmojiType = "SLIGHT"
+	EmojiTypeTONGUE                   EmojiType = "TONGUE"
+	EmojiTypeEYESCLOSED               EmojiType = "EYESCLOSED"
+	EmojiTypeRoarForYou               EmojiType = "RoarForYou"
+	EmojiTypeCALF                     EmojiType = "CALF"
+	EmojiTypeBEAR                     EmojiType = "BEAR"
+	EmojiTypeBULL                     EmojiType = "BULL"
+	EmojiTypeRAINBOWPUKE              EmojiType = "RAINBOWPUKE"
+	EmojiTypeROSE                     EmojiType = "ROSE"
+	EmojiTypeHEART                    EmojiType = "HEART"
+	EmojiTypePARTY                    EmojiType = "PARTY"
+	EmojiTypeLIPS                     EmojiType = "LIPS"
+	EmojiTypeBEER                     EmojiType = "BEER"
+	EmojiTypeCAKE                     EmojiType = "CAKE"
+	EmojiTypeGIFT                     EmojiType = "GIFT"
+	EmojiTypeCUCUMBER                 EmojiType = "CUCUMBER"
+	EmojiTypeDrumstick                EmojiType = "Drumstick"
+	EmojiTypePepper                   EmojiType = "Pepper"
+	EmojiTypeCANDIEDHAWS              EmojiType = "CANDIEDHAWS"
+	EmojiTypeBubbleTea                EmojiType = "BubbleTea"
+	EmojiTypeCoffee                   EmojiType = "Coffee"
+	EmojiTypeYes                      EmojiType = "Yes"
+	EmojiTypeNo                       EmojiType = "No"
+	EmojiTypeOKR                      EmojiType = "OKR"
+	EmojiTypeCheckMark                EmojiType = "CheckMark"
+	EmojiTypeCrossMark                EmojiType = "CrossMark"
+	EmojiTypeMinusOne                 EmojiType = "MinusOne"
+	EmojiTypeHundred                  EmojiType = "Hundred"
+	EmojiTypeAWESOMEN                 EmojiType = "AWESOMEN"
+	EmojiTypePin                      EmojiType = "Pin"
+	EmojiTypeAlarm                    EmojiType = "Alarm"
+	EmojiTypeLoudspeaker              EmojiType = "Loudspeaker"
+	EmojiTypeTrophy                   EmojiType = "Trophy"
+	EmojiTypeFire                     EmojiType = "Fire"
+	EmojiTypeBOMB                     EmojiType = "BOMB"
+	EmojiTypeMusic                    EmojiType = "Music"
+	EmojiTypeXmasTree                 EmojiType = "XmasTree"
+	EmojiTypeSnowman                  EmojiType = "Snowman"
+	EmojiTypeXmasHat                  EmojiType = "XmasHat"
+	EmojiTypeFIREWORKS                EmojiType = "FIREWORKS"
+	EmojiType2022                     EmojiType = "2022"
+	EmojiTypeREDPACKET                EmojiType = "REDPACKET"
+	EmojiTypeFORTUNE                  EmojiType = "FORTUNE"
+	EmojiTypeLUCK                     EmojiType = "LUCK"
+	EmojiTypeFIRECRACKER              EmojiType = "FIRECRACKER"
+	EmojiTypeStickyRiceBalls          EmojiType = "StickyRiceBalls"
+	EmojiTypeHEARTBROKEN              EmojiType = "HEARTBROKEN"
+	EmojiTypePOOP                     EmojiType = "POOP"
+	EmojiTypeStatusFlashOfInspiration EmojiType = "StatusFlashOfInspiration"
+	EmojiType18X                      EmojiType = "18X"
+	EmojiTypeCLEAVER                  EmojiType = "CLEAVER"
+	EmojiTypeSoccer                   EmojiType = "Soccer"
+	EmojiTypeBasketball               EmojiType = "Basketball"
+	EmojiTypeGeneralDoNotDisturb      EmojiType = "GeneralDoNotDisturb"
+	EmojiTypeStatusPrivateMessage     EmojiType = "Status_PrivateMessage"
+	EmojiTypeGeneralInMeetingBusy     EmojiType = "GeneralInMeetingBusy"
+	EmojiTypeStatusReading            EmojiType = "StatusReading"
+	EmojiTypeStatusInFlight           EmojiType = "StatusInFlight"
+	EmojiTypeGeneralBusinessTrip      EmojiType = "GeneralBusinessTrip"
+	EmojiTypeGeneralWorkFromHome      EmojiType = "GeneralWorkFromHome"
+	EmojiTypeStatusEnjoyLife          EmojiType = "StatusEnjoyLife"
+	EmojiTypeGeneralTravellingCar     EmojiType = "GeneralTravellingCar"
+	EmojiTypeStatusBus                EmojiType = "StatusBus"
+	EmojiTypeGeneralSun               EmojiType = "GeneralSun"
+	EmojiTypeGeneralMoonRest          EmojiType = "GeneralMoonRest"
+	EmojiTypePursueUltimate           EmojiType = "PursueUltimate"
+	EmojiTypePatient                  EmojiType = "Patient"
+	EmojiTypeAmbitious                EmojiType = "Ambitious"
+	EmojiTypeCustomerSuccess          EmojiType = "CustomerSuccess"
+	EmojiTypeResponsible              EmojiType = "Responsible"
+	EmojiTypeReliable                 EmojiType = "Reliable"
 )
 
 // PostMessageResponse .
@@ -66,6 +244,21 @@ type IMMessage struct {
 	Sender         IMSender
 	Mentions       []IMMention
 	Body           IMBody
+}
+
+type ReactionResponse struct {
+	BaseResponse
+	Data struct {
+		ReactionID string `json:"reaction_id"`
+		Operator   struct {
+			OperatorID   string `json:"operator_id"`
+			OperatorType string `json:"operator_type"`
+			ActionTime   string `json:"action_time"`
+		} `json:"operator"`
+		ReactionType struct {
+			EmojiType EmojiType `json:"emoji_type"`
+		} `json:"reaction_type"`
+	} `json:"data"`
 }
 
 // GetMessageResponse .
@@ -253,6 +446,25 @@ func (bot Bot) ReplyMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	}
 	var respData PostMessageResponse
 	err = bot.PostAPIRequest("ReplyMessage", fmt.Sprintf(replyMessageURL, om.RootID), true, req, &respData)
+	return &respData, err
+}
+
+// ReactionMessage reactions messages
+func (bot Bot) ReactionMessage(messageID string, emojiType EmojiType) (*ReactionResponse, error) {
+	req := map[string]interface{}{
+		"reaction_type": map[string]interface{}{
+			"emoji_type": emojiType,
+		},
+	}
+	var respData ReactionResponse
+	err := bot.PostAPIRequest("ReactionMessage", fmt.Sprintf(reactionsMessageUrl, messageID), true, req, &respData)
+	return &respData, err
+}
+
+// DeleteReactionMessage delete reactions messages
+func (bot Bot) DeleteReactionMessage(messageID string, reactionID string) (*ReactionResponse, error) {
+	var respData ReactionResponse
+	err := bot.DeleteAPIRequest("DeleteReactionMessage", fmt.Sprintf(deleteReactionsMessageUrl, messageID, reactionID), true, nil, &respData)
 	return &respData, err
 }
 
