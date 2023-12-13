@@ -33,7 +33,7 @@ func (bot *Bot) PostNotificationV2(om OutcomingMessage) (*PostNotificationV2Resp
 		return nil, ErrBotTypeError
 	}
 
-	params := BuildOutcomingMessageReq(om)
+	params := buildOutcomingNotification(om)
 	var respData PostNotificationV2Resp
 	err := bot.PostAPIRequest("PostNotificationV2", bot.webhook, false, params, &respData)
 	return &respData, err
