@@ -164,7 +164,7 @@ func TestPostMessage(t *testing.T) {
 	}
 	// file
 	msg = NewMsgBuffer(MsgFile)
-	om = msg.BindChatID(testGroupChatID).File("file_v2_356de203-39c2-49fd-8357-70b9b311f44g").Build()
+	om = msg.BindChatID(testGroupChatID).File("file_v3_0069_61085e72-3285-4ac8-82ec-31b060eeae7g").Build()
 	resp, err = bot.PostMessage(om)
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
@@ -172,13 +172,13 @@ func TestPostMessage(t *testing.T) {
 	}
 	// audio - not actually tested
 	msg = NewMsgBuffer(MsgAudio)
-	om = msg.BindChatID(testGroupChatID).File("file_v2_356de203-39c2-49fd-8357-70b9b311f44g").Build()
+	om = msg.BindChatID(testGroupChatID).File("file_v3_0069_61085e72-3285-4ac8-82ec-31b060eeae7g").Build()
 	resp, err = bot.PostMessage(om)
 	assert.NotEqual(t, 0, resp.Code)
 	assert.NotEmpty(t, resp.Msg)
 	// media - not actually tested
 	msg = NewMsgBuffer(MsgMedia)
-	om = msg.BindChatID(testGroupChatID).Media("file_v2_b53cd6cc-5327-4968-8bf6-4528deb3068g", "img_v2_b276195a-9ae0-4fec-bbfe-f74b4d5a994g").Build()
+	om = msg.BindChatID(testGroupChatID).Media("file_v3_0069_61085e72-3285-4ac8-82ec-31b060eeae7g", "img_v3_0269_ba0a83c6-21ff-48e2-a159-9061d2c8217g").Build()
 	resp, err = bot.PostMessage(om)
 	assert.NotEqual(t, 0, resp.Code)
 	assert.NotEmpty(t, resp.Msg)

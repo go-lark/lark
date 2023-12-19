@@ -13,6 +13,7 @@ type PostNotificationV2Resp struct {
 }
 
 // PostNotification send message to a webhook
+// deprecated: legacy version, please use PostNotificationV2 instead
 func (bot *Bot) PostNotification(title, text string) (*PostNotificationResp, error) {
 	if !bot.requireType(NotificationBot) {
 		return nil, ErrBotTypeError
