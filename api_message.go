@@ -5,8 +5,8 @@ import "fmt"
 const (
 	messageURL                = "/open-apis/im/v1/messages?receive_id_type=%s"
 	replyMessageURL           = "/open-apis/im/v1/messages/%s/reply"
-	reactionsMessageUrl       = "/open-apis/im/v1/messages/%s/reactions"
-	deleteReactionsMessageUrl = "/open-apis/im/v1/messages/%s/reactions/%s"
+	reactionsMessageURL       = "/open-apis/im/v1/messages/%s/reactions"
+	deleteReactionsMessageURL = "/open-apis/im/v1/messages/%s/reactions/%s"
 	getMessageURL             = "/open-apis/im/v1/messages/%s"
 	updateMessageURL          = "/open-apis/im/v1/messages/%s"
 	recallMessageURL          = "/open-apis/im/v1/messages/%s"
@@ -70,6 +70,7 @@ type IMMessage struct {
 	Body           IMBody
 }
 
+// ReactionResponse .
 type ReactionResponse struct {
 	BaseResponse
 	Data struct {
@@ -281,14 +282,14 @@ func (bot Bot) ReactionMessage(messageID string, emojiType EmojiType) (*Reaction
 		},
 	}
 	var respData ReactionResponse
-	err := bot.PostAPIRequest("ReactionMessage", fmt.Sprintf(reactionsMessageUrl, messageID), true, req, &respData)
+	err := bot.PostAPIRequest("ReactionMessage", fmt.Sprintf(reactionsMessageURL, messageID), true, req, &respData)
 	return &respData, err
 }
 
 // DeleteReactionMessage delete reactions messages
 func (bot Bot) DeleteReactionMessage(messageID string, reactionID string) (*ReactionResponse, error) {
 	var respData ReactionResponse
-	err := bot.DeleteAPIRequest("DeleteReactionMessage", fmt.Sprintf(deleteReactionsMessageUrl, messageID, reactionID), true, nil, &respData)
+	err := bot.DeleteAPIRequest("DeleteReactionMessage", fmt.Sprintf(deleteReactionsMessageURL, messageID, reactionID), true, nil, &respData)
 	return &respData, err
 }
 

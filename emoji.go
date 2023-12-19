@@ -1,7 +1,9 @@
 package lark
 
+// EmojiType .
 type EmojiType string
 
+// Emoji types
 const (
 	EmojiTypeOK                       EmojiType = "OK"
 	EmojiTypeTHUMBSUP                 EmojiType = "THUMBSUP"
