@@ -122,6 +122,9 @@ resp, err := bot.GetTenantAccessTokenInternal(true)
 - `PostTextMentionAll`
 - `PostImage`
 - `PostShareChatCard`
+- `ReplyMessage`
+- `ReactionMessage`
+- `DeleteReactionMessage`
 
 参考实例：[基本消息](https://github.com/go-lark/examples/tree/main/basic-message)。
 

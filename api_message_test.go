@@ -445,3 +445,20 @@ func TestPinMessages(t *testing.T) {
 		}
 	}
 }
+
+func TestReactionMessage(t *testing.T) {
+	msg := NewMsgBuffer(MsgText)
+	om := msg.BindEmail(testUserEmail).Text("hello, world").Build()
+	resp, err := bot.PostMessage(om)
+	if assert.NoError(t, err) {
+		messageID := resp.Data.MessageID
+		resp, err := bot.ReactionMessage(messageID, EmojiTypeOK)
+		if assert.NoError(t, err) {
+			assert.Equal(t, 0, resp.Code)
+			assert.Equal(t, EmojiTypeOK, resp.Data.ReactionType.EmojiType)
+			deleteReactionResp, err := bot.DeleteReactionMessage(messageID, resp.Data.ReactionID)
+			assert.NoError(t, err)
+			assert.Equal(t, 0, deleteReactionResp.Code)
+		}
+	}
+}

@@ -5,6 +5,8 @@ import "fmt"
 const (
 	messageURL                = "/open-apis/im/v1/messages?receive_id_type=%s"
 	replyMessageURL           = "/open-apis/im/v1/messages/%s/reply"
+	reactionsMessageURL       = "/open-apis/im/v1/messages/%s/reactions"
+	deleteReactionsMessageURL = "/open-apis/im/v1/messages/%s/reactions/%s"
 	getMessageURL             = "/open-apis/im/v1/messages/%s"
 	updateMessageURL          = "/open-apis/im/v1/messages/%s"
 	recallMessageURL          = "/open-apis/im/v1/messages/%s"
@@ -66,6 +68,22 @@ type IMMessage struct {
 	Sender         IMSender
 	Mentions       []IMMention
 	Body           IMBody
+}
+
+// ReactionResponse .
+type ReactionResponse struct {
+	BaseResponse
+	Data struct {
+		ReactionID string `json:"reaction_id"`
+		Operator   struct {
+			OperatorID   string `json:"operator_id"`
+			OperatorType string `json:"operator_type"`
+			ActionTime   string `json:"action_time"`
+		} `json:"operator"`
+		ReactionType struct {
+			EmojiType EmojiType `json:"emoji_type"`
+		} `json:"reaction_type"`
+	} `json:"data"`
 }
 
 // GetMessageResponse .
@@ -253,6 +271,25 @@ func (bot Bot) ReplyMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	}
 	var respData PostMessageResponse
 	err = bot.PostAPIRequest("ReplyMessage", fmt.Sprintf(replyMessageURL, om.RootID), true, req, &respData)
+	return &respData, err
+}
+
+// ReactionMessage reactions messages
+func (bot Bot) ReactionMessage(messageID string, emojiType EmojiType) (*ReactionResponse, error) {
+	req := map[string]interface{}{
+		"reaction_type": map[string]interface{}{
+			"emoji_type": emojiType,
+		},
+	}
+	var respData ReactionResponse
+	err := bot.PostAPIRequest("ReactionMessage", fmt.Sprintf(reactionsMessageURL, messageID), true, req, &respData)
+	return &respData, err
+}
+
+// DeleteReactionMessage delete reactions messages
+func (bot Bot) DeleteReactionMessage(messageID string, reactionID string) (*ReactionResponse, error) {
+	var respData ReactionResponse
+	err := bot.DeleteAPIRequest("DeleteReactionMessage", fmt.Sprintf(deleteReactionsMessageURL, messageID, reactionID), true, nil, &respData)
 	return &respData, err
 }
 
