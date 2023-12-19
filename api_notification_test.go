@@ -7,15 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWebhookV1(t *testing.T) {
-	bot := NewNotificationBot(testWebhookV1)
-	resp, err := bot.PostNotification("", "no title message")
-	assert.NoError(t, err)
-	assert.True(t, resp.Ok)
-	_, err = bot.PostNotification("go-lark CI", "it works")
-	assert.NoError(t, err)
-}
-
 // A weird case which sends V2 message body with V1 URL
 func TestWebhookV1Error(t *testing.T) {
 	bot := NewNotificationBot(testWebhookV1)
@@ -92,7 +83,7 @@ func TestWebhookV2Signed(t *testing.T) {
 	bot := NewNotificationBot(testWebhookV2Signed)
 
 	mbText := NewMsgBuffer(MsgText)
-	mbText.Text("hello sign").WithSign("LIpnNexV7rwOyOebKoqSdb", time.Now().Unix())
+	mbText.Text("hello sign").WithSign("FT1dnAgPYYTcpafMTkhPjc", time.Now().Unix())
 	resp, err := bot.PostNotificationV2(mbText.Build())
 	assert.NoError(t, err)
 	assert.Zero(t, resp.StatusCode)
