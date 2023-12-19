@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## v1.11.0
+
+- feat(message): support reactions (#62)
+- ci: run tests under private tenant to avoid applying permissions (#65)
+
+## v1.10.2
+
+- fix(notification): remove chat_id and uid_type from outcoming message (#63)
+- fix(notification): timestamp should be string
+- feat(im): drop v1 update_multi
+
+## v1.10.1
+
+- feat(chat): support chat list and chat (#60)
+
 ## v1.10.0
 
 - feat(im): support card with i18n (#59)
