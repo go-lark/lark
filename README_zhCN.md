@@ -123,8 +123,8 @@ resp, err := bot.GetTenantAccessTokenInternal(true)
 - `PostImage`
 - `PostShareChatCard`
 - `ReplyMessage`
-- `ReactionMessage`
-- `DeleteReactionMessage`
+- `AddReaction`
+- `DeleteReaction`
 
 参考实例：[基本消息](https://github.com/go-lark/examples/tree/main/basic-message)。
 

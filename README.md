@@ -128,8 +128,8 @@ For Chat Bot, we can send simple messages with the following method:
 - `PostImage`
 - `PostShareChatCard`
 - `ReplyMessage`
-- `ReactionMessage`
-- `DeleteReactionMessage`
+- `AddReaction`
+- `DeleteReaction`
 
 Basic message examples: [examples/basic-message](https://github.com/go-lark/examples/tree/main/basic-message)
 

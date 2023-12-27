@@ -452,11 +452,11 @@ func TestReactionMessage(t *testing.T) {
 	resp, err := bot.PostMessage(om)
 	if assert.NoError(t, err) {
 		messageID := resp.Data.MessageID
-		resp, err := bot.ReactionMessage(messageID, EmojiTypeOK)
+		resp, err := bot.AddReaction(messageID, EmojiTypeOK)
 		if assert.NoError(t, err) {
 			assert.Equal(t, 0, resp.Code)
 			assert.Equal(t, EmojiTypeOK, resp.Data.ReactionType.EmojiType)
-			deleteReactionResp, err := bot.DeleteReactionMessage(messageID, resp.Data.ReactionID)
+			deleteReactionResp, err := bot.DeleteReaction(messageID, resp.Data.ReactionID)
 			assert.NoError(t, err)
 			assert.Equal(t, 0, deleteReactionResp.Code)
 		}
