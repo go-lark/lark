@@ -244,7 +244,7 @@ func (bot Bot) PostShareUser(openID string, userID *OptionalUserID) (*PostMessag
 	return bot.PostMessage(om)
 }
 
-// PostMessage posts message
+// PostMessage posts a message
 func (bot Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	req, err := BuildMessage(om)
 	if err != nil {
@@ -260,7 +260,7 @@ func (bot Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	return &respData, err
 }
 
-// ReplyMessage replies messages
+// ReplyMessage replies a message
 func (bot Bot) ReplyMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	req, err := BuildMessage(om)
 	if err != nil {
@@ -274,26 +274,26 @@ func (bot Bot) ReplyMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 	return &respData, err
 }
 
-// ReactionMessage reactions messages
-func (bot Bot) ReactionMessage(messageID string, emojiType EmojiType) (*ReactionResponse, error) {
+// AddReaction adds reaction to a message
+func (bot Bot) AddReaction(messageID string, emojiType EmojiType) (*ReactionResponse, error) {
 	req := map[string]interface{}{
 		"reaction_type": map[string]interface{}{
 			"emoji_type": emojiType,
 		},
 	}
 	var respData ReactionResponse
-	err := bot.PostAPIRequest("ReactionMessage", fmt.Sprintf(reactionsMessageURL, messageID), true, req, &respData)
+	err := bot.PostAPIRequest("AddReaction", fmt.Sprintf(reactionsMessageURL, messageID), true, req, &respData)
 	return &respData, err
 }
 
-// DeleteReactionMessage delete reactions messages
-func (bot Bot) DeleteReactionMessage(messageID string, reactionID string) (*ReactionResponse, error) {
+// DeleteReaction deletes reaction of a message
+func (bot Bot) DeleteReaction(messageID string, reactionID string) (*ReactionResponse, error) {
 	var respData ReactionResponse
-	err := bot.DeleteAPIRequest("DeleteReactionMessage", fmt.Sprintf(deleteReactionsMessageURL, messageID, reactionID), true, nil, &respData)
+	err := bot.DeleteAPIRequest("DeleteReaction", fmt.Sprintf(deleteReactionsMessageURL, messageID, reactionID), true, nil, &respData)
 	return &respData, err
 }
 
-// UpdateMessage update message card
+// UpdateMessage updates a message
 func (bot Bot) UpdateMessage(messageID string, om OutcomingMessage) (*UpdateMessageResponse, error) {
 	if om.MsgType != MsgInteractive {
 		return nil, ErrMessageType
@@ -308,7 +308,7 @@ func (bot Bot) UpdateMessage(messageID string, om OutcomingMessage) (*UpdateMess
 	return &respData, err
 }
 
-// GetMessage posts message with im/v1
+// GetMessage gets a message with im/v1
 func (bot Bot) GetMessage(messageID string) (*GetMessageResponse, error) {
 	var respData GetMessageResponse
 	err := bot.GetAPIRequest("GetMessage", fmt.Sprintf(getMessageURL, messageID), true, nil, &respData)
@@ -354,7 +354,7 @@ func (bot Bot) DeleteEphemeralMessage(messageID string) (*DeleteEphemeralMessage
 	return &respData, err
 }
 
-// PinMessage pin a message
+// PinMessage pins a message
 func (bot Bot) PinMessage(messageID string) (*PinMessageResponse, error) {
 	params := map[string]interface{}{
 		"message_id": messageID,
@@ -364,7 +364,7 @@ func (bot Bot) PinMessage(messageID string) (*PinMessageResponse, error) {
 	return &respData, err
 }
 
-// UnpinMessage unpin a message
+// UnpinMessage unpins a message
 func (bot Bot) UnpinMessage(messageID string) (*UnpinMessageResponse, error) {
 	url := fmt.Sprintf(unpinMessageURL, messageID)
 	var respData UnpinMessageResponse
