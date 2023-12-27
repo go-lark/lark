@@ -1,8 +1,13 @@
 # CHANGELOG
 
+## v1.12.0
+
+- feat(im): support forward message
+- feat(im): change reaction API names (#66)
+
 ## v1.11.0
 
-- feat(message): support reactions (#62)
+- feat(im): support reactions (#62)
 - ci: run tests under private tenant to avoid applying permissions (#65)
 
 ## v1.10.2

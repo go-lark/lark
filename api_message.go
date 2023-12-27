@@ -15,6 +15,7 @@ const (
 	deleteEphemeralMessageURL = "/open-apis/ephemeral/v1/delete"
 	pinMessageURL             = "/open-apis/im/v1/pins"
 	unpinMessageURL           = "/open-apis/im/v1/pins/%s"
+	forwardMessageURL         = "/open-apis/im/v1/messages/%s/forward?receive_id_type=%s"
 )
 
 // PostMessageResponse .
@@ -111,6 +112,9 @@ type RecallMessageResponse = BaseResponse
 
 // UpdateMessageResponse .
 type UpdateMessageResponse = BaseResponse
+
+// ForwardMessageResponse .
+type ForwardMessageResponse = PostMessageResponse
 
 // MessageReceiptResponse .
 type MessageReceiptResponse struct {
@@ -369,5 +373,16 @@ func (bot Bot) UnpinMessage(messageID string) (*UnpinMessageResponse, error) {
 	url := fmt.Sprintf(unpinMessageURL, messageID)
 	var respData UnpinMessageResponse
 	err := bot.DeleteAPIRequest("PinMessage", url, true, nil, &respData)
+	return &respData, err
+}
+
+// ForwardMessage forwards a message
+func (bot Bot) ForwardMessage(messageID string, receiveID *OptionalUserID) (*ForwardMessageResponse, error) {
+	url := fmt.Sprintf(forwardMessageURL, messageID, receiveID.UIDType)
+	params := map[string]interface{}{
+		"receive_id": receiveID.RealID,
+	}
+	var respData ForwardMessageResponse
+	err := bot.PostAPIRequest("ForwardMessage", url, true, params, &respData)
 	return &respData, err
 }

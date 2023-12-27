@@ -462,3 +462,16 @@ func TestReactionMessage(t *testing.T) {
 		}
 	}
 }
+
+func TestForwardMessage(t *testing.T) {
+	msg := NewMsgBuffer(MsgText)
+	om := msg.BindEmail(testUserEmail).Text("let's forward").Build()
+	resp, err := bot.PostMessage(om)
+	if assert.NoError(t, err) {
+		messageID := resp.Data.MessageID
+		resp, err := bot.ForwardMessage(messageID, WithChatID(testGroupChatID))
+		if assert.NoError(t, err) {
+			assert.Equal(t, 0, resp.Code)
+		}
+	}
+}
