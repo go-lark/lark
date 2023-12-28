@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.13.0
+
+- feat(contact): support user info (#67)
+
 ## v1.12.0
 
 - feat(im): support forward message
