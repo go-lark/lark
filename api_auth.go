@@ -1,6 +1,7 @@
 package lark
 
 import (
+	"errors"
 	"sync/atomic"
 	"time"
 )
@@ -77,10 +78,15 @@ func (bot *Bot) startHeartbeat(defaultInterval time.Duration) error {
 	}
 
 	// First initialize the token in blocking mode
-	_, err := bot.GetTenantAccessTokenInternal(true)
+	resp, err := bot.GetTenantAccessTokenInternal(true)
 	if err != nil {
-		bot.httpErrorLog("Heartbeat", "failed to get tenant access token", err)
 		return err
+	}
+	if resp == nil {
+		return ErrNilResponse
+	}
+	if resp.Code != 0 {
+		return errors.New(resp.Msg)
 	}
 	atomic.AddInt64(&bot.heartbeatCounter, 1)
 
@@ -95,12 +101,21 @@ func (bot *Bot) startHeartbeat(defaultInterval time.Duration) error {
 			case <-t.C:
 				interval = defaultInterval
 				resp, err := bot.GetTenantAccessTokenInternal(true)
+				// if GetTenantAccessTokenInternal failed, then we would have retried 100ms later
 				if err != nil {
 					bot.httpErrorLog("Heartbeat", "failed to get tenant access token", err)
-				}
-				atomic.AddInt64(&bot.heartbeatCounter, 1)
-				if resp != nil && resp.Expire-20 > 0 {
-					interval = time.Duration(resp.Expire-20) * time.Second
+					interval = time.Duration(100 * time.Millisecond)
+				} else if resp == nil {
+					bot.httpErrorLog("Heartbeat", "response is nil", ErrNilResponse)
+					interval = time.Duration(100 * time.Millisecond)
+				} else if resp.Code != 0 {
+					bot.httpErrorLog("Heartbeat", "failed to get tenant access token", errors.New(resp.Msg))
+					interval = time.Duration(100 * time.Millisecond)
+				} else {
+					atomic.AddInt64(&bot.heartbeatCounter, 1)
+					if resp.Expire-20 > 0 {
+						interval = time.Duration(resp.Expire-20) * time.Second
+					}
 				}
 			}
 		}

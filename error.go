@@ -5,6 +5,7 @@ import "errors"
 // Errors
 var (
 	ErrBotTypeError           = errors.New("Bot type error")
+	ErrNilResponse            = errors.New("Nil response")
 	ErrParamUserID            = errors.New("Param error: UserID")
 	ErrParamMessageID         = errors.New("Param error: Message ID")
 	ErrParamExceedInputLimit  = errors.New("Param error: Exceed input limit")
