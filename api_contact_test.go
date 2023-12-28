@@ -17,4 +17,6 @@ func TestGetUserInfo(t *testing.T) {
 			assert.Equal(t, bresp.Data.Items[0].Name, "David")
 		}
 	}
+	_, err = bot.BatchGetUserInfo(UIDUserID)
+	assert.ErrorIs(t, err, ErrParamExceedInputLimit)
 }
