@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.13.1
+
+- feat(event): support card callback (#68)
+
 ## v1.13.0
 
 - feat(contact): support user info (#67)
