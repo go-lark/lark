@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.13.3
+
+- feat(event): support message_recalled, message_reaction_created, and message_reaction_deleted
+
+## v1.13.2
+
+- fix(event): chat_id and message_id
+
 ## v1.13.1
 
 - feat(event): support card callback (#68)
