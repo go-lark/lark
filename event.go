@@ -24,7 +24,8 @@ type EventCardCallback struct {
 	Token     string          `json:"token,omitempty"`
 	OpenID    string          `json:"open_id,omitempty"`
 	UserID    string          `json:"user_id,omitempty"`
-	MessageID string          `json:"message_id,omitempty"`
+	MessageID string          `json:"open_message_id,omitempty"`
+	ChatID    string          `json:"open_chat_id,omitempty"`
 	Action    EventCardAction `json:"action,omitempty"`
 }
 
