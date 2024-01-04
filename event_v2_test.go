@@ -2,17 +2,13 @@ package lark
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
-
-func httpHandlerV2(w http.ResponseWriter, r *http.Request) {
-	var m EventV2
-	json.NewDecoder(r.Body).Decode(&m)
-	w.Write([]byte(m.Schema))
-}
 
 func TestPostEventV2(t *testing.T) {
 	message := EventV2{
@@ -32,8 +28,29 @@ func TestPostEventV2(t *testing.T) {
 			ImageURL:      "",
 		},
 	}
-	w := performRequest(httpHandlerV2, "POST", "/", message)
+	w := performRequest(func(w http.ResponseWriter, r *http.Request) {
+		var m EventV2
+		json.NewDecoder(r.Body).Decode(&m)
+		w.Write([]byte(m.Schema))
+	}, "POST", "/", message)
 	assert.Equal(t, "2.0", string(w.Body.Bytes()))
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		m, _ := json.Marshal(message)
+		w.Write([]byte(m))
+	}))
+	defer ts.Close()
+	resp, err := message.PostEvent(http.DefaultClient, ts.URL)
+	if assert.NoError(t, err) {
+		var event EventV2
+		body, err := ioutil.ReadAll(resp.Body)
+		if assert.NoError(t, err) {
+			defer resp.Body.Close()
+			_ = json.Unmarshal(body, &event)
+			assert.Equal(t, "2.0", event.Schema)
+			assert.Equal(t, "666", event.Header.AppID)
+		}
+	}
 }
 
 func TestEventTypes(t *testing.T) {

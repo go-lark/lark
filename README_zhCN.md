@@ -76,8 +76,7 @@ func main() {
 
 - go-lark 基于飞书域名进行测试，理论上可以完全兼容 Lark 平台（API 定义一致）。但我们不保证在 Lark 下完全可用，因为账户限于，没有专门测试过。
 - go-lark 仅支持企业自建应用，不支持应用商店应用（ISV）。
-- go-lark 仅实现了机器人和消息 API，对于飞书文档、日历等功能，并不支持。
-- go-lark 目前实现的是 API v3/v4 版本\*（官方文档通常还会出现 im/v1 版本）以及事件 Schema 1.0 版本。
+- go-lark 仅实现了消息、群组和机器人 API，对于飞书文档、日历等功能，并不支持。
 
 ### 切换到 Lark 域名
 
@@ -209,7 +208,7 @@ Bind 函数：
 - [Gin Middleware](https://github.com/go-lark/lark-gin)
 - [Hertz Middleware](https://github.com/go-lark/lark-hertz)
 
-实例：[examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware)
+实例：[examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware) [examples/hertz-middleware](https://github.com/go-lark/examples/tree/main/hertz-middleware)
 
 #### URL 挑战
 
@@ -223,6 +222,7 @@ r.Use(middleware.LarkChallengeHandler())
 #### 事件 2.0
 
 飞书开放平台默认事件类似目前 v2，会自动在新创建的机器人中启用。
+
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
@@ -230,6 +230,7 @@ r.Use(middleware.LarkEventHandler())
 ```
 
 获取事件详情：
+
 ```go
 r.POST("/", func(c *gin.Context) {
     if evt, ok := middleware.GetEvent(c); ok { // => GetEvent instead of GetMessage
@@ -243,9 +244,24 @@ r.POST("/", func(c *gin.Context) {
 })
 ```
 
-#### 接收消息 1.0
+#### 卡片回调
+
+我们可以使用卡片回调接受卡片的用户操作（如：按钮点击），URL 挑战部分同步上。
+
+我们可以使用 `LarkCardHandler` 来接受操作事件：
+
+```go
+r.Use(middleware.LarkCardHandler())
+r.POST("/callback", func(c *gin.Context) {
+    if card, ok := middleware.GetCardCallback(c); ok {
+    }
+})
+```
+
+#### 接收消息（事件 1.0）
 
 对于较早常见的机器人，我们需要使用 v1 版本：
+
 ```go
 r := gin.Default()
 middleware := larkgin.NewLarkMiddleware()
@@ -275,13 +291,9 @@ middleware.WithEncryption("<encryption-key>")
 ### 调试
 
 飞书官方没有提供发消息工具，如果测试消息交互的话不得不在飞书上发消息，直接在“线上” URL 调试，很不方便。
+推荐使用 [ngrok](https://ngrok.com/) 进行代理调试。
 
-我们加入了线下模拟消息事件的 `PostEvent`，通过它可以在任何地方进行调试。当然，模拟消息的包体需要自己构造。同时，我们也可以使用 `PostEvent` 对原消息进行转发，对消息进行反向代理。
-
-参考实例：[examples/event-forward](https://github.com/go-lark/examples/tree/main/event-forward)
-
-> `PostEvent`目前不支持 AES 加密。
-
+同时，我们还加入了线下模拟消息事件的 `PostEvent`，通过它可以在任何地方进行调试。当然，模拟消息的包体需要自己构造。`PostEvent` 也可以用于事件转发，对事件进行反向代理。
 
 ## 开发
 
@@ -299,7 +311,8 @@ middleware.WithEncryption("<encryption-key>")
    LARK_UNION_ID
    LARK_OPEN_ID
    LARK_CHAT_ID
-   LARK_MESSAGE_ID
+   LARK_WEBHOOK_V2
+   LARK_WEBHOOK_V2_SIGNED
    ```
 
    其中，`LARK_APP_ID` 和 `LARK_APP_SECRET` 必须配置，其它字段根据不同的测试可选择配置。
@@ -375,4 +388,4 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
 
 ## 协议
 
-Copyright (c) David Zhang, 2018-2023. Licensed under MIT License.
+Copyright (c) David Zhang, 2018-2024. Licensed under MIT License.

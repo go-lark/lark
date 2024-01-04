@@ -1,7 +1,6 @@
 package lark
 
 import (
-	"bytes"
 	"context"
 	"io"
 	"log"
@@ -77,12 +76,4 @@ func (bot Bot) Logger() LogWrapper {
 func (bot *Bot) WithContext(ctx context.Context) *Bot {
 	bot.ctx = ctx
 	return bot
-}
-
-func (bot Bot) captureOutput(f func()) string {
-	var buf bytes.Buffer
-	bot.logger.SetOutput(&buf)
-	f()
-	bot.logger.SetOutput(os.Stderr)
-	return buf.String()
 }

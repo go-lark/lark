@@ -52,9 +52,9 @@ type EventV2UserID struct {
 
 // PostEvent with event v2 format
 // and it's part of EventV2 instead of package method
-func (e EventV2) PostEvent(client *http.Client, hookURL string, event EventV2) (*http.Response, error) {
+func (e EventV2) PostEvent(client *http.Client, hookURL string) (*http.Response, error) {
 	buf := new(bytes.Buffer)
-	err := json.NewEncoder(buf).Encode(event)
+	err := json.NewEncoder(buf).Encode(e)
 	if err != nil {
 		log.Printf("Encode json failed: %+v\n", err)
 		return nil, err

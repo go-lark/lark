@@ -81,8 +81,7 @@ Feishu/Lark API offers more features, please refers to [Usage](#usage) for furth
   because Feishu and Lark basically shares the same API specification.
   We do not guarantee all of the APIs work well with Lark, until we have tested it on Lark.
 - go-lark only supports Custom App. Marketplace App is not supported yet.
-- go-lark implements bot and messaging API, other APIs such as Lark Doc, Calendar and so on are not supported.
-- go-lark implements API in v3/v4 version\* (official documents may also mention im/v1 version) and event with Schema 1.0 and 2.0 (partially).
+- go-lark implements messaging, group chat, and bot API, other APIs such as Lark Doc, Calendar and so on are not supported.
 
 ### Switch to Lark Endpoints
 
@@ -218,7 +217,7 @@ We have already implemented HTTP middlewares to support event handling:
 - [Gin Middleware](https://github.com/go-lark/lark-gin)
 - [Hertz Middleware](https://github.com/go-lark/lark-hertz)
 
-Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware)
+Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware) [examples/hertz-middleware](https://github.com/go-lark/examples/tree/main/hertz-middleware)
 
 #### URL Challenge
 
@@ -253,7 +252,20 @@ r.POST("/", func(c *gin.Context) {
 })
 ```
 
-#### Receiving Message
+#### Card Callback
+
+We may also setup callback for card actions (e.g. button). The URL challenge part is the same.
+
+We may use `LarkCardHandler` to handle the actions:
+```go
+r.Use(middleware.LarkCardHandler())
+r.POST("/callback", func(c *gin.Context) {
+    if card, ok := middleware.GetCardCallback(c); ok {
+    }
+})
+```
+
+#### Receiving Message (Event V1)
 
 For older bots, please use v1:
 
@@ -286,12 +298,10 @@ middleware.WithEncryption("<encryption-key>")
 ### Debugging
 
 Lark does not provide messaging API debugger officially. Thus, we have to debug with real Lark conversation.
-We add `PostEvent` to simulate message sending to make it easier.
-`PostEvent` can also be used to redirect message, which acts like a reverse proxy.
+We recommend [ngrok](https://ngrok.com/) to debug events.
 
-Example: [examples/event-forward](https://github.com/go-lark/examples/tree/main/event-forward)
-
-> Notice: `PostEvent` does not support AES encryption at the moment.
+And we add `PostEvent` to simulate message sending to make it even easier.
+`PostEvent` can also be used to redirect events, which acts like a reverse proxy.
 
 ## Development
 
@@ -309,7 +319,8 @@ Example: [examples/event-forward](https://github.com/go-lark/examples/tree/main/
    LARK_UNION_ID
    LARK_OPEN_ID
    LARK_CHAT_ID
-   LARK_MESSAGE_ID
+   LARK_WEBHOOK_V2
+   LARK_WEBHOOK_V2_SIGNED
    ```
 
    `LARK_APP_ID` and `LARK_APP_SECRET` are mandatory. Others are required only by specific API tests.
@@ -379,7 +390,7 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
   2. not invite to the group.
   3. API permission not applied.
 - Does go-lark support interactive message card?
-  - Yes, use card builder.
+  - Yes, use a CardBuilder.
 
 ## Contributing
 
@@ -388,4 +399,4 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
 
 ## License
 
-Copyright (c) David Zhang, 2018-2023. Licensed under MIT License.
+Copyright (c) David Zhang, 2018-2024. Licensed under MIT License.
