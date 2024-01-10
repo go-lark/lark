@@ -27,7 +27,8 @@ type OutcomingMessage struct {
 	ChatID  string `json:"chat_id,omitempty"`
 	UnionID string `json:"-"`
 	// For reply
-	RootID string `json:"root_id,omitempty"`
+	RootID        string `json:"root_id,omitempty"`
+	ReplyInThread bool   `json:"reply_in_thread,omitempty"`
 	// Sign for notification bot
 	Sign string `json:"sign"`
 	// Timestamp for sign

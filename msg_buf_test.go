@@ -41,6 +41,8 @@ func TestBindingUserIDs(t *testing.T) {
 	mb.Clear()
 	msgReplyID := mb.BindReply("om_f779ffe0ffa3d1b94fc1ef5fcb6f1063").Build()
 	assert.Equal(t, "om_f779ffe0ffa3d1b94fc1ef5fcb6f1063", msgReplyID.RootID)
+	mb.ReplyInThread(true)
+	assert.False(t, msgReplyID.ReplyInThread)
 }
 
 func TestMsgShareChat(t *testing.T) {
