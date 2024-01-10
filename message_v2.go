@@ -29,9 +29,6 @@ func buildReplyMessage(om OutcomingMessage) (*IMMessageRequest, error) {
 		Content:   buildContent(om),
 		ReceiveID: buildReceiveID(om),
 	}
-	if om.MsgType == MsgInteractive {
-		req.MsgType = om.MsgType
-	}
 	if req.Content == "" {
 		return nil, ErrMessageNotBuild
 	}
