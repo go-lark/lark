@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.14.0
+
+- refactor(im): build reply and update message with standalone methods
+- feat(im): UpdateMessage supports text and post in addition to card
+- feat(im): ReplyMessage suports reply in thread
+
 ## v1.13.3
 
 - feat(event): support message_recalled, message_reaction_created, and message_reaction_deleted
