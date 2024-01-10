@@ -23,6 +23,39 @@ func BuildMessage(om OutcomingMessage) (*IMMessageRequest, error) {
 	return &req, nil
 }
 
+func buildReplyMessage(om OutcomingMessage) (*IMMessageRequest, error) {
+	req := IMMessageRequest{
+		MsgType:   string(om.MsgType),
+		Content:   buildContent(om),
+		ReceiveID: buildReceiveID(om),
+	}
+	if om.MsgType == MsgInteractive {
+		req.MsgType = om.MsgType
+	}
+	if req.Content == "" {
+		return nil, ErrMessageNotBuild
+	}
+	if om.ReplyInThread == true {
+		req.ReplyInThread = om.ReplyInThread
+	}
+
+	return &req, nil
+}
+
+func buildUpdateMessage(om OutcomingMessage) (*IMMessageRequest, error) {
+	req := IMMessageRequest{
+		Content: buildContent(om),
+	}
+	if om.MsgType != MsgInteractive {
+		req.MsgType = om.MsgType
+	}
+	if req.Content == "" {
+		return nil, ErrMessageNotBuild
+	}
+
+	return &req, nil
+}
+
 func buildContent(om OutcomingMessage) string {
 	var (
 		content = ""

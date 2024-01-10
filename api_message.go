@@ -27,10 +27,11 @@ type PostMessageResponse struct {
 
 // IMMessageRequest .
 type IMMessageRequest struct {
-	ReceiveID string `json:"receive_id"`
-	Content   string `json:"content"`
-	MsgType   string `json:"msg_type"`
-	UUID      string `json:"uuid,omitempty"`
+	Content       string `json:"content"`
+	MsgType       string `json:"msg_type,omitempty"`
+	ReceiveID     string `json:"receive_id,omitempty"`
+	UUID          string `json:"uuid,omitempty"`
+	ReplyInThread bool   `json:"reply_in_thread,omitempty"`
 }
 
 // IMSender .
@@ -56,19 +57,20 @@ type IMBody struct {
 
 // IMMessage .
 type IMMessage struct {
-	MessageID      string `json:"message_id"`
-	UpperMessageID string `json:"upper_message_id"`
-	RootID         string `json:"root_id"`
-	ParentID       string `json:"parent_id"`
-	ChatID         string `json:"chat_id"`
-	MsgType        string `json:"msg_type"`
-	CreateTime     string `json:"create_time"`
-	UpdateTime     string `json:"update_time"`
-	Deleted        bool   `json:"deleted"`
-	Updated        bool   `json:"updated"`
-	Sender         IMSender
-	Mentions       []IMMention
-	Body           IMBody
+	MessageID      string      `json:"message_id"`
+	UpperMessageID string      `json:"upper_message_id"`
+	RootID         string      `json:"root_id"`
+	ParentID       string      `json:"parent_id"`
+	ThreadID       string      `json:"thread_id"`
+	ChatID         string      `json:"chat_id"`
+	MsgType        string      `json:"msg_type"`
+	CreateTime     string      `json:"create_time"`
+	UpdateTime     string      `json:"update_time"`
+	Deleted        bool        `json:"deleted"`
+	Updated        bool        `json:"updated"`
+	Sender         IMSender    `json:"sender"`
+	Mentions       []IMMention `json:"mentions"`
+	Body           IMBody      `json:"body"`
 }
 
 // ReactionResponse .
@@ -266,7 +268,7 @@ func (bot Bot) PostMessage(om OutcomingMessage) (*PostMessageResponse, error) {
 
 // ReplyMessage replies a message
 func (bot Bot) ReplyMessage(om OutcomingMessage) (*PostMessageResponse, error) {
-	req, err := BuildMessage(om)
+	req, err := buildReplyMessage(om)
 	if err != nil {
 		return nil, err
 	}
@@ -299,16 +301,22 @@ func (bot Bot) DeleteReaction(messageID string, reactionID string) (*ReactionRes
 
 // UpdateMessage updates a message
 func (bot Bot) UpdateMessage(messageID string, om OutcomingMessage) (*UpdateMessageResponse, error) {
-	if om.MsgType != MsgInteractive {
+	if om.MsgType != MsgInteractive &&
+		om.MsgType != MsgText &&
+		om.MsgType != MsgPost {
 		return nil, ErrMessageType
 	}
-	req, err := BuildMessage(om)
+	req, err := buildUpdateMessage(om)
 	if err != nil {
 		return nil, err
 	}
 	url := fmt.Sprintf(updateMessageURL, messageID)
 	var respData UpdateMessageResponse
-	err = bot.PatchAPIRequest("UpdateMessage", url, true, req, &respData)
+	if om.MsgType == MsgInteractive {
+		err = bot.PatchAPIRequest("UpdateMessage", url, true, req, &respData)
+	} else {
+		err = bot.PutAPIRequest("UpdateMessage", url, true, req, &respData)
+	}
 	return &respData, err
 }
 

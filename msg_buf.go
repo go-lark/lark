@@ -76,6 +76,12 @@ func (m *MsgBuffer) BindReply(rootID string) *MsgBuffer {
 	return m
 }
 
+// ReplyInThread replies message in thread
+func (m *MsgBuffer) ReplyInThread(replyInThread bool) *MsgBuffer {
+	m.message.ReplyInThread = replyInThread
+	return m
+}
+
 // WithSign generates sign for notification bot check
 func (m *MsgBuffer) WithSign(secret string, ts int64) *MsgBuffer {
 	m.message.Sign, _ = GenSign(secret, ts)

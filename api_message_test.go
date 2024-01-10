@@ -59,7 +59,17 @@ func TestReplyMessage(t *testing.T) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
 	}
-	resp, err = bot.PostTextMentionAndReply("PostTextMentionAndReply", testUserOpenID, WithChatID(testGroupChatID), resp.Data.MessageID)
+	replyID := resp.Data.MessageID
+	resp, err = bot.PostTextMentionAndReply("PostTextMentionAndReply", testUserOpenID, WithChatID(testGroupChatID), replyID)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
+	// Reply with Outcoming Message
+	mb := NewMsgBuffer(MsgText)
+	tb := NewTextBuilder()
+	om := mb.Text(tb.Text("Reply raw").Render()).BindReply(replyID).ReplyInThread(true).Build()
+	resp, err = bot.ReplyMessage(om)
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
@@ -210,6 +220,20 @@ func TestPostPostMessage(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, 0, resp.Code)
 		assert.NotEmpty(t, resp.Data.MessageID)
+
+		newOM := NewMsgBuffer(MsgPost).
+			BindOpenChatID(testGroupChatID).
+			Post(
+				NewPostBuilder().
+					Title("modified title").
+					TextTag("modified content", 1, true).
+					Render(),
+			).
+			Build()
+		_, err = bot.UpdateMessage(resp.Data.MessageID, newOM)
+		if assert.NoError(t, err) {
+			assert.Equal(t, 0, resp.Code)
+		}
 	}
 }
 
@@ -446,7 +470,7 @@ func TestPinMessages(t *testing.T) {
 	}
 }
 
-func TestReactionMessage(t *testing.T) {
+func TestMessageReactions(t *testing.T) {
 	msg := NewMsgBuffer(MsgText)
 	om := msg.BindEmail(testUserEmail).Text("hello, world").Build()
 	resp, err := bot.PostMessage(om)
