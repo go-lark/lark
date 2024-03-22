@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v1.14.1
+- feat(api): UploadBinaryFile support uploads binary file
+
 ## v1.14.0
 
 - refactor(im): build reply and update message with standalone methods

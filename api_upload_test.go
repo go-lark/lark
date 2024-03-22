@@ -3,6 +3,7 @@ package lark
 import (
 	"image/jpeg"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -34,6 +35,22 @@ func TestUploadFile(t *testing.T) {
 		FileType: "pdf",
 		FileName: "hello.pdf",
 		Path:     "./fixtures/test.pdf",
+	})
+	if assert.NoError(t, err) {
+		assert.Zero(t, resp.Code)
+		t.Log(resp.Data.FileKey)
+		assert.NotEmpty(t, resp.Data.FileKey)
+	}
+}
+
+func TestUploadBinaryFile(t *testing.T) {
+	resp, err := bot.UploadBinaryFile(UploadBinaryFileRequest{
+		FileType: "stream",
+		FileName: "test-data.csv",
+		Reader: strings.NewReader(`Name,Age,Location
+		Foo,25,Sleman
+		Bar,23,Sidoarjo
+		Baz,27,Bantul`),
 	})
 	if assert.NoError(t, err) {
 		assert.Zero(t, resp.Code)

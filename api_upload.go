@@ -43,6 +43,14 @@ type UploadFileResponse struct {
 	} `json:"data"`
 }
 
+// UploadBinaryFileRequest .
+type UploadBinaryFileRequest struct {
+	FileType string    `json:"-"`
+	FileName string    `json:"-"`
+	Duration int       `json:"-"`
+	Reader   io.Reader `json:"-"`
+}
+
 // UploadImage uploads image to Lark server
 func (bot Bot) UploadImage(path string) (*UploadImageResponse, error) {
 	file, err := os.Open(path)
@@ -134,6 +142,37 @@ func (bot Bot) UploadFile(req UploadFileRequest) (*UploadFileResponse, error) {
 	header := make(http.Header)
 	header.Set("Content-Type", writer.FormDataContentType())
 	err = bot.DoAPIRequest("POST", "UploadFile", uploadFileURL, header, true, body, &respData)
+	if err != nil {
+		return nil, err
+	}
+	return &respData, err
+}
+
+// UploadBinaryFile uploads binary file to Lark server
+func (bot Bot) UploadBinaryFile(req UploadBinaryFileRequest) (*UploadFileResponse, error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	writer.WriteField("file_type", req.FileType)
+	writer.WriteField("file_name", req.FileName)
+	if req.FileType == "mp4" && req.Duration > 0 {
+		writer.WriteField("duration", fmt.Sprintf("%d", req.Duration))
+	}
+	part, err := writer.CreateFormFile("file", req.FileName)
+	if err != nil {
+		return nil, err
+	}
+	_, err = io.Copy(part, req.Reader)
+	if err != nil {
+		return nil, err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, err
+	}
+	var respData UploadFileResponse
+	header := make(http.Header)
+	header.Set("Content-Type", writer.FormDataContentType())
+	err = bot.DoAPIRequest("POST", "UploadBinaryFile", uploadFileURL, header, true, body, &respData)
 	if err != nil {
 		return nil, err
 	}
