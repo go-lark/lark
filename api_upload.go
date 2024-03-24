@@ -29,10 +29,11 @@ type UploadImageResponse struct {
 
 // UploadFileRequest .
 type UploadFileRequest struct {
-	FileType string `json:"-"`
-	FileName string `json:"-"`
-	Duration int    `json:"-"`
-	Path     string `json:"-"`
+	FileType string    `json:"-"`
+	FileName string    `json:"-"`
+	Duration int       `json:"-"`
+	Path     string    `json:"-"`
+	Reader   io.Reader `json:"-"`
 }
 
 // UploadFileResponse .
@@ -105,11 +106,18 @@ func (bot Bot) UploadImageObject(img image.Image) (*UploadImageResponse, error) 
 
 // UploadFile uploads file to Lark server
 func (bot Bot) UploadFile(req UploadFileRequest) (*UploadFileResponse, error) {
-	file, err := os.Open(req.Path)
-	if err != nil {
-		return nil, err
+	var content io.Reader
+	if req.Reader == nil {
+		file, err := os.Open(req.Path)
+		if err != nil {
+			return nil, err
+		}
+		defer file.Close()
+		content = file
+	} else {
+		content = req.Reader
+		req.Path = req.FileName
 	}
-	defer file.Close()
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
@@ -122,7 +130,7 @@ func (bot Bot) UploadFile(req UploadFileRequest) (*UploadFileResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, err = io.Copy(part, file)
+	_, err = io.Copy(part, content)
 	if err != nil {
 		return nil, err
 	}
