@@ -52,6 +52,7 @@ type MessageContent struct {
 	Media     *MediaContent     `json:"media,omitempty"`
 	File      *FileContent      `json:"file,omitempty"`
 	Sticker   *StickerContent   `json:"sticker,omitempty"`
+	Template  *TemplateContent  `json:"template,omitempty"`
 }
 
 // TextContent .
@@ -96,4 +97,16 @@ type FileContent struct {
 // StickerContent .
 type StickerContent struct {
 	FileKey string `json:"file_key"`
+}
+
+// TemplateContent .
+type TemplateContent struct {
+	Type string       `json:"type"`
+	Data templateData `json:"data,omitempty"`
+}
+
+type templateData struct {
+	TemplateID          string `json:"template_id"`
+	TemplateVersionName string `json:"template_version_name,omitempty"`
+	TemplateVariable    map[string]interface{}
 }
