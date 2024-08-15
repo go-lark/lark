@@ -225,6 +225,16 @@ func (m *MsgBuffer) Card(cardContent string) *MsgBuffer {
 	return m
 }
 
+// Template sets raw template content
+func (m *MsgBuffer) Template(tempateContent *TemplateContent) *MsgBuffer {
+	if m.msgType != MsgInteractive {
+		m.err = m.typeError("Template", MsgInteractive)
+		return m
+	}
+	m.message.Content.Template = tempateContent
+	return m
+}
+
 // Build message and return message body
 func (m *MsgBuffer) Build() OutcomingMessage {
 	return m.message

@@ -73,7 +73,11 @@ func buildContent(om OutcomingMessage) string {
 	case MsgPost:
 		b, err = json.Marshal(om.Content.Post)
 	case MsgInteractive:
-		b, err = json.Marshal(om.Content.Card)
+		if om.Content.Card != nil {
+			b, err = json.Marshal(om.Content.Card)
+		} else if om.Content.Template != nil {
+			b, err = json.Marshal(om.Content.Template)
+		}
 	case MsgAudio:
 		b, err = json.Marshal(om.Content.Audio)
 	case MsgMedia:

@@ -184,6 +184,7 @@ Content functions:
 | Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                   |
 | Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                   |
 | Card      | `MsgInteractive` | Append interactive card | May build with [`CardBuilder`](card/README.md) |
+| Template  | `MsgInteractive` | Append card template    | May build with [`CardBuilder`](card/README.md) |
 | ShareChat | `MsgShareCard`   | Append group share card |                                                |
 | ShareUser | `MsgShareUser`   | Append user share card  |                                                |
 | Image     | `MsgImage`       | Append image            | Required to upload to Lark server in advance   |
@@ -257,6 +258,7 @@ r.POST("/", func(c *gin.Context) {
 We may also setup callback for card actions (e.g. button). The URL challenge part is the same.
 
 We may use `LarkCardHandler` to handle the actions:
+
 ```go
 r.Use(middleware.LarkCardHandler())
 r.POST("/callback", func(c *gin.Context) {

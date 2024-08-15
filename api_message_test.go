@@ -385,6 +385,20 @@ func TestI18NCard(t *testing.T) {
 	}
 }
 
+func TestTemplateCardMessage(t *testing.T) {
+	b := NewTemplateBuilder()
+	c := b.BindTemplate("AAqCYI07MQWh1", "1.0.0", map[string]interface{}{
+		"name": "志田千陽",
+	})
+	msgV4 := NewMsgBuffer(MsgInteractive)
+	omV4 := msgV4.BindEmail(testUserEmail).Template(c).Build()
+	resp, err := bot.PostMessage(omV4)
+	if assert.NoError(t, err) {
+		assert.Equal(t, 0, resp.Code)
+		assert.NotEmpty(t, resp.Data.MessageID)
+	}
+}
+
 func TestEphemeralMessage(t *testing.T) {
 	b := NewCardBuilder()
 	card := b.Card(
