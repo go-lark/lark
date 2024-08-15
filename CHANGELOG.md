@@ -8,7 +8,7 @@
 
 - refactor(im): build reply and update message with standalone methods
 - feat(im): UpdateMessage supports text and post in addition to card
-- feat(im): ReplyMessage suports reply in thread
+- feat(im): ReplyMessage supports reply in thread
 
 ## v1.13.3
 
