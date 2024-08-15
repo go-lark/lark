@@ -179,19 +179,19 @@ Binding functions:
 Content functions pair with message content types. If it mismatched, it would not have sent successfully.
 Content functions:
 
-| Function  | Message Type     | Usage                   | Comment                                        |
-| --------- | ---------------- | ----------------------- | ---------------------------------------------- |
-| Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                   |
-| Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                   |
-| Card      | `MsgInteractive` | Append interactive card | May build with [`CardBuilder`](card/README.md) |
-| Template  | `MsgInteractive` | Append card template    | May build with [`CardBuilder`](card/README.md) |
-| ShareChat | `MsgShareCard`   | Append group share card |                                                |
-| ShareUser | `MsgShareUser`   | Append user share card  |                                                |
-| Image     | `MsgImage`       | Append image            | Required to upload to Lark server in advance   |
-| File      | `MsgFile`        | Append file             | Required to upload to Lark server in advance   |
-| Audio     | `MsgAudio`       | Append audio            | Required to upload to Lark server in advance   |
-| Media     | `MsgMedia`       | Append media            | Required to upload to Lark server in advance   |
-| Sticker   | `MsgSticker`     | Append sticker          | Required to upload to Lark server in advance   |
+| Function  | Message Type     | Usage                   | Comment                                                          |
+| --------- | ---------------- | ----------------------- | ---------------------------------------------------------------- |
+| Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                                     |
+| Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                                     |
+| Card      | `MsgInteractive` | Append interactive card | May build with [`CardBuilder`](card/README.md)                   |
+| Template  | `MsgInteractive` | Append card template    | Required to build with [CardKit](https://open.feishu.cn/cardkit) |
+| ShareChat | `MsgShareCard`   | Append group share card |                                                                  |
+| ShareUser | `MsgShareUser`   | Append user share card  |                                                                  |
+| Image     | `MsgImage`       | Append image            | Required to upload to Lark server in advance                     |
+| File      | `MsgFile`        | Append file             | Required to upload to Lark server in advance                     |
+| Audio     | `MsgAudio`       | Append audio            | Required to upload to Lark server in advance                     |
+| Media     | `MsgMedia`       | Append media            | Required to upload to Lark server in advance                     |
+| Sticker   | `MsgSticker`     | Append sticker          | Required to upload to Lark server in advance                     |
 
 ### Error Handling
 

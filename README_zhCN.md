@@ -171,19 +171,19 @@ Bind 函数：
 
 内容函数大多跟消息类型是强关联的，类型错误不会生效。内容函数：
 
-| 函数      | 适用范围         | 作用             | 备注                                             |
-| --------- | ---------------- | ---------------- | ------------------------------------------------ |
-| Text      | `MsgText`        | 添加文本内容     | 可使用 `TextBuilder` 构造                        |
-| Post      | `MsgPost`        | 添加富文本内容   | 可使用 `PostBuilder` 构造                        |
-| Card      | `MsgInteractive` | 添加交互式卡片   | 可使用 [`CardBuilder`](card/README_zhCN.md) 构造 |
-| Template  | `MsgInteractive` | 添加卡片模板     | 可使用 [`CardBuilder`](card/README_zhCN.md) 构造 |
-| ShareChat | `MsgShareCard`   | 添加分享群卡片   |                                                  |
-| ShareUser | `MsgShareUser`   | 添加分享用户卡片 |                                                  |
-| Image     | `MsgImage`       | 添加图片         | 需要先上传到飞书服务器                           |
-| File      | `MsgFile`        | 添加文件         | 需要先上传到飞书服务器                           |
-| Audio     | `MsgAudio`       | 添加音频         | 需要先上传到飞书服务器                           |
-| Media     | `MsgMedia`       | 添加媒体         | 需要先上传到飞书服务器                           |
-| Sticker   | `MsgSticker`     | 添加表情         | 需要先上传到飞书服务器                           |
+| 函数      | 适用范围         | 作用             | 备注                                                         |
+| --------- | ---------------- | ---------------- | ------------------------------------------------------------ |
+| Text      | `MsgText`        | 添加文本内容     | 可使用 `TextBuilder` 构造                                    |
+| Post      | `MsgPost`        | 添加富文本内容   | 可使用 `PostBuilder` 构造                                    |
+| Card      | `MsgInteractive` | 添加交互式卡片   | 可使用 [`CardBuilder`](card/README_zhCN.md) 构造             |
+| Template  | `MsgInteractive` | 添加卡片模板     | 可使用 [可视化搭建工具](https://open.feishu.cn/cardkit) 构造 |
+| ShareChat | `MsgShareCard`   | 添加分享群卡片   |                                                              |
+| ShareUser | `MsgShareUser`   | 添加分享用户卡片 |                                                              |
+| Image     | `MsgImage`       | 添加图片         | 需要先上传到飞书服务器                                       |
+| File      | `MsgFile`        | 添加文件         | 需要先上传到飞书服务器                                       |
+| Audio     | `MsgAudio`       | 添加音频         | 需要先上传到飞书服务器                                       |
+| Media     | `MsgMedia`       | 添加媒体         | 需要先上传到飞书服务器                                       |
+| Sticker   | `MsgSticker`     | 添加表情         | 需要先上传到飞书服务器                                       |
 
 ### 异常处理
 

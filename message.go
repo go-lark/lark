@@ -106,7 +106,7 @@ type TemplateContent struct {
 }
 
 type templateData struct {
-	TemplateID          string `json:"template_id"`
-	TemplateVersionName string `json:"template_version_name,omitempty"`
-	TemplateVariable    map[string]interface{}
+	TemplateID          string                 `json:"template_id"`
+	TemplateVersionName string                 `json:"template_version_name,omitempty"`
+	TemplateVariable    map[string]interface{} `json:"template_variable,omitempty"`
 }

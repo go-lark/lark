@@ -388,7 +388,7 @@ func TestI18NCard(t *testing.T) {
 func TestTemplateCardMessage(t *testing.T) {
 	b := NewTemplateBuilder()
 	c := b.BindTemplate("AAqCYI07MQWh1", "1.0.0", map[string]interface{}{
-		"name": "志田千陽",
+		"name": "Chiharu",
 	})
 	msgV4 := NewMsgBuffer(MsgInteractive)
 	omV4 := msgV4.BindEmail(testUserEmail).Template(c).Build()
