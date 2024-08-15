@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.15.0
+
+- feat(im): support card template (#75)
+
 ## v1.14.1
 
 - feat(api): UploadFile support uploads binary file
