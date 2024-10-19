@@ -5,6 +5,7 @@ var _ Element = (*ButtonBlock)(nil)
 // ButtonBlock 按钮元素
 type ButtonBlock struct {
 	text     *TextBlock
+	name     string
 	url      string
 	multiURL *URLBlock
 	btnType  string
@@ -15,6 +16,7 @@ type ButtonBlock struct {
 type buttonRenderer struct {
 	ElementTag
 	Text     Renderer               `json:"text"`
+	Name     string                 `json:"name,omitempty"`
 	URL      string                 `json:"url,omitempty"`
 	MultiURL Renderer               `json:"multi_url,omitempty"`
 	Type     string                 `json:"type,omitempty"`
@@ -28,6 +30,7 @@ func (b *ButtonBlock) Render() Renderer {
 		ElementTag: ElementTag{
 			Tag: "button",
 		},
+		Name:  b.name,
 		Text:  b.text.Render(),
 		URL:   b.url,
 		Type:  b.btnType,
@@ -45,6 +48,12 @@ func (b *ButtonBlock) Render() Renderer {
 // Button 按钮交互元素
 func Button(text *TextBlock) *ButtonBlock {
 	return (&ButtonBlock{text: text}).Default()
+}
+
+// Name 按钮的标识
+func (b *ButtonBlock) Name(n string) *ButtonBlock {
+	b.name = n
+	return b
 }
 
 // URL 按钮的跳转链接
