@@ -12,8 +12,10 @@ type EventV2MessageReceived struct {
 		RootID      string `json:"root_id,omitempty"`
 		ParentID    string `json:"parent_id,omitempty"`
 		CreateTime  string `json:"create_time,omitempty"`
+		UpdateTime  string `json:"update_time,omitempty"`
 		ChatID      string `json:"chat_id,omitempty"`
 		ChatType    string `json:"chat_type,omitempty"`
+		ThreadID    string `json:"thread_id,omitempty"`
 		MessageType string `json:"message_type,omitempty"`
 		Content     string `json:"content,omitempty"`
 		Mentions    []struct {
@@ -22,6 +24,7 @@ type EventV2MessageReceived struct {
 			Name      string        `json:"name,omitempty"`
 			TenantKey string        `json:"tenant_key,omitempty"`
 		} `json:"mentions,omitempty"`
+		UserAgent string `json:"user_agent,omitempty"`
 	} `json:"message,omitempty"`
 }
 
