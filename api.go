@@ -2,8 +2,14 @@ package lark
 
 // BaseResponse of an API
 type BaseResponse struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
+	Code  int       `json:"code"`
+	Msg   string    `json:"msg"`
+	Error BaseError `json:"error"`
+}
+
+// BaseError returned by the platform
+type BaseError struct {
+	LogID string `json:"log_id,omitempty"`
 }
 
 // I18NNames .
