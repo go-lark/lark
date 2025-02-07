@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.16.0
+
+- feat(base): add base error (#78)
+- feat(im): support buzz message (#77)
+
 ## v1.15.0
 
 - feat(im): support card template (#75)
