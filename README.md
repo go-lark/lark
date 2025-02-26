@@ -253,7 +253,7 @@ r.POST("/", func(c *gin.Context) {
 })
 ```
 
-#### Card Callback
+#### Card Callback v1
 
 We may also setup callback for card actions (e.g. button). The URL challenge part is the same.
 
@@ -265,6 +265,24 @@ r.POST("/callback", func(c *gin.Context) {
     if card, ok := middleware.GetCardCallback(c); ok {
     }
 })
+```
+
+#### Card Callback v2
+
+Card Callback v2 content is same as Event v2. When handling card callback v2 requests, you can use the processing logic of Event 2.0.
+
+```go
+r.Use(middleware.LarkEventHandler())
+r.Post("/callback", func(c *gin.Context)) {
+    if evt, ok := middleware.GetEvent(c); ok { // => GetEvent instead of GetMessage
+        if evt.Header.EventType == lark.EventTypeCardV2Callback {
+            if msg, err := evt.GetCardV2Callback(); err == nil { // note: use `GetCardV2Callback()` function to parse callback content
+                fmt.Println(msg)
+            }
+            // you may have to parse other events
+		}
+    }
+}
 ```
 
 #### Receiving Message (Event V1)

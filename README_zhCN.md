@@ -245,7 +245,7 @@ r.POST("/", func(c *gin.Context) {
 })
 ```
 
-#### 卡片回调
+#### 卡片回调v1
 
 我们可以使用卡片回调接受卡片的用户操作（如：按钮点击），URL 挑战部分同步上。
 
@@ -257,6 +257,24 @@ r.POST("/callback", func(c *gin.Context) {
     if card, ok := middleware.GetCardCallback(c); ok {
     }
 })
+```
+
+#### 卡片回调v2
+
+卡片回调v2使用事件2.0的请求结构，在处理卡片回调请求时，可以使用事件2.0的处理逻辑。
+
+```go
+r.Use(middleware.LarkEventHandler())
+r.Post("/callback", func(c *gin.Context)) {
+    if evt, ok := middleware.GetEvent(c); ok { // => GetEvent instead of GetMessage
+        if evt.Header.EventType == lark.EventTypeCardV2Callback {
+            if msg, err := evt.GetCardV2Callback(); err == nil { // 需要注意这里，使用`GetCardV2Callback()`函数解析回调内容
+                fmt.Println(msg)
+            }
+            // you may have to parse other events
+        }
+	}
+}
 ```
 
 #### 接收消息（事件 1.0）
