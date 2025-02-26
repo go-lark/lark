@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// This appID & appSecret is for test use
+// IDs for test use
 var (
 	testAppID           string
 	testAppSecret       string
