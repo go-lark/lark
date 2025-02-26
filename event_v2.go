@@ -19,7 +19,7 @@ const (
 	EventTypeUserDeleted            = "im.chat.member.user.deleted_v1"
 	EventTypeBotAdded               = "im.chat.member.bot.added_v1"
 	EventTypeBotDeleted             = "im.chat.member.bot.deleted_v1"
-	EventTypeCardCallback           = "card.action.trigger"
+	EventTypeCardV2Callback         = "card.action.trigger"
 	// not supported yet
 	EventTypeChatUpdated   = "im.chat.updated_v1"
 	EventTypeUserWithdrawn = "im.chat.member.user.withdrawn_v1"
