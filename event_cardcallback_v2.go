@@ -9,15 +9,15 @@ type CardV2CallbackEvent struct {
 	} `json:"operator,omitempty"`
 	Token  string `json:"token,omitempty"`
 	Action struct {
-		Value      any      `json:"value,omitempty"`
-		Tag        string   `json:"tag,omitempty"`
-		Timezone   string   `json:"timezone,omitempty"`
-		Name       string   `json:"name,omitempty"`
-		FormValue  string   `json:"form_value,omitempty"`
-		InputValue string   `json:"input_value,omitempty"`
-		Option     string   `json:"option,omitempty"`
-		Options    []string `json:"options,omitempty"`
-		Checked    bool     `json:"checked,omitempty"`
+		Value      interface{} `json:"value,omitempty"`
+		Tag        string      `json:"tag,omitempty"`
+		Timezone   string      `json:"timezone,omitempty"`
+		Name       string      `json:"name,omitempty"`
+		FormValue  string      `json:"form_value,omitempty"`
+		InputValue string      `json:"input_value,omitempty"`
+		Option     string      `json:"option,omitempty"`
+		Options    []string    `json:"options,omitempty"`
+		Checked    bool        `json:"checked,omitempty"`
 	} `json:"action,omitempty"`
 	Host         string `json:"host,omitempty"`
 	DeliveryType string `json:"delivery_type,omitempty"`
