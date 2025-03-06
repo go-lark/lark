@@ -4,24 +4,26 @@ var _ Element = (*ButtonBlock)(nil)
 
 // ButtonBlock 按钮元素
 type ButtonBlock struct {
-	text     *TextBlock
-	name     string
-	url      string
-	multiURL *URLBlock
-	btnType  string
-	value    map[string]interface{}
-	confirm  *ConfirmBlock
+	text       *TextBlock
+	name       string
+	url        string
+	multiURL   *URLBlock
+	btnType    string
+	value      map[string]interface{}
+	confirm    *ConfirmBlock
+	actionType string
 }
 
 type buttonRenderer struct {
 	ElementTag
-	Text     Renderer               `json:"text"`
-	Name     string                 `json:"name,omitempty"`
-	URL      string                 `json:"url,omitempty"`
-	MultiURL Renderer               `json:"multi_url,omitempty"`
-	Type     string                 `json:"type,omitempty"`
-	Value    map[string]interface{} `json:"value,omitempty"`
-	Confirm  Renderer               `json:"confirm,omitempty"`
+	Text       Renderer               `json:"text"`
+	Name       string                 `json:"name,omitempty"`
+	URL        string                 `json:"url,omitempty"`
+	MultiURL   Renderer               `json:"multi_url,omitempty"`
+	Type       string                 `json:"type,omitempty"`
+	Value      map[string]interface{} `json:"value,omitempty"`
+	Confirm    Renderer               `json:"confirm,omitempty"`
+	ActionType string                 `json:"action_type,omitempty"`
 }
 
 // Render 渲染为 Renderer
@@ -30,11 +32,12 @@ func (b *ButtonBlock) Render() Renderer {
 		ElementTag: ElementTag{
 			Tag: "button",
 		},
-		Name:  b.name,
-		Text:  b.text.Render(),
-		URL:   b.url,
-		Type:  b.btnType,
-		Value: b.value,
+		Name:       b.name,
+		Text:       b.text.Render(),
+		URL:        b.url,
+		Type:       b.btnType,
+		Value:      b.value,
+		ActionType: b.actionType,
 	}
 	if b.multiURL != nil {
 		ret.MultiURL = b.multiURL.Render()
@@ -53,6 +56,12 @@ func Button(text *TextBlock) *ButtonBlock {
 // Name 按钮的标识
 func (b *ButtonBlock) Name(n string) *ButtonBlock {
 	b.name = n
+	return b
+}
+
+// ActionType 按钮的交互类型
+func (b *ButtonBlock) ActionType(actionType string) *ButtonBlock {
+	b.actionType = actionType
 	return b
 }
 
