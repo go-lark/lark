@@ -12,6 +12,7 @@ type ButtonBlock struct {
 	value      map[string]interface{}
 	confirm    *ConfirmBlock
 	actionType string
+	width      string
 }
 
 type buttonRenderer struct {
@@ -24,6 +25,7 @@ type buttonRenderer struct {
 	Value      map[string]interface{} `json:"value,omitempty"`
 	Confirm    Renderer               `json:"confirm,omitempty"`
 	ActionType string                 `json:"action_type,omitempty"`
+	Width      string                 `json:"width,omitempty"`
 }
 
 // Render 渲染为 Renderer
@@ -38,6 +40,7 @@ func (b *ButtonBlock) Render() Renderer {
 		Type:       b.btnType,
 		Value:      b.value,
 		ActionType: b.actionType,
+		Width:      b.width,
 	}
 	if b.multiURL != nil {
 		ret.MultiURL = b.multiURL.Render()
@@ -62,6 +65,12 @@ func (b *ButtonBlock) Name(n string) *ButtonBlock {
 // ActionType 按钮的交互类型
 func (b *ButtonBlock) ActionType(actionType string) *ButtonBlock {
 	b.actionType = actionType
+	return b
+}
+
+// Width 按钮的宽度
+func (b *ButtonBlock) Width(w string) *ButtonBlock {
+	b.width = w
 	return b
 }
 
