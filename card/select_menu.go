@@ -4,6 +4,7 @@ var _ Element = (*SelectMenuBlock)(nil)
 
 // SelectMenuBlock 菜单元素
 type SelectMenuBlock struct {
+	name          string
 	tag           string
 	placeholder   string
 	initialOption string
@@ -14,6 +15,7 @@ type SelectMenuBlock struct {
 
 type selectMenuRenderer struct {
 	ElementTag
+	Name          string                 `json:"name,omitempty"`
 	Placeholder   Renderer               `json:"placeholder,omitempty"`
 	InitialOption string                 `json:"initial_option,omitempty"`
 	Options       []Renderer             `json:"options,omitempty"`
@@ -31,6 +33,7 @@ func (s *SelectMenuBlock) Render() Renderer {
 		Options:       renderElements(s.options),
 		Value:         s.value,
 		Placeholder:   Text(s.placeholder).Render(),
+		Name:          s.name,
 	}
 	if s.confirm != nil {
 		ret.Confirm = s.confirm.Render()
@@ -48,6 +51,12 @@ func SelectMenu(opt ...*OptionBlock) *SelectMenuBlock {
 		ret.options[i] = v
 	}
 	return ret
+}
+
+// Name 菜单的标识
+func (s *SelectMenuBlock) Name(n string) *SelectMenuBlock {
+	s.name = n
+	return s
 }
 
 // SelectPerson 选人模式，value应设置为人员的open_id，options 为空则候选人员为当前群组
