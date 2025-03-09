@@ -10,6 +10,8 @@ type SelectMenuBlock struct {
 	initialOption string
 	options       []Element
 	value         map[string]interface{}
+	required      bool
+	width         string
 	confirm       *ConfirmBlock
 }
 
@@ -20,7 +22,9 @@ type selectMenuRenderer struct {
 	InitialOption string                 `json:"initial_option,omitempty"`
 	Options       []Renderer             `json:"options,omitempty"`
 	Value         map[string]interface{} `json:"value,omitempty"`
+	Width         string                 `json:"width,omitempty"`
 	Confirm       Renderer               `json:"confirm,omitempty"`
+	Required      bool                   `json:"required,omitempty"`
 }
 
 // Render 渲染为 Renderer
@@ -34,6 +38,7 @@ func (s *SelectMenuBlock) Render() Renderer {
 		Value:         s.value,
 		Placeholder:   Text(s.placeholder).Render(),
 		Name:          s.name,
+		Required:      s.required,
 	}
 	if s.confirm != nil {
 		ret.Confirm = s.confirm.Render()
@@ -83,8 +88,20 @@ func (s *SelectMenuBlock) Value(v map[string]interface{}) *SelectMenuBlock {
 	return s
 }
 
+// Width 宽度
+func (s *SelectMenuBlock) Width(w string) *SelectMenuBlock {
+	s.width = w
+	return s
+}
+
 // Confirm 选中后二次确认的弹框
 func (s *SelectMenuBlock) Confirm(title, text string) *SelectMenuBlock {
 	s.confirm = Confirm(title, text)
+	return s
+}
+
+// Required 是否必填
+func (s *SelectMenuBlock) Required(r bool) *SelectMenuBlock {
+	s.required = r
 	return s
 }
