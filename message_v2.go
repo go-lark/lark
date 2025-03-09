@@ -32,8 +32,11 @@ func buildReplyMessage(om OutcomingMessage) (*IMMessageRequest, error) {
 	if req.Content == "" {
 		return nil, ErrMessageNotBuild
 	}
-	if om.ReplyInThread == true {
+	if om.ReplyInThread {
 		req.ReplyInThread = om.ReplyInThread
+	}
+	if om.UUID != "" {
+		req.UUID = om.UUID
 	}
 
 	return &req, nil
