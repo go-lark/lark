@@ -15,6 +15,7 @@ type InputBlock struct {
 	autoResize    bool
 	disabled      bool
 	defaultValue  string
+	wdith         string
 }
 
 type InputBlockRenderer struct {
@@ -30,6 +31,7 @@ type InputBlockRenderer struct {
 	AutoResize    bool     `json:"auto_resize,omitempty"`
 	Disabled      bool     `json:"disabled,omitempty"`
 	DefaultValue  string   `json:"default_value,omitempty"`
+	Width         string   `json:"width,omitempty"`
 }
 
 // Render 渲染为 Renderer
@@ -49,6 +51,7 @@ func (s *InputBlock) Render() Renderer {
 		AutoResize:    s.autoResize,
 		Disabled:      s.disabled,
 		DefaultValue:  s.defaultValue,
+		Width:         s.wdith,
 	}
 	return ret
 }
@@ -96,18 +99,24 @@ func (s *InputBlock) Rows(r int) *InputBlock {
 	return s
 }
 
-// InputType 输入框类型
-func (s *InputBlock) InputType(t string) *InputBlock {
-	s.inputType = t
-	return s
-}
-
 // MaxRows 最大行数
 func (s *InputBlock) MaxRows(r int) *InputBlock {
 	s.maxRows = r
 	if s.rows > r {
 		s.rows = r
 	}
+	return s
+}
+
+// InputType 输入框类型
+func (s *InputBlock) InputType(t string) *InputBlock {
+	s.inputType = t
+	return s
+}
+
+// Width 宽度
+func (s *InputBlock) Width(w string) *InputBlock {
+	s.wdith = w
 	return s
 }
 
