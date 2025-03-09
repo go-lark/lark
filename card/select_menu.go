@@ -39,6 +39,7 @@ func (s *SelectMenuBlock) Render() Renderer {
 		Placeholder:   Text(s.placeholder).Render(),
 		Name:          s.name,
 		Required:      s.required,
+		Width:         s.width,
 	}
 	if s.confirm != nil {
 		ret.Confirm = s.confirm.Render()
