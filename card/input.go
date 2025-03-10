@@ -15,7 +15,7 @@ type InputBlock struct {
 	autoResize    bool
 	disabled      bool
 	defaultValue  string
-	wdith         string
+	width         string
 }
 
 type InputBlockRenderer struct {
@@ -51,7 +51,7 @@ func (s *InputBlock) Render() Renderer {
 		AutoResize:    s.autoResize,
 		Disabled:      s.disabled,
 		DefaultValue:  s.defaultValue,
-		Width:         s.wdith,
+		Width:         s.width,
 	}
 	return ret
 }
@@ -116,7 +116,7 @@ func (s *InputBlock) InputType(t string) *InputBlock {
 
 // Width 宽度
 func (s *InputBlock) Width(w string) *InputBlock {
-	s.wdith = w
+	s.width = w
 	return s
 }
 
