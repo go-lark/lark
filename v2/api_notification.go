@@ -2,7 +2,7 @@ package lark
 
 import "context"
 
-// PostNotificationResp response of PostNotificationV2
+// PostNotificationResp .
 type PostNotificationResp struct {
 	Code          int    `json:"code"`
 	Msg           string `json:"msg"`
@@ -18,6 +18,6 @@ func (bot *Bot) PostNotification(ctx context.Context, om OutcomingMessage) (*Pos
 
 	params := buildNotification(om)
 	var respData PostNotificationResp
-	err := bot.PostAPIRequest(ctx, "PostNotificationV2", bot.webhook, false, params, &respData)
+	err := bot.PostAPIRequest(ctx, "PostNotification", bot.webhook, false, params, &respData)
 	return &respData, err
 }
