@@ -17,16 +17,16 @@ import (
 
 // IDs for test use
 var (
-	testAppID           string
-	testAppSecret       string
-	testUserEmail       string
-	testUserOpenID      string
-	testUserID          string
-	testUserUnionID     string
-	testGroupChatID     string
-	testWebhookV1       string
-	testWebhookV2       string
-	testWebhookV2Signed string
+	testAppID         string
+	testAppSecret     string
+	testUserEmail     string
+	testUserOpenID    string
+	testUserID        string
+	testUserUnionID   string
+	testGroupChatID   string
+	testWebhookV1     string
+	testWebhook       string
+	testWebhookSigned string
 )
 
 func newTestBot() *Bot {
@@ -47,9 +47,8 @@ func newTestBot() *Bot {
 	testUserUnionID = os.Getenv("LARK_UNION_ID")
 	testUserOpenID = os.Getenv("LARK_OPEN_ID")
 	testGroupChatID = os.Getenv("LARK_CHAT_ID")
-	testWebhookV1 = os.Getenv("LARK_WEBHOOK_V1")
-	testWebhookV2 = os.Getenv("LARK_WEBHOOK_V2")
-	testWebhookV2Signed = os.Getenv("LARK_WEBHOOK_V2_SIGNED")
+	testWebhook = os.Getenv("LARK_WEBHOOK")
+	testWebhookSigned = os.Getenv("LARK_WEBHOOK_SIGNED")
 	if len(testAppID) == 0 ||
 		len(testAppSecret) == 0 ||
 		len(testUserEmail) == 0 ||
@@ -84,7 +83,8 @@ var bot *Bot
 
 func init() {
 	bot = newTestBot()
-	_, _ = bot.GetTenantAccessTokenInternal(true)
+	ctx := context.Background()
+	_, _ = bot.GetTenantAccessTokenInternal(ctx, true)
 }
 
 func TestBotProperties(t *testing.T) {
@@ -97,7 +97,7 @@ func TestBotProperties(t *testing.T) {
 	assert.NotNil(t, chatBot.client)
 	assert.NotNil(t, chatBot.logger)
 
-	notifyBot := NewNotificationBot(testWebhookV1)
+	notifyBot := NewNotificationBot(testWebhook)
 	assert.Empty(t, notifyBot.appID)
 	assert.Empty(t, notifyBot.appSecret)
 	assert.NotEmpty(t, notifyBot.webhook)

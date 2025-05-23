@@ -16,4 +16,5 @@ var (
 	ErrInvalidReceiveID       = errors.New("Invalid receive ID")
 	ErrEventTypeNotMatch      = errors.New("Event type not match")
 	ErrMessageType            = errors.New("Message type error")
+	ErrHeartbeatContextNotSet = errors.New("Heartbeat context not set")
 )

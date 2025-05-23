@@ -71,9 +71,3 @@ func (bot *Bot) SetLogger(logger LogWrapper) {
 func (bot Bot) Logger() LogWrapper {
 	return bot.logger
 }
-
-// WithContext .
-func (bot *Bot) WithContext(ctx context.Context) *Bot {
-	bot.ctx = ctx
-	return bot
-}
