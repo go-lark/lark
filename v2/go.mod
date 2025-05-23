@@ -3,6 +3,7 @@ module github.com/go-lark/lark/v2
 go 1.24
 
 require (
+	github.com/go-lark/lark v1.16.0
 	github.com/joho/godotenv v1.5.1
 	github.com/stretchr/testify v1.10.0
 )
