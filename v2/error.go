@@ -1,6 +1,9 @@
 package lark
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 // Errors
 var (
@@ -18,3 +21,14 @@ var (
 	ErrMessageType            = errors.New("Message type error")
 	ErrHeartbeatContextNotSet = errors.New("Heartbeat context not set")
 )
+
+// APIError constructs an error with given response
+func APIError(url string, resp BaseResponse) error {
+	return fmt.Errorf(
+		"Lark API server returned error: Code [%d] Message [%s] LogID [%s] Interface [%s]",
+		resp.Code,
+		resp.Msg,
+		resp.Error.LogID,
+		url,
+	)
+}

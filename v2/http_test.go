@@ -12,3 +12,10 @@ func TestExpandURL(t *testing.T) {
 	assert.Equal(t, bot.ExpandURL("/test"),
 		"http://localhost/test")
 }
+
+func TestAPIError(t *testing.T) {
+	resp, err := bot.PostText(t.Context(), "failing", WithChatID("1231"))
+	t.Log(resp, err)
+	assert.Error(t, err)
+	assert.NotZero(t, resp.Code)
+}

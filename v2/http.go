@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime"
 	"net/http"
 	"net/http/httputil"
 )
@@ -68,10 +69,23 @@ func (bot Bot) PerformAPIRequest(
 		respBody = resp.Body
 	}
 	defer respBody.Close()
-	err = json.NewDecoder(respBody).Decode(&output)
+	buffer, err := io.ReadAll(respBody)
+	if err != nil {
+		bot.httpErrorLog(ctx, prefix, "read body failed", err)
+		return err
+	}
+	// read error code
+	var dummyOutput DummyResponse
+	err = json.Unmarshal(buffer, &dummyOutput)
+	if err == nil && dummyOutput.Code != 0 {
+		apiError := APIError(url, dummyOutput.BaseResponse)
+		bot.logger.Log(ctx, LogLevelError, apiError.Error())
+		return apiError
+	}
+	// read response content
+	err = json.Unmarshal(buffer, &output)
 	if err != nil {
 		bot.httpErrorLog(ctx, prefix, "decode body failed", err)
-		return err
 	}
 	return err
 }
@@ -87,10 +101,7 @@ func (bot Bot) wrapAPIRequest(ctx context.Context, method, prefix, urlPath strin
 	header := make(http.Header)
 	header.Set("Content-Type", "application/json; charset=utf-8")
 	err = bot.PerformAPIRequest(ctx, method, prefix, urlPath, header, auth, buf, output)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 // PostAPIRequest call Lark API
