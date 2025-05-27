@@ -9,7 +9,7 @@ const (
 	UIDUnionID = "union_id"
 )
 
-// OptionalUserID to contain openID, chatID, userID, email
+// OptionalUserID contains either openID, chatID, userID, or email
 type OptionalUserID struct {
 	UIDType string
 	RealID  string

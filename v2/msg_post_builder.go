@@ -55,11 +55,6 @@ func NewPostBuilder() *MsgPostBuilder {
 	}
 }
 
-// Locale renamed to WithLocale but still available
-func (pb *MsgPostBuilder) Locale(locale string) *MsgPostBuilder {
-	return pb.WithLocale(locale)
-}
-
 // WithLocale switches to locale and returns self
 func (pb *MsgPostBuilder) WithLocale(locale string) *MsgPostBuilder {
 	if _, ok := pb.buf[locale]; !ok {

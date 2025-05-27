@@ -120,7 +120,7 @@ func (bot *Bot) UnsetCustomClient() {
 	bot.customClient = nil
 }
 
-// SetDomain set domain of endpoint, so we could call Feishu/Lark
+// SetDomain sets domain of endpoint, so we could call Feishu/Lark
 // go-lark does not check your host, just use the right one or fail.
 func (bot *Bot) SetDomain(domain string) {
 	bot.domain = domain

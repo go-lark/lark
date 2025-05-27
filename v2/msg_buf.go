@@ -16,7 +16,7 @@ type MsgBuffer struct {
 	err error
 }
 
-// NewMsgBuffer create a message buffer
+// NewMsgBuffer creates a message buffer
 func NewMsgBuffer(newMsgType string) *MsgBuffer {
 	msgBuffer := MsgBuffer{
 		message: OutcomingMessage{

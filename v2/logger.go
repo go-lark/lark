@@ -48,6 +48,7 @@ type stdLogger struct {
 	*log.Logger
 }
 
+// Log standard log func
 func (sl stdLogger) Log(_ context.Context, level LogLevel, msg string) {
 	sl.Printf("[%s] %s\n", level, msg)
 }
@@ -62,7 +63,7 @@ func initDefaultLogger() LogWrapper {
 	return logger
 }
 
-// SetLogger set a new logger
+// SetLogger sets a new logger
 func (bot *Bot) SetLogger(logger LogWrapper) {
 	bot.logger = logger
 }

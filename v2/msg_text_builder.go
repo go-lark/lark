@@ -35,7 +35,7 @@ func NewTextBuilder() *MsgTextBuilder {
 	}
 }
 
-// Text add simple texts
+// Text adds simple texts
 func (tb *MsgTextBuilder) Text(text ...interface{}) *MsgTextBuilder {
 	elem := textElem{
 		elemType: msgText,
@@ -45,7 +45,7 @@ func (tb *MsgTextBuilder) Text(text ...interface{}) *MsgTextBuilder {
 	return tb
 }
 
-// Textln add simple texts with a newline
+// Textln adds simple texts with a newline
 func (tb *MsgTextBuilder) Textln(text ...interface{}) *MsgTextBuilder {
 	elem := textElem{
 		elemType: msgText,
@@ -55,7 +55,7 @@ func (tb *MsgTextBuilder) Textln(text ...interface{}) *MsgTextBuilder {
 	return tb
 }
 
-// Textf add texts with format
+// Textf adds texts with format
 func (tb *MsgTextBuilder) Textf(textFmt string, text ...interface{}) *MsgTextBuilder {
 	elem := textElem{
 		elemType: msgText,

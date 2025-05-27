@@ -29,7 +29,7 @@ type GetChatResponse struct {
 	Data ChatInfo `json:"data"`
 }
 
-// ChatInfo entity of a chat, not every field is available for every API.
+// ChatInfo is entity of a chat, not every field is available for every API.
 type ChatInfo struct {
 	ChatID                 string    `json:"chat_id,omitempty"`
 	Name                   string    `json:"name,omitempty"`
@@ -210,7 +210,7 @@ func (bot Bot) GetChat(ctx context.Context, chatID string) (*GetChatResponse, er
 	return &respData, err
 }
 
-// ListChat list chats
+// ListChat lists chats
 // sortType: ByCreateTimeAsc/ByActiveTimeDesc
 func (bot Bot) ListChat(ctx context.Context, sortType string, pageToken string, pageSize int) (*ListChatResponse, error) {
 	var respData ListChatResponse
@@ -225,7 +225,7 @@ func (bot Bot) ListChat(ctx context.Context, sortType string, pageToken string, 
 	return &respData, err
 }
 
-// SearchChat search chat
+// SearchChat searches chat
 func (bot Bot) SearchChat(ctx context.Context, query string, pageToken string, pageSize int) (*ListChatResponse, error) {
 	var respData ListChatResponse
 	err := bot.GetAPIRequest(

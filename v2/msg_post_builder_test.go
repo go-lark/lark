@@ -9,7 +9,7 @@ import (
 func TestPostLocale(t *testing.T) {
 	pb := NewPostBuilder()
 	assert.Equal(t, defaultLocale, pb.curLocale)
-	pb.Locale(LocaleEnUS)
+	pb.WithLocale(LocaleEnUS)
 	assert.Equal(t, LocaleEnUS, pb.curLocale)
 	pb.WithLocale(LocaleJaJP)
 	assert.Equal(t, LocaleJaJP, pb.curLocale)

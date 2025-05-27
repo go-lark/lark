@@ -26,99 +26,99 @@ func (i18nCardBuilder) LocalizedText(locale, s string) *i18n.LocalizedTextBlock 
 	return i18n.LocalizedText(locale, s)
 }
 
-// NewCardBuilder 新建卡片构造器
+// NewCardBuilder .
 func NewCardBuilder() *CardBuilder {
 	return &CardBuilder{
 		I18N: &i18nCardBuilder{},
 	}
 }
 
-// Card 包裹了最外层的卡片结构
+// Card assigns elements
 func (CardBuilder) Card(elements ...card.Element) *card.Block {
 	return card.Card(elements...)
 }
 
-// Action 交互元素，可添加 Button, SelectMenu, Overflow, DatePicker, TimePicker, DatetimePicker
+// Action elements including Button, SelectMenu, Overflow, DatePicker, TimePicker, DatetimePicker
 func (CardBuilder) Action(actions ...card.Element) *card.ActionBlock {
 	return card.Action(actions...)
 }
 
-// Button 按钮交互元素
+// Button .
 func (CardBuilder) Button(text *card.TextBlock) *card.ButtonBlock {
 	return card.Button(text)
 }
 
-// Confirm 用于交互元素的二次确认
+// Confirm .
 func (CardBuilder) Confirm(title, text string) *card.ConfirmBlock {
 	return card.Confirm(title, text)
 }
 
-// DatePicker 日期选择器
+// DatePicker .
 func (CardBuilder) DatePicker() *card.DatePickerBlock {
 	return card.DatePicker()
 }
 
-// TimePicker 时间选择器
+// TimePicker .
 func (CardBuilder) TimePicker() *card.TimePickerBlock {
 	return card.TimePicker()
 }
 
-// DatetimePicker 日期时间选择器
+// DatetimePicker .
 func (CardBuilder) DatetimePicker() *card.DatetimePickerBlock {
 	return card.DatetimePicker()
 }
 
-// Div 内容模块
+// Div .
 func (CardBuilder) Div(fields ...*card.FieldBlock) *card.DivBlock {
 	return card.Div(fields...)
 }
 
-// Field 内容模块的排版元素
+// Field .
 func (CardBuilder) Field(text *card.TextBlock) *card.FieldBlock {
 	return card.Field(text)
 }
 
-// Hr 分割线模块
+// Hr .
 func (CardBuilder) Hr() *card.HrBlock {
 	return card.Hr()
 }
 
-// Img 图片展示模块
+// Img .
 func (CardBuilder) Img(key string) *card.ImgBlock {
 	return card.Img(key)
 }
 
-// Note 备注模块
+// Note .
 func (CardBuilder) Note() *card.NoteBlock {
 	return card.Note()
 }
 
-// Option 选项模块，可用于 SelectMenu 和 Overflow
+// Option .
 func (CardBuilder) Option(value string) *card.OptionBlock {
 	return card.Option(value)
 }
 
-// Overflow 折叠按钮菜单组件
+// Overflow .
 func (CardBuilder) Overflow(options ...*card.OptionBlock) *card.OverflowBlock {
 	return card.Overflow(options...)
 }
 
-// SelectMenu 菜单组件
+// SelectMenu .
 func (CardBuilder) SelectMenu(options ...*card.OptionBlock) *card.SelectMenuBlock {
 	return card.SelectMenu(options...)
 }
 
-// Text 文本模块
+// Text .
 func (CardBuilder) Text(s string) *card.TextBlock {
 	return card.Text(s)
 }
 
-// Markdown 单独使用的 Markdown 文本模块
+// Markdown .
 func (CardBuilder) Markdown(s string) *card.MarkdownBlock {
 	return card.Markdown(s)
 }
 
-// URL 链接模块
+// URL .
 func (CardBuilder) URL() *card.URLBlock {
 	return card.URL()
 }

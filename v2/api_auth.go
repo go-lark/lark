@@ -67,12 +67,12 @@ func (bot *Bot) StopHeartbeat() {
 	bot.heartbeat <- true
 }
 
-// StartHeartbeat renew auth token periodically
+// StartHeartbeat renews auth token periodically
 func (bot *Bot) StartHeartbeat() error {
 	return bot.startHeartbeat(10 * time.Second)
 }
 
-// SetHeartbeatCtx assign a context for heartbeat
+// SetHeartbeatCtx assigns a context for heartbeat
 func (bot *Bot) SetHeartbeatCtx(ctx context.Context) {
 	bot.heartbeatCtx = ctx
 }

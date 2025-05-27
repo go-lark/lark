@@ -47,7 +47,7 @@ func unpad(data []byte) []byte {
 	return data[:(length - unpaddingIdx - unpadding)]
 }
 
-// GenSign generate sign for notification bot
+// GenSign generates sign for notification bot
 func GenSign(secret string, timestamp int64) (string, error) {
 	stringToSign := fmt.Sprintf("%v", timestamp) + "\n" + secret
 

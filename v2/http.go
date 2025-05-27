@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"mime"
 	"net/http"
 	"net/http/httputil"
 )
@@ -104,27 +103,27 @@ func (bot Bot) wrapAPIRequest(ctx context.Context, method, prefix, urlPath strin
 	return err
 }
 
-// PostAPIRequest call Lark API
+// PostAPIRequest POSTs Lark API
 func (bot Bot) PostAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodPost, prefix, urlPath, auth, params, output)
 }
 
-// GetAPIRequest call Lark API
+// GetAPIRequest GETs Lark API
 func (bot Bot) GetAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodGet, prefix, urlPath, auth, params, output)
 }
 
-// DeleteAPIRequest call Lark API
+// DeleteAPIRequest DELETEs Lark API
 func (bot Bot) DeleteAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodDelete, prefix, urlPath, auth, params, output)
 }
 
-// PutAPIRequest call Lark API
+// PutAPIRequest PUTs Lark API
 func (bot Bot) PutAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodPut, prefix, urlPath, auth, params, output)
 }
 
-// PatchAPIRequest call Lark API
+// PatchAPIRequest PATCHes Lark API
 func (bot Bot) PatchAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodPatch, prefix, urlPath, auth, params, output)
 }

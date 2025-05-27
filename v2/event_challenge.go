@@ -2,7 +2,7 @@ package lark
 
 import "encoding/json"
 
-// EventChallenge request of add event hook
+// EventChallenge is request of add event hook
 type EventChallenge struct {
 	Token     string `json:"token,omitempty"`
 	Challenge string `json:"challenge,omitempty"`
@@ -12,12 +12,12 @@ type EventChallenge struct {
 // EventChallengeReq is deprecated. Keep for legacy versions.
 type EventChallengeReq = EventChallenge
 
-// EncryptedReq request of encrypted challenge
+// EncryptedReq is request of encrypted challenge
 type EncryptedReq struct {
 	Encrypt string `json:"encrypt,omitempty"`
 }
 
-// EventCardCallback request of card
+// EventCardCallback is request of card
 type EventCardCallback struct {
 	AppID     string          `json:"app_id,omitempty"`
 	TenantKey string          `json:"tenant_key,omitempty"`
