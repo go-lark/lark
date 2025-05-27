@@ -9,9 +9,6 @@ type EventChallenge struct {
 	Type      string `json:"type,omitempty"`
 }
 
-// EventChallengeReq is deprecated. Keep for legacy versions.
-type EventChallengeReq = EventChallenge
-
 // EncryptedReq is request of encrypted challenge
 type EncryptedReq struct {
 	Encrypt string `json:"encrypt,omitempty"`
