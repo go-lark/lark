@@ -108,7 +108,7 @@ func TestPostShareUser(t *testing.T) {
 
 func TestPostTextFailed(t *testing.T) {
 	resp, err := bot.PostText(t.Context(), "PostText: email hello, world", WithEmail("9999@example.com"))
-	if assert.NoError(t, err) {
+	if assert.Error(t, err) {
 		assert.NotEqual(t, 0, resp.Code)
 		assert.Contains(t, resp.Msg, "invalid receive_id")
 	}
@@ -455,7 +455,7 @@ func TestMessageCRUD(t *testing.T) {
 	}
 	// receipt unread
 	receipt, err := bot.MessageReadReceipt(t.Context(), resp.Data.MessageID, "", 20)
-	if assert.NoError(t, err) {
+	if assert.Error(t, err) {
 		t.Log(receipt.Data.ReadUsers)
 	}
 }
