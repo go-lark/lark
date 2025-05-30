@@ -1,0 +1,52 @@
+name: build_v2
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'v2/**'
+  pull_request:
+jobs:
+  checks:
+    name: run
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: setup
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.13.0'
+
+    - name: lint
+      uses: morphy2k/revive-action@v2
+
+    - name: build
+      run: ./scripts/test_v2.sh
+      env:
+        LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+        LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+        LARK_USER_EMAIL: ${{ secrets.LARK_USER_EMAIL }}
+        LARK_CHAT_ID: ${{ secrets.LARK_CHAT_ID }}
+        LARK_OPEN_ID: ${{ secrets.LARK_OPEN_ID }}
+        LARK_USER_ID: ${{ secrets.LARK_USER_ID }}
+        LARK_UNION_ID: ${{ secrets.LARK_UNION_ID }}
+        LARK_MESSAGE_ID: ${{ secrets.LARK_MESSAGE_ID }}
+        LARK_WEBHOOK: ${{ secrets.LARK_WEBHOOK_V2 }}
+        LARK_WEBHOOK_SIGNED: ${{ secrets.LARK_WEBHOOK_V2_SIGNED }}
+
+    - name: codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
