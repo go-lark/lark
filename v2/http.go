@@ -73,6 +73,12 @@ func (bot Bot) PerformAPIRequest(
 		bot.httpErrorLog(ctx, prefix, "read body failed", err)
 		return err
 	}
+	// read response content
+	err = json.Unmarshal(buffer, &output)
+	if err != nil {
+		bot.httpErrorLog(ctx, prefix, "decode body failed", err)
+		return err
+	}
 	// read error code
 	var dummyOutput DummyResponse
 	err = json.Unmarshal(buffer, &dummyOutput)
@@ -80,11 +86,6 @@ func (bot Bot) PerformAPIRequest(
 		apiError := APIError(url, dummyOutput.BaseResponse)
 		bot.logger.Log(ctx, LogLevelError, apiError.Error())
 		return apiError
-	}
-	// read response content
-	err = json.Unmarshal(buffer, &output)
-	if err != nil {
-		bot.httpErrorLog(ctx, prefix, "decode body failed", err)
 	}
 	return err
 }

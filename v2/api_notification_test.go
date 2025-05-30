@@ -86,7 +86,7 @@ func TestWebhookSignedError(t *testing.T) {
 	mbText := NewMsgBuffer(MsgText)
 	mbText.Text("hello sign").WithSign("LIpnNexV7rwOyOebKoqSdb", time.Now().Unix())
 	resp, err := bot.PostNotification(t.Context(), mbText.Build())
-	assert.NoError(t, err)
+	assert.Error(t, err)
 	assert.Zero(t, resp.StatusCode)
 	assert.Equal(t, "sign match fail or timestamp is not within one hour from current time", resp.Msg)
 }
