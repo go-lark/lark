@@ -1,6 +1,6 @@
 module github.com/go-lark/lark/v2
 
-go 1.17
+go 1.24
 
 require (
 	github.com/go-lark/lark v1.16.0
