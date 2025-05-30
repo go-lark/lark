@@ -1,6 +1,6 @@
 # go-lark
 
-[![build](https://github.com/go-lark/lark/actions/workflows/ci.yml/badge.svg)](https://github.com/go-lark/lark/actions/workflows/ci.yml)
+[![build_v1](https://github.com/go-lark/lark/actions/workflows/build_v1.yml/badge.svg)](https://github.com/go-lark/lark/actions/workflows/build_v1.yml)
 [![codecov](https://codecov.io/gh/go-lark/lark/branch/main/graph/badge.svg)](https://codecov.io/gh/go-lark/lark)
 [![Go Report Card](https://goreportcard.com/badge/github.com/go-lark/lark)](https://goreportcard.com/report/github.com/go-lark/lark)
 [![Go Module](https://badge.fury.io/go/github.com%2Fgo-lark%2Flark.svg)](https://badge.fury.io/go/github.com%2Fgo-lark%2Flark.svg)
