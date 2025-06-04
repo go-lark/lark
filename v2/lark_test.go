@@ -122,7 +122,6 @@ func TestBotGetters(t *testing.T) {
 	bot := newTestBot()
 	assert.Equal(t, testAppID, bot.AppID())
 	assert.Equal(t, ChatBot, bot.BotType())
-	assert.Equal(t, "", bot.TenantAccessToken())
 }
 
 func TestSetClient(t *testing.T) {
@@ -132,7 +131,7 @@ func TestSetClient(t *testing.T) {
 	assert.NotNil(t, bot.client)
 }
 
-func TestUpdateWebhook(t *testing.T) {
+func TestSetWebhook(t *testing.T) {
 	bot := NewNotificationBot("abc")
 	assert.Equal(t, "abc", bot.webhook)
 	bot.SetWebhook("def")
@@ -140,9 +139,19 @@ func TestUpdateWebhook(t *testing.T) {
 }
 
 func TestSetAutoRenew(t *testing.T) {
+	bot := newTestBot()
 	assert.True(t, bot.autoRenew)
 	bot.SetAutoRenew(false)
 	assert.False(t, bot.autoRenew)
 	bot.SetAutoRenew(true)
 	assert.True(t, bot.autoRenew)
+}
+
+func TestTenantAccessToken(t *testing.T) {
+	bot := newTestBot()
+	assert.Equal(t, "", bot.TenantAccessToken())
+	bot.SetTenantAccessToken(TenantAccessToken{
+		TenantAccessToken: "test",
+	})
+	assert.Equal(t, "test", bot.TenantAccessToken())
 }
