@@ -2,9 +2,7 @@ package lark
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
-	"io"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -83,8 +81,6 @@ var bot *Bot
 
 func init() {
 	bot = newTestBot()
-	ctx := context.Background()
-	_, _ = bot.GetTenantAccessTokenInternal(ctx, true)
 }
 
 func TestBotProperties(t *testing.T) {
@@ -126,31 +122,14 @@ func TestBotGetters(t *testing.T) {
 	bot := newTestBot()
 	assert.Equal(t, testAppID, bot.AppID())
 	assert.Equal(t, ChatBot, bot.BotType())
-	assert.Equal(t, "", bot.AccessToken())
 	assert.Equal(t, "", bot.TenantAccessToken())
 }
 
 func TestSetClient(t *testing.T) {
 	bot := &Bot{}
 	assert.Nil(t, bot.client)
-	bot.SetClient(&http.Client{})
+	bot.SetClient(newDefaultClient())
 	assert.NotNil(t, bot.client)
-}
-
-type customHTTPWrapper struct {
-	client *http.Client
-}
-
-func (c customHTTPWrapper) Do(ctx context.Context, method, url string, header http.Header, body io.Reader) (io.ReadCloser, error) {
-	return nil, nil
-}
-
-func TestCustomClient(t *testing.T) {
-	bot := &Bot{}
-	assert.Nil(t, bot.customClient)
-	var c customHTTPWrapper
-	bot.SetCustomClient(c)
-	assert.NotNil(t, bot.customClient)
 }
 
 func TestUpdateWebhook(t *testing.T) {
