@@ -6,6 +6,8 @@ on:
     paths:
       - 'v2/**'
   pull_request:
+    paths:
+      - 'v2/**'
 jobs:
   checks:
     name: run
