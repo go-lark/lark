@@ -125,7 +125,17 @@ func (bot Bot) TenantAccessToken() string {
 	return token.TenantAccessToken
 }
 
-// SetWebhook updates webhook URL
+// SetTenantAccessToken sets tenant access token
+func (bot *Bot) SetTenantAccessToken(t TenantAccessToken) {
+	bot.tenantAccessToken.Store(t)
+}
+
+// SetAutoRenew sets autoRenew
+func (bot *Bot) SetAutoRenew(onOff bool) {
+	bot.autoRenew = onOff
+}
+
+// SetWebhook sets webhook URL
 func (bot *Bot) SetWebhook(url string) {
 	bot.webhook = url
 }

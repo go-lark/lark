@@ -138,3 +138,11 @@ func TestUpdateWebhook(t *testing.T) {
 	bot.SetWebhook("def")
 	assert.Equal(t, "def", bot.webhook)
 }
+
+func TestSetAutoRenew(t *testing.T) {
+	assert.True(t, bot.autoRenew)
+	bot.SetAutoRenew(false)
+	assert.False(t, bot.autoRenew)
+	bot.SetAutoRenew(true)
+	assert.True(t, bot.autoRenew)
+}
