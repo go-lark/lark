@@ -8,7 +8,13 @@ import (
 	"io"
 	"net/http"
 	"net/http/httputil"
+	"time"
 )
+
+// HTTPClient is an interface handling http requests
+type HTTPClient interface {
+	Do(ctx context.Context, req *http.Request) (*http.Response, error)
+}
 
 // ExpandURL expands url path to full url
 func (bot Bot) ExpandURL(urlPath string) string {

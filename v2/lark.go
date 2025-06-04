@@ -3,8 +3,6 @@
 package lark
 
 import (
-	"context"
-	"net/http"
 	"sync/atomic"
 	"time"
 )
@@ -22,12 +20,13 @@ const (
 type Bot struct {
 	// bot type
 	botType int
-	// Auth info
-	appID             string
-	appSecret         string
-	accessToken       atomic.Value
+	// auth info
+	appID     string
+	appSecret string
+	// access token
 	tenantAccessToken atomic.Value
-
+	autoRenew         bool
+	userAccessToken   atomic.Value
 	// user id type for api chat
 	userIDType string
 	// webhook for NotificationBot
@@ -35,17 +34,8 @@ type Bot struct {
 	// API Domain
 	domain string
 	// http client
-	client *http.Client
-	// custom http client
-	useCustomClient bool
-	customClient    HTTPWrapper
-	// auth heartbeat
-	heartbeat chan bool
-	// auth heartbeat context
-	heartbeatCtx context.Context
-	// auth heartbeat counter (for testing)
-	heartbeatCounter int64
-
+	client HTTPClient
+	// logger
 	logger LogWrapper
 	debug  bool
 }
@@ -56,19 +46,26 @@ const (
 	DomainLark   = "https://open.larksuite.com"
 )
 
+// TenantAccessToken .
+type TenantAccessToken struct {
+	TenantAccessToken string
+	Expire            time.Duration
+	LastUpdatedAt     *time.Time
+	EstimatedExpireAt *time.Time
+}
+
 // NewChatBot with appID and appSecret
 func NewChatBot(appID, appSecret string) *Bot {
 	bot := &Bot{
-		botType:      ChatBot,
-		appID:        appID,
-		appSecret:    appSecret,
-		client:       initClient(),
-		domain:       DomainFeishu,
-		heartbeatCtx: context.Background(),
-		logger:       initDefaultLogger(),
+		botType:   ChatBot,
+		appID:     appID,
+		appSecret: appSecret,
+		client:    newDefaultClient(),
+		domain:    DomainFeishu,
+		logger:    initDefaultLogger(),
 	}
-	bot.accessToken.Store("")
-	bot.tenantAccessToken.Store("")
+	bot.autoRenew = true
+	bot.tenantAccessToken.Store(TenantAccessToken{})
 
 	return bot
 }
@@ -78,11 +75,10 @@ func NewNotificationBot(hookURL string) *Bot {
 	bot := &Bot{
 		botType: NotificationBot,
 		webhook: hookURL,
-		client:  initClient(),
+		client:  newDefaultClient(),
 		logger:  initDefaultLogger(),
 	}
-	bot.accessToken.Store("")
-	bot.tenantAccessToken.Store("")
+	bot.tenantAccessToken.Store(TenantAccessToken{})
 
 	return bot
 }
@@ -98,26 +94,8 @@ func (bot Bot) requireType(botType ...int) bool {
 }
 
 // SetClient assigns a new client to bot.client
-func (bot *Bot) SetClient(c *http.Client) {
+func (bot *Bot) SetClient(c HTTPClient) {
 	bot.client = c
-}
-
-func initClient() *http.Client {
-	return &http.Client{
-		Timeout: 5 * time.Second,
-	}
-}
-
-// SetCustomClient .
-func (bot *Bot) SetCustomClient(c HTTPWrapper) {
-	bot.useCustomClient = true
-	bot.customClient = c
-}
-
-// UnsetCustomClient .
-func (bot *Bot) UnsetCustomClient() {
-	bot.useCustomClient = false
-	bot.customClient = nil
 }
 
 // SetDomain sets domain of endpoint, so we could call Feishu/Lark
@@ -141,14 +119,10 @@ func (bot Bot) BotType() int {
 	return bot.botType
 }
 
-// AccessToken returns bot.accessToken for external use
-func (bot Bot) AccessToken() string {
-	return bot.accessToken.Load().(string)
-}
-
-// TenantAccessToken returns bot.tenantAccessToken for external use
+// TenantAccessToken returns tenant access token for external use
 func (bot Bot) TenantAccessToken() string {
-	return bot.tenantAccessToken.Load().(string)
+	token := bot.tenantAccessToken.Load().(TenantAccessToken)
+	return token.TenantAccessToken
 }
 
 // SetWebhook updates webhook URL
