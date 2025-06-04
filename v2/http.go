@@ -29,27 +29,25 @@ func (bot Bot) httpErrorLog(ctx context.Context, prefix, text string, err error)
 func (bot *Bot) loadAndRenewToken(ctx context.Context) (string, error) {
 	now := time.Now()
 	// check token
-	token := bot.tenantAccessToken.Load().(TenantAccessToken)
+	token, ok := bot.tenantAccessToken.Load().(TenantAccessToken)
 	tenantAccessToken := token.TenantAccessToken
-	if token.EstimatedExpireAt != nil && now.After(*token.EstimatedExpireAt) {
+	if !ok || token.TenantAccessToken == "" || (token.EstimatedExpireAt != nil && now.After(*token.EstimatedExpireAt)) {
 		// renew token
 		if bot.autoRenew {
 			tacResp, err := bot.GetTenantAccessTokenInternal(ctx)
-			if err == nil {
-				now := time.Now()
-				expire := time.Duration(tacResp.Expire - 10)
-				eta := now.Add(expire)
-				token := TenantAccessToken{
-					TenantAccessToken: tacResp.TenantAccessToken,
-					Expire:            expire,
-					LastUpdatedAt:     &now,
-					EstimatedExpireAt: &eta,
-				}
-				bot.tenantAccessToken.Store(token)
-			}
 			if err != nil {
 				return "", err
 			}
+			now := time.Now()
+			expire := time.Duration(tacResp.Expire - 10)
+			eta := now.Add(expire)
+			token := TenantAccessToken{
+				TenantAccessToken: tacResp.TenantAccessToken,
+				Expire:            expire,
+				LastUpdatedAt:     &now,
+				EstimatedExpireAt: &eta,
+			}
+			bot.tenantAccessToken.Store(token)
 			tenantAccessToken = tacResp.TenantAccessToken
 		}
 	}
