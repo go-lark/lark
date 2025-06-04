@@ -20,6 +20,36 @@ func (bot Bot) httpErrorLog(ctx context.Context, prefix, text string, err error)
 	bot.logger.Log(ctx, LogLevelError, fmt.Sprintf("[%s] %s: %+v\n", prefix, text, err))
 }
 
+func (bot *Bot) loadAndRenewToken(ctx context.Context) (string, error) {
+	now := time.Now()
+	// check token
+	token := bot.tenantAccessToken.Load().(TenantAccessToken)
+	tenantAccessToken := token.TenantAccessToken
+	if token.EstimatedExpireAt != nil && now.After(*token.EstimatedExpireAt) {
+		// renew token
+		if bot.autoRenew {
+			tacResp, err := bot.GetTenantAccessTokenInternal(ctx)
+			if err == nil {
+				now := time.Now()
+				expire := time.Duration(tacResp.Expire - 10)
+				eta := now.Add(expire)
+				token := TenantAccessToken{
+					TenantAccessToken: tacResp.TenantAccessToken,
+					Expire:            expire,
+					LastUpdatedAt:     &now,
+					EstimatedExpireAt: &eta,
+				}
+				bot.tenantAccessToken.Store(token)
+			}
+			if err != nil {
+				return "", err
+			}
+			tenantAccessToken = tacResp.TenantAccessToken
+		}
+	}
+	return tenantAccessToken, nil
+}
+
 // PerformAPIRequest performs API request
 func (bot Bot) PerformAPIRequest(
 	ctx context.Context,
@@ -38,35 +68,28 @@ func (bot Bot) PerformAPIRequest(
 		header = make(http.Header)
 	}
 	if auth {
-		header.Add("Authorization", fmt.Sprintf("Bearer %s", bot.TenantAccessToken()))
+		tenantAccessToken, err := bot.loadAndRenewToken(ctx)
+		if err != nil {
+			return err
+		}
+		header.Add("Authorization", fmt.Sprintf("Bearer %s", tenantAccessToken))
 	}
-	if bot.useCustomClient {
-		if bot.customClient == nil {
-			return ErrCustomHTTPClientNotSet
-		}
-		respBody, err = bot.customClient.Do(ctx, method, url, header, body)
-		if err != nil {
-			bot.httpErrorLog(ctx, prefix, "call failed", err)
-			return err
-		}
-	} else {
-		req, err := http.NewRequestWithContext(ctx, method, url, body)
-		if err != nil {
-			bot.httpErrorLog(ctx, prefix, "init request failed", err)
-			return err
-		}
-		req.Header = header
-		resp, err := bot.client.Do(req)
-		if err != nil {
-			bot.httpErrorLog(ctx, prefix, "call failed", err)
-			return err
-		}
-		if bot.debug {
-			b, _ := httputil.DumpResponse(resp, true)
-			bot.logger.Log(ctx, LogLevelDebug, string(b))
-		}
-		respBody = resp.Body
+	req, err := http.NewRequest(method, url, body)
+	if err != nil {
+		bot.httpErrorLog(ctx, prefix, "init request failed", err)
+		return err
 	}
+	req.Header = header
+	resp, err := bot.client.Do(ctx, req)
+	if err != nil {
+		bot.httpErrorLog(ctx, prefix, "call failed", err)
+		return err
+	}
+	if bot.debug {
+		b, _ := httputil.DumpResponse(resp, true)
+		bot.logger.Log(ctx, LogLevelDebug, string(b))
+	}
+	respBody = resp.Body
 	defer respBody.Close()
 	buffer, err := io.ReadAll(respBody)
 	if err != nil {
