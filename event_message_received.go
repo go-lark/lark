@@ -34,3 +34,9 @@ func (e EventV2) GetMessageReceived() (*EventV2MessageReceived, error) {
 	err := e.GetEvent(EventTypeMessageReceived, &body)
 	return &body, err
 }
+
+func (e EventV2) GetCardV2Callback() (*CardV2CallbackEvent, error) {
+	var body CardV2CallbackEvent
+	err := e.GetEvent(EventTypeCardV2Callback, &body)
+	return &body, err
+}
