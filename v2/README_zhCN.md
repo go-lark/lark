@@ -1,10 +1,10 @@
 # go-lark
 
-[![build_v1](https://github.com/go-lark/lark/actions/workflows/build_v1.yml/badge.svg)](https://github.com/go-lark/lark/actions/workflows/build_v1.yml)
+[![build_v2](https://github.com/go-lark/lark/actions/workflows/build_v2.yml/badge.svg)](https://github.com/go-lark/lark/actions/workflows/build_v2.yml)
 [![codecov](https://codecov.io/gh/go-lark/lark/branch/main/graph/badge.svg)](https://codecov.io/gh/go-lark/lark)
-[![Go Report Card](https://goreportcard.com/badge/github.com/go-lark/lark)](https://goreportcard.com/report/github.com/go-lark/lark)
-[![Go Module](https://badge.fury.io/go/github.com%2Fgo-lark%2Flark.svg)](https://badge.fury.io/go/github.com%2Fgo-lark%2Flark.svg)
-[![Go Reference](https://pkg.go.dev/badge/github.com/go-lark/lark.svg)](https://pkg.go.dev/github.com/go-lark/lark)
+[![Go Report Card](https://goreportcard.com/badge/github.com/go-lark/lark/v2)](https://goreportcard.com/report/github.com/go-lark/lark/v2)
+[![Go Module](https://badge.fury.io/go/github.com%2Fgo-lark%2Flark%2Fv2.svg)](https://badge.fury.io/go/github.com%2Fgo-lark%2Flark%2Fv2.svg)
+[![Go Reference](https://pkg.go.dev/badge/github.com/go-lark/lark/v2.svg)](https://pkg.go.dev/github.com/go-lark/lark/v2)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
 
 一个简单、开发者友好的 Lark 开放平台机器人 SDK。
@@ -27,7 +27,7 @@ go-lark 主要实现了消息类 API，提供完整的聊天机器人和通知�
 ## 安装
 
 ```shell
-go get github.com/go-lark/lark
+go get github.com/go-lark/lark/v2
 ```
 
 ## 快速入门
@@ -52,7 +52,7 @@ go get github.com/go-lark/lark
 聊天机器人：
 
 ```go
-import "github.com/go-lark/lark"
+import "github.com/go-lark/lark/v2"
 
 func main() {
     bot := lark.NewChatBot("<App ID>", "<App Secret>")
@@ -64,7 +64,7 @@ func main() {
 通知机器人：
 
 ```go
-import "github.com/go-lark/lark"
+import "github.com/go-lark/lark/v2"
 
 func main() {
     bot := lark.NewNotificationBot("<WEB HOOK URL>")
@@ -91,26 +91,19 @@ bot.SetDomain(lark.DomainLark)
 
 ### 鉴权
 
-自动更新授权：
+go-lark v2 默认自动开启鉴权更新功能。你可以直接调用任何接口。
+
+手动鉴权：
 
 ```go
-// initialize a chat bot with appID and appSecret
-bot := lark.NewChatBot(appID, appSecret)
-// Renew access token periodically
-bot.StartHeartbeat()
-// Stop renewal
-bot.StopHeartbeat()
+resp, err := bot.GetTenantAccessTokenInternal()
+// and we can now access the token value with `resp.TenantAccessToken`
 ```
 
-单次授权：
-
+关闭自动鉴权刷新：
 ```go
-bot := lark.NewChatBot(appID, appSecret)
-resp, err := bot.GetTenantAccessTokenInternal(true)
-// and we can now access the token value with `bot.TenantAccessToken()`
+bot.SetAutoRenew(false)
 ```
-
-参考实例：[鉴权](https://github.com/go-lark/examples/tree/main/auth)
 
 ### 消息
 
@@ -124,6 +117,7 @@ resp, err := bot.GetTenantAccessTokenInternal(true)
 - `ReplyMessage`
 - `AddReaction`
 - `DeleteReaction`
+- `BuzzMessage`
 
 参考实例：[基本消息](https://github.com/go-lark/examples/tree/main/basic-message)。
 
@@ -187,13 +181,13 @@ Bind 函数：
 
 ### 异常处理
 
-每个 API 都会返回 `response` 和 `error`。`error` 是 HTTP 客户端返回，`response` 是开放平台接口返回。一般来说，每个接口的 `response` 都会有 `code` 字段，如果非 0 则表示有错误。具体错误码含义，请查看[官方文档](https://open.feishu.cn/document/ukTMukTMukTM/ugjM14COyUjL4ITN)。
+每个 API 都会返回 `response` 和 `err`。如果出现 HTTP 错误，`err` 会是 HTTP 客户端返回的错误。如果飞书服务器返回错误，`err` 会是飞书业务错误。
+
+`response` 是开放平台接口返回。一般来说，每个接口的 `response` 都会有 `code` 字段，如果非 0 则表示有错误。具体错误码含义，请查看[官方文档](https://open.feishu.cn/document/ukTMukTMukTM/ugjM14COyUjL4ITN)。
 
 ## 事件处理
 
 事件是飞书机器人用于实现机器人交互的机制，创建聊天机器人后我们并不具有和机器人交互的能力，需要通过开放平台的挑战和消息相应完成交互。
-
-飞书开放平台提供多种事件，并且有两种版本的格式（1.0 和 2.0）。
 
 在开发交互机器人过程中，我们主要需要用到这两类事件：
 
@@ -220,7 +214,7 @@ middleware.BindURLPrefix("/handle") // 假设 URL 是 http://your.domain.com/han
 r.Use(middleware.LarkChallengeHandler())
 ```
 
-#### 事件 2.0
+#### 事件响应
 
 飞书开放平台默认事件类似目前 v2，会自动在新创建的机器人中启用。
 
@@ -255,22 +249,6 @@ r.POST("/", func(c *gin.Context) {
 r.Use(middleware.LarkCardHandler())
 r.POST("/callback", func(c *gin.Context) {
     if card, ok := middleware.GetCardCallback(c); ok {
-    }
-})
-```
-
-#### 接收消息（事件 1.0）
-
-对于较早常见的机器人，我们需要使用 v1 版本：
-
-```go
-r := gin.Default()
-middleware := larkgin.NewLarkMiddleware()
-middleware.BindURLPrefix("/handle") // supposed URL is http://your.domain.com/handle
-r.POST("/handle", func(c *gin.Context) {
-    if msg, ok := middleware.GetMessage(c); ok && msg != nil {
-        text := msg.Event.Text
-        // 你的业务逻辑
     }
 })
 ```
@@ -312,8 +290,8 @@ middleware.WithEncryption("<encryption-key>")
    LARK_UNION_ID
    LARK_OPEN_ID
    LARK_CHAT_ID
-   LARK_WEBHOOK_V2
-   LARK_WEBHOOK_V2_SIGNED
+   LARK_WEBHOOK
+   LARK_WEBHOOK_SIGNED
    ```
 
    其中，`LARK_APP_ID` 和 `LARK_APP_SECRET` 必须配置，其它字段根据不同的测试可选择配置。
@@ -333,7 +311,7 @@ go-lark 的开发设施（鉴权、HTTP 处理等）可以很方便的用来实�
 ```go
 package lark
 
-import "github.com/go-lark/lark"
+import "github.com/go-lark/lark/v2"
 
 const copyFileAPIPattern = "/open-apis/drive/explorer/v2/file/copy/files/%s"
 
@@ -354,9 +332,10 @@ type CopyFileData struct {
 }
 
 // CopyFile implementation
-func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFileResponse, error) {
+func CopyFile(ctx context.Context, bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFileResponse, error) {
 	var respData model.CopyFileResponse
 	err := bot.PostAPIRequest(
+		ctx,
 		"CopyFile",
 		fmt.Sprintf(copyFileAPIPattern, fileToken),
 		true,
@@ -389,4 +368,4 @@ func CopyFile(bot *lark.Bot, fileToken, dstFolderToken, dstName string) (*CopyFi
 
 ## 协议
 
-Copyright (c) David Zhang, 2018-2024. Licensed under MIT License.
+Copyright (c) David Zhang, 2018-2025. Licensed under MIT License.
