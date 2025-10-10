@@ -35,7 +35,7 @@ func TestPostEvent(t *testing.T) {
 	}, "POST", "/", message)
 	assert.Equal(t, "2.0", string(w.Body.Bytes()))
 
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		m, _ := json.Marshal(message)
 		w.Write([]byte(m))
 	}))
