@@ -119,19 +119,13 @@ bot.SetAutoRenew(false)
 - `DeleteReaction`
 - `BuzzMessage`
 
-参考实例：[基本消息](https://github.com/go-lark/examples/tree/main/basic-message)。
 
 对于复杂消息，可以使用 [Message Buffer](#message-buffer) 进行链式构造。
 
 ### 参考实例
 
-- [鉴权](https://github.com/go-lark/examples/tree/main/auth)
-- [基本消息](https://github.com/go-lark/examples/tree/main/basic-message)
-- [富文本消息](https://github.com/go-lark/examples/tree/main/rich-text-message)
-- [交互卡片](https://github.com/go-lark/examples/tree/main/interactive-message)
-- [图片消息](https://github.com/go-lark/examples/tree/main/image-message)
-- [分享群卡片](https://github.com/go-lark/examples/tree/main/share-chat)
-- [群操作](https://github.com/go-lark/examples/tree/main/group)
+- [examples/message](https://github.com/go-lark/examples/tree/v2/message)
+- [examples/chat](https://github.com/go-lark/examples/tree/v2/chat)
 
 ### Message Buffer
 
@@ -203,7 +197,7 @@ Bind 函数：
 - [Gin Middleware](https://github.com/go-lark/lark-gin)
 - [Hertz Middleware](https://github.com/go-lark/lark-hertz)
 
-实例：[examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware) [examples/hertz-middleware](https://github.com/go-lark/examples/tree/main/hertz-middleware)
+实例：[examples/gin-middleware](https://github.com/go-lark/examples/tree/v2/gin-middleware) [examples/hertz-middleware](https://github.com/go-lark/examples/tree/v2/hertz-middleware)
 
 #### URL 挑战
 

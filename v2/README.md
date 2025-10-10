@@ -124,23 +124,16 @@ For Chat Bot, we can send simple messages with the following method:
 - `DeleteReaction`
 - `BuzzMessage`
 
-Basic message examples: [examples/basic-message](https://github.com/go-lark/examples/tree/main/basic-message)
-
 To build rich messages, we may use [Message Buffer](#message-buffer) (or simply `MsgBuffer`),
 which builds message conveniently with chaining methods.
 
 ### Examples
 
 Apart from the general auth and messaging chapter, there are comprehensive examples for almost all APIs.
-Here is a collection of ready-to-run examples for each part of `go-lark`:
+Here is a collection of ready-to-run examples for each part of `go-lark`.
 
-- [examples/auth](https://github.com/go-lark/examples/tree/main/auth)
-- [examples/basic-message](https://github.com/go-lark/examples/tree/main/basic-message)
-- [examples/rich-text-message](https://github.com/go-lark/examples/tree/main/rich-text-message)
-- [examples/interactive-message](https://github.com/go-lark/examples/tree/main/interactive-message)
-- [examples/image-message](https://github.com/go-lark/examples/tree/main/image-message)
-- [examples/share-chat](https://github.com/go-lark/examples/tree/main/share-chat)
-- [examples/group](https://github.com/go-lark/examples/tree/main/group)
+- [examples/message](https://github.com/go-lark/examples/tree/v2/message)
+- [examples/chat](https://github.com/go-lark/examples/tree/v2/chat)
 
 ### Message Buffer
 
@@ -212,7 +205,7 @@ We have already implemented HTTP middlewares to support event handling:
 - [Gin Middleware](https://github.com/go-lark/lark-gin)
 - [Hertz Middleware](https://github.com/go-lark/lark-hertz)
 
-Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/main/gin-middleware) [examples/hertz-middleware](https://github.com/go-lark/examples/tree/main/hertz-middleware)
+Example: [examples/gin-middleware](https://github.com/go-lark/examples/tree/v2/gin-middleware) [examples/hertz-middleware](https://github.com/go-lark/examples/tree/v2/hertz-middleware)
 
 #### URL Challenge
 
