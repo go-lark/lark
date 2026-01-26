@@ -22,6 +22,6 @@ func newDefaultClient() *defaultClient {
 
 // Do .
 func (dc defaultClient) Do(ctx context.Context, req *http.Request) (*http.Response, error) {
-	req.WithContext(ctx)
+	req = req.WithContext(ctx)
 	return dc.c.Do(req)
 }
