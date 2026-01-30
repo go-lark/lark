@@ -10,7 +10,7 @@ import (
 )
 
 func TestUploadImage(t *testing.T) {
-	resp, err := bot.UploadImage(t.Context(), "./fixtures/test.jpg")
+	resp, err := bot.UploadImage(t.Context(), "../fixtures/test.jpg")
 	if assert.NoError(t, err) {
 		assert.Zero(t, resp.Code)
 		t.Log(resp.Data.ImageKey)
@@ -19,7 +19,7 @@ func TestUploadImage(t *testing.T) {
 }
 
 func TestUploadImageObject(t *testing.T) {
-	file, _ := os.Open("./fixtures/test.jpg")
+	file, _ := os.Open("../fixtures/test.jpg")
 	img, _ := jpeg.Decode(file)
 
 	resp, err := bot.UploadImageObject(t.Context(), img)
@@ -36,7 +36,7 @@ func TestUploadFile(t *testing.T) {
 		UploadFileRequest{
 			FileType: "pdf",
 			FileName: "hello.pdf",
-			Path:     "./fixtures/test.pdf",
+			Path:     "../fixtures/test.pdf",
 		})
 	if assert.NoError(t, err) {
 		assert.Zero(t, resp.Code)
