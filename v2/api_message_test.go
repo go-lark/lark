@@ -454,9 +454,10 @@ func TestMessageCRUD(t *testing.T) {
 		assert.Equal(t, 0, rcResp.Code)
 	}
 	// receipt unread
+	bot.WithUserIDType(UIDOpenID)
 	receipt, err := bot.MessageReadReceipt(t.Context(), resp.Data.MessageID, "", 20)
-	if assert.Error(t, err) {
-		t.Log(receipt.Data.ReadUsers)
+	if assert.NoError(t, err) {
+		assert.Empty(t, receipt.Data.ReadUsers)
 	}
 }
 

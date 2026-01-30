@@ -13,7 +13,7 @@ const (
 	getMessageURL             = "/open-apis/im/v1/messages/%s"
 	updateMessageURL          = "/open-apis/im/v1/messages/%s"
 	recallMessageURL          = "/open-apis/im/v1/messages/%s"
-	messageReceiptURL         = "/open-apis/im/v1/messages/:message_id/read_users?user_id_type=%s&page_size=%d&page_token=%s"
+	messageReceiptURL         = "/open-apis/im/v1/messages/%s/read_users?user_id_type=%s&page_size=%d&page_token=%s"
 	ephemeralMessageURL       = "/open-apis/ephemeral/v1/send"
 	deleteEphemeralMessageURL = "/open-apis/ephemeral/v1/delete"
 	pinMessageURL             = "/open-apis/im/v1/pins"
@@ -340,12 +340,9 @@ func (bot Bot) RecallMessage(ctx context.Context, messageID string) (*RecallMess
 
 // MessageReadReceipt queries message read receipt
 func (bot Bot) MessageReadReceipt(ctx context.Context, messageID string, pageToken string, pageSize int) (*MessageReceiptResponse, error) {
-	params := map[string]interface{}{
-		"message_id": messageID,
-	}
-	url := fmt.Sprintf(messageReceiptURL, bot.userIDType, pageSize, pageToken)
+	url := fmt.Sprintf(messageReceiptURL, messageID, bot.userIDType, pageSize, pageToken)
 	var respData MessageReceiptResponse
-	err := bot.GetAPIRequest(ctx, "MessageReadReceipt", url, true, params, &respData)
+	err := bot.GetAPIRequest(ctx, "MessageReadReceipt", url, true, nil, &respData)
 	return &respData, err
 }
 
