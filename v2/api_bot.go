@@ -19,7 +19,7 @@ type GetBotInfoResponse struct {
 }
 
 // GetBotInfo returns bot info
-func (bot Bot) GetBotInfo(ctx context.Context) (*GetBotInfoResponse, error) {
+func (bot *Bot) GetBotInfo(ctx context.Context) (*GetBotInfoResponse, error) {
 	var respData GetBotInfoResponse
 	err := bot.PostAPIRequest(ctx, "GetBotInfo", getBotInfoURL, true, nil, &respData)
 	return &respData, err

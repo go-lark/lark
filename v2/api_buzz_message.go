@@ -28,7 +28,7 @@ type BuzzMessageResponse struct {
 }
 
 // BuzzMessage .
-func (bot Bot) BuzzMessage(ctx context.Context, buzzType string, messageID string, userIDList ...string) (*BuzzMessageResponse, error) {
+func (bot *Bot) BuzzMessage(ctx context.Context, buzzType string, messageID string, userIDList ...string) (*BuzzMessageResponse, error) {
 	var respData BuzzMessageResponse
 	url := buzzInAppURL
 	switch buzzType {

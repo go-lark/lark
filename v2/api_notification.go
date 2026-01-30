@@ -11,7 +11,7 @@ type PostNotificationResp struct {
 }
 
 // PostNotification posts nofication to a given webhook
-func (bot Bot) PostNotification(ctx context.Context, om OutcomingMessage) (*PostNotificationResp, error) {
+func (bot *Bot) PostNotification(ctx context.Context, om OutcomingMessage) (*PostNotificationResp, error) {
 	if !bot.requireType(NotificationBot) {
 		return nil, ErrBotTypeError
 	}

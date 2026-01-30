@@ -76,7 +76,7 @@ type UserStatus struct {
 }
 
 // GetUserInfo gets contact info
-func (bot Bot) GetUserInfo(ctx context.Context, userID *OptionalUserID) (*GetUserInfoResponse, error) {
+func (bot *Bot) GetUserInfo(ctx context.Context, userID *OptionalUserID) (*GetUserInfoResponse, error) {
 	url := fmt.Sprintf(getUserInfoURL, userID.RealID, userID.UIDType)
 	var respData GetUserInfoResponse
 	err := bot.GetAPIRequest(ctx, "GetUserInfo", url, true, nil, &respData)
@@ -84,7 +84,7 @@ func (bot Bot) GetUserInfo(ctx context.Context, userID *OptionalUserID) (*GetUse
 }
 
 // BatchGetUserInfo gets contact info in batch
-func (bot Bot) BatchGetUserInfo(ctx context.Context, userIDType string, userIDs ...string) (*BatchGetUserInfoResponse, error) {
+func (bot *Bot) BatchGetUserInfo(ctx context.Context, userIDType string, userIDs ...string) (*BatchGetUserInfoResponse, error) {
 	if len(userIDs) == 0 || len(userIDs) > 50 {
 		return nil, ErrParamExceedInputLimit
 	}

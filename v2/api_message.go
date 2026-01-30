@@ -171,7 +171,7 @@ func newMsgBufWithOptionalUserID(msgType string, userID *OptionalUserID) *MsgBuf
 }
 
 // PostText is a simple way to send text messages
-func (bot Bot) PostText(ctx context.Context, text string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot *Bot) PostText(ctx context.Context, text string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -181,7 +181,7 @@ func (bot Bot) PostText(ctx context.Context, text string, userID *OptionalUserID
 }
 
 // PostRichText is a simple way to send rich text messages
-func (bot Bot) PostRichText(ctx context.Context, postContent *PostContent, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot *Bot) PostRichText(ctx context.Context, postContent *PostContent, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgPost, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -191,7 +191,7 @@ func (bot Bot) PostRichText(ctx context.Context, postContent *PostContent, userI
 }
 
 // PostTextMention is a simple way to send text messages with @user
-func (bot Bot) PostTextMention(ctx context.Context, text string, atUserID string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot *Bot) PostTextMention(ctx context.Context, text string, atUserID string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -202,7 +202,7 @@ func (bot Bot) PostTextMention(ctx context.Context, text string, atUserID string
 }
 
 // PostTextMentionAll is a simple way to send text messages with @all
-func (bot Bot) PostTextMentionAll(ctx context.Context, text string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot *Bot) PostTextMentionAll(ctx context.Context, text string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -213,7 +213,7 @@ func (bot Bot) PostTextMentionAll(ctx context.Context, text string, userID *Opti
 }
 
 // PostTextMentionAndReply is a simple way to send text messages with @user and reply a message
-func (bot Bot) PostTextMentionAndReply(ctx context.Context, text string, atUserID string, userID *OptionalUserID, replyID string) (*PostMessageResponse, error) {
+func (bot *Bot) PostTextMentionAndReply(ctx context.Context, text string, atUserID string, userID *OptionalUserID, replyID string) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgText, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -224,7 +224,7 @@ func (bot Bot) PostTextMentionAndReply(ctx context.Context, text string, atUserI
 }
 
 // PostImage is a simple way to send image
-func (bot Bot) PostImage(ctx context.Context, imageKey string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot *Bot) PostImage(ctx context.Context, imageKey string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgImage, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -234,7 +234,7 @@ func (bot Bot) PostImage(ctx context.Context, imageKey string, userID *OptionalU
 }
 
 // PostShareChat is a simple way to share chat
-func (bot Bot) PostShareChat(ctx context.Context, chatID string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot *Bot) PostShareChat(ctx context.Context, chatID string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgShareCard, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -244,7 +244,7 @@ func (bot Bot) PostShareChat(ctx context.Context, chatID string, userID *Optiona
 }
 
 // PostShareUser is a simple way to share user
-func (bot Bot) PostShareUser(ctx context.Context, openID string, userID *OptionalUserID) (*PostMessageResponse, error) {
+func (bot *Bot) PostShareUser(ctx context.Context, openID string, userID *OptionalUserID) (*PostMessageResponse, error) {
 	mb := newMsgBufWithOptionalUserID(MsgShareUser, userID)
 	if mb == nil {
 		return nil, ErrParamUserID
@@ -254,7 +254,7 @@ func (bot Bot) PostShareUser(ctx context.Context, openID string, userID *Optiona
 }
 
 // PostMessage posts a message
-func (bot Bot) PostMessage(ctx context.Context, om OutcomingMessage) (*PostMessageResponse, error) {
+func (bot *Bot) PostMessage(ctx context.Context, om OutcomingMessage) (*PostMessageResponse, error) {
 	req, err := BuildMessage(om)
 	if err != nil {
 		return nil, err
@@ -270,7 +270,7 @@ func (bot Bot) PostMessage(ctx context.Context, om OutcomingMessage) (*PostMessa
 }
 
 // ReplyMessage replies a message
-func (bot Bot) ReplyMessage(ctx context.Context, om OutcomingMessage) (*PostMessageResponse, error) {
+func (bot *Bot) ReplyMessage(ctx context.Context, om OutcomingMessage) (*PostMessageResponse, error) {
 	req, err := buildReplyMessage(om)
 	if err != nil {
 		return nil, err
@@ -284,7 +284,7 @@ func (bot Bot) ReplyMessage(ctx context.Context, om OutcomingMessage) (*PostMess
 }
 
 // AddReaction adds reaction to a message
-func (bot Bot) AddReaction(ctx context.Context, messageID string, emojiType EmojiType) (*ReactionResponse, error) {
+func (bot *Bot) AddReaction(ctx context.Context, messageID string, emojiType EmojiType) (*ReactionResponse, error) {
 	req := map[string]interface{}{
 		"reaction_type": map[string]interface{}{
 			"emoji_type": emojiType,
@@ -296,14 +296,14 @@ func (bot Bot) AddReaction(ctx context.Context, messageID string, emojiType Emoj
 }
 
 // DeleteReaction deletes reaction of a message
-func (bot Bot) DeleteReaction(ctx context.Context, messageID string, reactionID string) (*ReactionResponse, error) {
+func (bot *Bot) DeleteReaction(ctx context.Context, messageID string, reactionID string) (*ReactionResponse, error) {
 	var respData ReactionResponse
 	err := bot.DeleteAPIRequest(ctx, "DeleteReaction", fmt.Sprintf(deleteReactionsMessageURL, messageID, reactionID), true, nil, &respData)
 	return &respData, err
 }
 
 // UpdateMessage updates a message
-func (bot Bot) UpdateMessage(ctx context.Context, messageID string, om OutcomingMessage) (*UpdateMessageResponse, error) {
+func (bot *Bot) UpdateMessage(ctx context.Context, messageID string, om OutcomingMessage) (*UpdateMessageResponse, error) {
 	if om.MsgType != MsgInteractive &&
 		om.MsgType != MsgText &&
 		om.MsgType != MsgPost {
@@ -324,14 +324,14 @@ func (bot Bot) UpdateMessage(ctx context.Context, messageID string, om Outcoming
 }
 
 // GetMessage gets a message with im/v1
-func (bot Bot) GetMessage(ctx context.Context, messageID string) (*GetMessageResponse, error) {
+func (bot *Bot) GetMessage(ctx context.Context, messageID string) (*GetMessageResponse, error) {
 	var respData GetMessageResponse
 	err := bot.GetAPIRequest(ctx, "GetMessage", fmt.Sprintf(getMessageURL, messageID), true, nil, &respData)
 	return &respData, err
 }
 
 // RecallMessage recalls a message with ID
-func (bot Bot) RecallMessage(ctx context.Context, messageID string) (*RecallMessageResponse, error) {
+func (bot *Bot) RecallMessage(ctx context.Context, messageID string) (*RecallMessageResponse, error) {
 	url := fmt.Sprintf(recallMessageURL, messageID)
 	var respData RecallMessageResponse
 	err := bot.DeleteAPIRequest(ctx, "RecallMessage", url, true, nil, &respData)
@@ -339,7 +339,7 @@ func (bot Bot) RecallMessage(ctx context.Context, messageID string) (*RecallMess
 }
 
 // MessageReadReceipt queries message read receipt
-func (bot Bot) MessageReadReceipt(ctx context.Context, messageID string, pageToken string, pageSize int) (*MessageReceiptResponse, error) {
+func (bot *Bot) MessageReadReceipt(ctx context.Context, messageID string, pageToken string, pageSize int) (*MessageReceiptResponse, error) {
 	url := fmt.Sprintf(messageReceiptURL, messageID, bot.userIDType, pageSize, pageToken)
 	var respData MessageReceiptResponse
 	err := bot.GetAPIRequest(ctx, "MessageReadReceipt", url, true, nil, &respData)
@@ -347,7 +347,7 @@ func (bot Bot) MessageReadReceipt(ctx context.Context, messageID string, pageTok
 }
 
 // PostEphemeralMessage posts an ephemeral message
-func (bot Bot) PostEphemeralMessage(ctx context.Context, om OutcomingMessage) (*PostEphemeralMessageResponse, error) {
+func (bot *Bot) PostEphemeralMessage(ctx context.Context, om OutcomingMessage) (*PostEphemeralMessageResponse, error) {
 	if om.UIDType == UIDUnionID {
 		return nil, ErrUnsupportedUIDType
 	}
@@ -358,7 +358,7 @@ func (bot Bot) PostEphemeralMessage(ctx context.Context, om OutcomingMessage) (*
 }
 
 // DeleteEphemeralMessage deletes an ephemeral message
-func (bot Bot) DeleteEphemeralMessage(ctx context.Context, messageID string) (*DeleteEphemeralMessageResponse, error) {
+func (bot *Bot) DeleteEphemeralMessage(ctx context.Context, messageID string) (*DeleteEphemeralMessageResponse, error) {
 	params := map[string]interface{}{
 		"message_id": messageID,
 	}
@@ -368,7 +368,7 @@ func (bot Bot) DeleteEphemeralMessage(ctx context.Context, messageID string) (*D
 }
 
 // PinMessage pins a message
-func (bot Bot) PinMessage(ctx context.Context, messageID string) (*PinMessageResponse, error) {
+func (bot *Bot) PinMessage(ctx context.Context, messageID string) (*PinMessageResponse, error) {
 	params := map[string]interface{}{
 		"message_id": messageID,
 	}
@@ -378,7 +378,7 @@ func (bot Bot) PinMessage(ctx context.Context, messageID string) (*PinMessageRes
 }
 
 // UnpinMessage unpins a message
-func (bot Bot) UnpinMessage(ctx context.Context, messageID string) (*UnpinMessageResponse, error) {
+func (bot *Bot) UnpinMessage(ctx context.Context, messageID string) (*UnpinMessageResponse, error) {
 	url := fmt.Sprintf(unpinMessageURL, messageID)
 	var respData UnpinMessageResponse
 	err := bot.DeleteAPIRequest(ctx, "PinMessage", url, true, nil, &respData)
@@ -386,7 +386,7 @@ func (bot Bot) UnpinMessage(ctx context.Context, messageID string) (*UnpinMessag
 }
 
 // ForwardMessage forwards a message
-func (bot Bot) ForwardMessage(ctx context.Context, messageID string, receiveID *OptionalUserID) (*ForwardMessageResponse, error) {
+func (bot *Bot) ForwardMessage(ctx context.Context, messageID string, receiveID *OptionalUserID) (*ForwardMessageResponse, error) {
 	url := fmt.Sprintf(forwardMessageURL, messageID, receiveID.UIDType)
 	params := map[string]interface{}{
 		"receive_id": receiveID.RealID,
