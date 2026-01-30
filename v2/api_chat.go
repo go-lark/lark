@@ -204,7 +204,7 @@ type SetTopNoticeResponse = BaseResponse
 type DeleteTopNoticeResponse = BaseResponse
 
 // GetChat .
-func (bot Bot) GetChat(ctx context.Context, chatID string) (*GetChatResponse, error) {
+func (bot *Bot) GetChat(ctx context.Context, chatID string) (*GetChatResponse, error) {
 	var respData GetChatResponse
 	err := bot.GetAPIRequest(ctx, "GetChatInfo", fmt.Sprintf(getChatURL, chatID, bot.userIDType), true, nil, &respData)
 	return &respData, err
@@ -212,7 +212,7 @@ func (bot Bot) GetChat(ctx context.Context, chatID string) (*GetChatResponse, er
 
 // ListChat lists chats
 // sortType: ByCreateTimeAsc/ByActiveTimeDesc
-func (bot Bot) ListChat(ctx context.Context, sortType string, pageToken string, pageSize int) (*ListChatResponse, error) {
+func (bot *Bot) ListChat(ctx context.Context, sortType string, pageToken string, pageSize int) (*ListChatResponse, error) {
 	var respData ListChatResponse
 	if sortType == "" {
 		sortType = "ByCreateTimeAsc"
@@ -226,7 +226,7 @@ func (bot Bot) ListChat(ctx context.Context, sortType string, pageToken string, 
 }
 
 // SearchChat searches chat
-func (bot Bot) SearchChat(ctx context.Context, query string, pageToken string, pageSize int) (*ListChatResponse, error) {
+func (bot *Bot) SearchChat(ctx context.Context, query string, pageToken string, pageSize int) (*ListChatResponse, error) {
 	var respData ListChatResponse
 	err := bot.GetAPIRequest(
 		ctx,
@@ -237,35 +237,35 @@ func (bot Bot) SearchChat(ctx context.Context, query string, pageToken string, p
 }
 
 // CreateChat .
-func (bot Bot) CreateChat(ctx context.Context, req CreateChatRequest) (*CreateChatResponse, error) {
+func (bot *Bot) CreateChat(ctx context.Context, req CreateChatRequest) (*CreateChatResponse, error) {
 	var respData CreateChatResponse
 	err := bot.PostAPIRequest(ctx, "CreateChat", fmt.Sprintf(createChatURL, bot.userIDType), true, req, &respData)
 	return &respData, err
 }
 
 // DeleteChat .
-func (bot Bot) DeleteChat(ctx context.Context, chatID string) (*DeleteChatResponse, error) {
+func (bot *Bot) DeleteChat(ctx context.Context, chatID string) (*DeleteChatResponse, error) {
 	var respData DeleteChatResponse
 	err := bot.DeleteAPIRequest(ctx, "DeleteChat", fmt.Sprintf(deleteChatURL, chatID), true, nil, &respData)
 	return &respData, err
 }
 
 // UpdateChat .
-func (bot Bot) UpdateChat(ctx context.Context, chatID string, req UpdateChatRequest) (*UpdateChatResponse, error) {
+func (bot *Bot) UpdateChat(ctx context.Context, chatID string, req UpdateChatRequest) (*UpdateChatResponse, error) {
 	var respData UpdateChatResponse
 	err := bot.PutAPIRequest(ctx, "UpdateChat", fmt.Sprintf(updateChatURL, chatID, bot.userIDType), true, req, &respData)
 	return &respData, err
 }
 
 // JoinChat .
-func (bot Bot) JoinChat(ctx context.Context, chatID string) (*JoinChatResponse, error) {
+func (bot *Bot) JoinChat(ctx context.Context, chatID string) (*JoinChatResponse, error) {
 	var respData JoinChatResponse
 	err := bot.PatchAPIRequest(ctx, "JoinChat", fmt.Sprintf(joinChatURL, chatID), true, nil, &respData)
 	return &respData, err
 }
 
 // AddChatMember .
-func (bot Bot) AddChatMember(ctx context.Context, chatID string, idList []string) (*AddChatMemberResponse, error) {
+func (bot *Bot) AddChatMember(ctx context.Context, chatID string, idList []string) (*AddChatMemberResponse, error) {
 	var respData AddChatMemberResponse
 	req := AddChatMemberRequest{
 		IDList: idList,
@@ -279,7 +279,7 @@ func (bot Bot) AddChatMember(ctx context.Context, chatID string, idList []string
 }
 
 // RemoveChatMember .
-func (bot Bot) RemoveChatMember(ctx context.Context, chatID string, idList []string) (*RemoveChatMemberResponse, error) {
+func (bot *Bot) RemoveChatMember(ctx context.Context, chatID string, idList []string) (*RemoveChatMemberResponse, error) {
 	var respData RemoveChatMemberResponse
 	req := RemoveChatMemberRequest{
 		IDList: idList,
@@ -293,7 +293,7 @@ func (bot Bot) RemoveChatMember(ctx context.Context, chatID string, idList []str
 }
 
 // IsInChat .
-func (bot Bot) IsInChat(ctx context.Context, chatID string) (*IsInChatResponse, error) {
+func (bot *Bot) IsInChat(ctx context.Context, chatID string) (*IsInChatResponse, error) {
 	var respData IsInChatResponse
 	err := bot.GetAPIRequest(ctx, "IsInChat", fmt.Sprintf(isInChatURL, chatID), true, nil, &respData)
 	return &respData, err
@@ -301,7 +301,7 @@ func (bot Bot) IsInChat(ctx context.Context, chatID string) (*IsInChatResponse, 
 
 // GetChatMembers .
 // NOTICE: pageSize must be larger than 10, e.g. if you present pageSize=1, it returns the same pageToken as pageSize=10. So we recommend you just pass pageSize=10.
-func (bot Bot) GetChatMembers(ctx context.Context, chatID string, pageToken string, pageSize int) (*GetChatMembersResponse, error) {
+func (bot *Bot) GetChatMembers(ctx context.Context, chatID string, pageToken string, pageSize int) (*GetChatMembersResponse, error) {
 	if pageSize <= 0 || pageSize > 100 {
 		pageSize = 10
 	}
@@ -317,7 +317,7 @@ func (bot Bot) GetChatMembers(ctx context.Context, chatID string, pageToken stri
 }
 
 // SetTopNotice .
-func (bot Bot) SetTopNotice(ctx context.Context, chatID, actionType, messageID string) (*SetTopNoticeResponse, error) {
+func (bot *Bot) SetTopNotice(ctx context.Context, chatID, actionType, messageID string) (*SetTopNoticeResponse, error) {
 	var respData SetTopNoticeResponse
 	req := SetTopNoticeRequest{
 		ChatTopNotice: []ChatTopNoticeAction{
@@ -333,7 +333,7 @@ func (bot Bot) SetTopNotice(ctx context.Context, chatID, actionType, messageID s
 }
 
 // DeleteTopNotice .
-func (bot Bot) DeleteTopNotice(ctx context.Context, chatID string) (*DeleteChatResponse, error) {
+func (bot *Bot) DeleteTopNotice(ctx context.Context, chatID string) (*DeleteChatResponse, error) {
 	var respData DeleteChatResponse
 	url := fmt.Sprintf(deleteTopNoticeURL, chatID)
 	err := bot.PostAPIRequest(ctx, "DeleteTopNotice", url, true, nil, &respData)

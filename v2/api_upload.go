@@ -46,7 +46,7 @@ type UploadFileResponse struct {
 }
 
 // UploadImage uploads image file
-func (bot Bot) UploadImage(ctx context.Context, path string) (*UploadImageResponse, error) {
+func (bot *Bot) UploadImage(ctx context.Context, path string) (*UploadImageResponse, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -79,7 +79,7 @@ func (bot Bot) UploadImage(ctx context.Context, path string) (*UploadImageRespon
 }
 
 // UploadImageObject uploads image object
-func (bot Bot) UploadImageObject(ctx context.Context, img image.Image) (*UploadImageResponse, error) {
+func (bot *Bot) UploadImageObject(ctx context.Context, img image.Image) (*UploadImageResponse, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	writer.WriteField("image_type", "message")
@@ -106,7 +106,7 @@ func (bot Bot) UploadImageObject(ctx context.Context, img image.Image) (*UploadI
 }
 
 // UploadFile uploads file to Lark server
-func (bot Bot) UploadFile(ctx context.Context, req UploadFileRequest) (*UploadFileResponse, error) {
+func (bot *Bot) UploadFile(ctx context.Context, req UploadFileRequest) (*UploadFileResponse, error) {
 	var content io.Reader
 	if req.Reader == nil {
 		file, err := os.Open(req.Path)

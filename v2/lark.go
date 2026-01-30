@@ -84,7 +84,7 @@ func NewNotificationBot(hookURL string) *Bot {
 }
 
 // requireType checks whether the action is allowed in a list of bot types
-func (bot Bot) requireType(botType ...int) bool {
+func (bot *Bot) requireType(botType ...int) bool {
 	for _, iterType := range botType {
 		if bot.botType == iterType {
 			return true
@@ -105,22 +105,22 @@ func (bot *Bot) SetDomain(domain string) {
 }
 
 // Domain returns current domain
-func (bot Bot) Domain() string {
+func (bot *Bot) Domain() string {
 	return bot.domain
 }
 
 // AppID returns bot.appID for external use
-func (bot Bot) AppID() string {
+func (bot *Bot) AppID() string {
 	return bot.appID
 }
 
 // BotType returns bot.botType for external use
-func (bot Bot) BotType() int {
+func (bot *Bot) BotType() int {
 	return bot.botType
 }
 
 // TenantAccessToken returns tenant access token for external use
-func (bot Bot) TenantAccessToken() string {
+func (bot *Bot) TenantAccessToken() string {
 	token := bot.tenantAccessToken.Load().(TenantAccessToken)
 	return token.TenantAccessToken
 }

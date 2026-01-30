@@ -69,6 +69,6 @@ func (bot *Bot) SetLogger(logger LogWrapper) {
 }
 
 // Logger returns current logger
-func (bot Bot) Logger() LogWrapper {
+func (bot *Bot) Logger() LogWrapper {
 	return bot.logger
 }

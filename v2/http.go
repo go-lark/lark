@@ -17,12 +17,12 @@ type HTTPClient interface {
 }
 
 // ExpandURL expands url path to full url
-func (bot Bot) ExpandURL(urlPath string) string {
+func (bot *Bot) ExpandURL(urlPath string) string {
 	url := fmt.Sprintf("%s%s", bot.domain, urlPath)
 	return url
 }
 
-func (bot Bot) httpErrorLog(ctx context.Context, prefix, text string, err error) {
+func (bot *Bot) httpErrorLog(ctx context.Context, prefix, text string, err error) {
 	bot.logger.Log(ctx, LogLevelError, fmt.Sprintf("[%s] %s: %+v\n", prefix, text, err))
 }
 
@@ -55,7 +55,7 @@ func (bot *Bot) loadAndRenewToken(ctx context.Context) (string, error) {
 }
 
 // PerformAPIRequest performs API request
-func (bot Bot) PerformAPIRequest(
+func (bot *Bot) PerformAPIRequest(
 	ctx context.Context,
 	method string,
 	prefix, urlPath string,
@@ -117,7 +117,7 @@ func (bot Bot) PerformAPIRequest(
 	return err
 }
 
-func (bot Bot) wrapAPIRequest(ctx context.Context, method, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+func (bot *Bot) wrapAPIRequest(ctx context.Context, method, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	buf := new(bytes.Buffer)
 	err := json.NewEncoder(buf).Encode(params)
 	if err != nil {
@@ -132,26 +132,26 @@ func (bot Bot) wrapAPIRequest(ctx context.Context, method, prefix, urlPath strin
 }
 
 // PostAPIRequest POSTs Lark API
-func (bot Bot) PostAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+func (bot *Bot) PostAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodPost, prefix, urlPath, auth, params, output)
 }
 
 // GetAPIRequest GETs Lark API
-func (bot Bot) GetAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+func (bot *Bot) GetAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodGet, prefix, urlPath, auth, params, output)
 }
 
 // DeleteAPIRequest DELETEs Lark API
-func (bot Bot) DeleteAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+func (bot *Bot) DeleteAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodDelete, prefix, urlPath, auth, params, output)
 }
 
 // PutAPIRequest PUTs Lark API
-func (bot Bot) PutAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+func (bot *Bot) PutAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodPut, prefix, urlPath, auth, params, output)
 }
 
 // PatchAPIRequest PATCHes Lark API
-func (bot Bot) PatchAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
+func (bot *Bot) PatchAPIRequest(ctx context.Context, prefix, urlPath string, auth bool, params interface{}, output interface{}) error {
 	return bot.wrapAPIRequest(ctx, http.MethodPatch, prefix, urlPath, auth, params, output)
 }
