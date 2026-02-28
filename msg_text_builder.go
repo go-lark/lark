@@ -2,6 +2,7 @@ package lark
 
 import (
 	"fmt"
+	"strings"
 )
 
 // textElemType of a text buf
@@ -92,11 +93,11 @@ func (tb *MsgTextBuilder) Clear() {
 
 // Render message
 func (tb *MsgTextBuilder) Render() string {
-	var text string
+	var text strings.Builder
 	for _, msg := range tb.buf {
-		text += msg.content
+		text.WriteString(msg.content)
 	}
-	return text
+	return text.String()
 }
 
 // Len returns buf len
