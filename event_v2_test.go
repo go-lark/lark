@@ -66,6 +66,32 @@ func TestEventTypes(t *testing.T) {
 	m, e = event.GetMessageReceived()
 	assert.NoError(t, e)
 	assert.Equal(t, "p2p", m.Message.ChatType)
+
+	event = EventV2{
+		Header: EventV2Header{
+			EventType: EventTypeCardV2Callback,
+		},
+		EventRaw: json.RawMessage(`{"operator":{"tenant_key":"73658260f175d","user_id":"2a91f9","union_id":"on_fcc3539c08b49244f3f4d4106d2e","open_id":"ou_6bfe63b8001cb8a2cae0555b79ecd"},"token":"c-7f23aeca4f5cd726c2b70bfa616da2","action":{"value":"confirm","tag":"button","timezone":"","name":"","form_value":"","input_value":"","option":"","options":null,"checked":false},"host":"im_message","delivery_type":"","context":{"url":"","preview_token":"","open_message_id":"om_227c08473975fa87dfcb777e39322","open_chat_id":"oc_5d2f53edc7eadc731f4a984b171"}}`),
+	}
+	callbackReq, err := event.GetCardV2Callback()
+	assert.NoError(t, err)
+	val, ok := callbackReq.Action.Value.(string)
+	assert.Equal(t, true, ok)
+	assert.Equal(t, "confirm", val)
+
+	event = EventV2{
+		Header: EventV2Header{
+			EventType: EventTypeCardV2Callback,
+		},
+		EventRaw: json.RawMessage(`{"operator":{"tenant_key":"73658260f175d","user_id":"2a91f9","union_id":"on_fcc3539c08b49244f3f4d4106d2e","open_id":"ou_6bfe63b8001cb8a2cae0555b79ecd"},"token":"c-7f23aeca4f5cd726c2b70bfa616da2","action":{"value":{"confirm":"true"},"tag":"button","timezone":"","name":"","form_value":"","input_value":"","option":"","options":null,"checked":false},"host":"im_message","delivery_type":"","context":{"url":"","preview_token":"","open_message_id":"om_227c08473975fa87dfcb777e39322","open_chat_id":"oc_5d2f53edc7eadc731f4a984b171"}}`),
+	}
+	callbackReq, err = event.GetCardV2Callback()
+	assert.NoError(t, err)
+
+	valObj, ok := callbackReq.Action.Value.(map[string]interface{})
+	assert.Equal(t, true, ok)
+	assert.Equal(t, "true", valObj["confirm"])
+
 }
 
 func TestGetEvent(t *testing.T) {
