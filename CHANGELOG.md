@@ -1,5 +1,32 @@
 # CHANGELOG
 
+## v2.0.0
+
+Major release published as a separate Go module under `github.com/go-lark/lark/v2`.
+
+### Breaking changes vs v1
+
+- All API methods now take `context.Context` as the first argument (e.g. `bot.PostText(ctx, ...)`, `bot.PostNotification(ctx, ...)`, `bot.GetTenantAccessTokenInternal(ctx)`).
+- Removed `StartHeartbeat`/`StopHeartbeat`. Tenant access token is auto-renewed on demand; use `SetAutoRenew(false)` to opt out.
+- Authentication is now a regular API call rather than mutating the `Bot` (`GetTenantAccessTokenInternal` no longer requires `updateToken`). Token state can be set via `SetTenantAccessToken`.
+- Removed legacy `PostNotification(title, text)` and the `PostNotificationV2` alias. Use the unified `PostNotification(ctx, om)` for webhook bots.
+- Dropped Event v1 (`im.message`) handling. Only Event v2 schema is supported.
+- Card builder is no longer in this repo. It has been moved to a standalone module: [`github.com/go-lark/card-builder`](https://github.com/go-lark/card-builder).
+- HTTP layer redesigned: the old `HTTPWrapper` is replaced by an `HTTPClient` interface for easier customization (`SetClient`).
+- Group/Chat APIs consolidated under `api_chat.go`; the standalone `api_group.go` has been removed.
+- Minimum Go version bumped to 1.24.
+
+### New behaviours
+
+- API methods return a wrapped Go `error` for both HTTP failures and Lark business errors (in addition to the `Code`/`Msg` fields on the response). Business error bodies are now properly JSON‑decoded.
+- `Bot` exposes `SetAutoRenew`, `SetTenantAccessToken`, `SetWebhook`, `SetClient`, and `Domain()` for finer‑grained control.
+
+### Events
+
+- Event v2 with URL challenge, message receive, message read/recalled, reaction created/deleted, chat disbanded, user/bot added/deleted, plus encryption & token verification helpers.
+
+---
+
 ## v1.16.0
 
 - feat(base): add base error (#78)
