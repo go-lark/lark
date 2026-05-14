@@ -33,23 +33,24 @@ func (bot *Bot) loadAndRenewToken(ctx context.Context) (string, error) {
 	tenantAccessToken := token.TenantAccessToken
 	if !ok || token.TenantAccessToken == "" || (token.EstimatedExpireAt != nil && now.After(*token.EstimatedExpireAt)) {
 		// renew token
-		if bot.autoRenew {
-			tacResp, err := bot.GetTenantAccessTokenInternal(ctx)
-			if err != nil {
-				return "", err
-			}
-			now := time.Now()
-			expire := time.Duration(tacResp.Expire-10) * time.Second
-			eta := now.Add(expire)
-			token := TenantAccessToken{
-				TenantAccessToken: tacResp.TenantAccessToken,
-				Expire:            expire,
-				LastUpdatedAt:     &now,
-				EstimatedExpireAt: &eta,
-			}
-			bot.tenantAccessToken.Store(token)
-			tenantAccessToken = tacResp.TenantAccessToken
+		if !bot.autoRenew {
+			return "", ErrTenantAccessTokenEmpty
 		}
+		tacResp, err := bot.GetTenantAccessTokenInternal(ctx)
+		if err != nil {
+			return "", err
+		}
+		now := time.Now()
+		expire := time.Duration(tacResp.Expire-10) * time.Second
+		eta := now.Add(expire)
+		token := TenantAccessToken{
+			TenantAccessToken: tacResp.TenantAccessToken,
+			Expire:            expire,
+			LastUpdatedAt:     &now,
+			EstimatedExpireAt: &eta,
+		}
+		bot.tenantAccessToken.Store(token)
+		tenantAccessToken = tacResp.TenantAccessToken
 	}
 	return tenantAccessToken, nil
 }
