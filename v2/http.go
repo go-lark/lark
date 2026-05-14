@@ -39,7 +39,7 @@ func (bot *Bot) loadAndRenewToken(ctx context.Context) (string, error) {
 				return "", err
 			}
 			now := time.Now()
-			expire := time.Duration(tacResp.Expire - 10)
+			expire := time.Duration(tacResp.Expire-10) * time.Second
 			eta := now.Add(expire)
 			token := TenantAccessToken{
 				TenantAccessToken: tacResp.TenantAccessToken,
