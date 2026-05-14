@@ -92,14 +92,46 @@ Feishu/Lark API offers more features, please refers to [Usage](#usage) for furth
 
 ### Switch to Lark Endpoints
 
-The default API endpoints are for Feishu, in order to switch to Lark, we should use `SetDomain`:
+The default API endpoints are for Feishu, in order to switch to Lark, we may pass `WithDomain` at construction:
 
 ```go
-bot := lark.NewChatBot("<App ID>", "<App Secret>")
+bot := lark.NewChatBot("<App ID>", "<App Secret>", lark.WithDomain(lark.DomainLark))
+```
+
+Or use the equivalent setter on an existing bot:
+
+```go
 bot.SetDomain(lark.DomainLark)
 ```
 
 ## Usage
+
+### Bot Options
+
+`NewChatBot` and `NewNotificationBot` accept variadic `BotOption`s for construction-time configuration:
+
+```go
+bot := lark.NewChatBot(
+    "<App ID>", "<App Secret>",
+    lark.WithDomain(lark.DomainLark),
+    lark.WithAutoRenew(false),
+    lark.WithUserIDType(lark.UIDOpenID),
+    lark.WithHTTPClient(myHTTPClient),
+    lark.WithLogger(myLogger),
+)
+```
+
+Available options:
+
+| Option                   | Description                                              |
+| ------------------------ | -------------------------------------------------------- |
+| `WithHTTPClient`         | Custom `HTTPClient` implementation                       |
+| `WithLogger`             | Custom `LogWrapper`                                      |
+| `WithDomain`             | API domain (`DomainFeishu` / `DomainLark`)               |
+| `WithAutoRenew`          | Toggle tenant access token auto-renew (default `true`)   |
+| `WithTenantAccessToken`  | Pre-set a tenant access token                            |
+| `WithUserIDType`         | Default user ID type for chat APIs                       |
+| `WithWebhook`            | Webhook URL (mainly for `NotificationBot`)               |
 
 ### Auth
 
@@ -113,10 +145,17 @@ resp, err := bot.GetTenantAccessTokenInternal(ctx)
 // and we can now access the token value with `resp.TenantAccessToken`
 ```
 
-Switch off auto renew:
+Switch off auto renew (at construction):
+```go
+bot := lark.NewChatBot("<App ID>", "<App Secret>", lark.WithAutoRenew(false))
+```
+
+Or at runtime:
 ```go
 bot.SetAutoRenew(false)
 ```
+
+When auto-renew is disabled and no tenant access token has been set, API calls will return `ErrTenantAccessTokenEmpty`.
 
 ### Messaging
 

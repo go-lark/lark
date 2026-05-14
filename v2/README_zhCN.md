@@ -87,14 +87,46 @@ func main() {
 
 ### 切换到 Lark 域名
 
-go-lark 默认使用飞书 API 域名，我们需要调用`SetDomain`来切换到 Lark：
+go-lark 默认使用飞书 API 域名，可以在创建 Bot 时使用 `WithDomain` 切换到 Lark：
 
 ```go
-bot := lark.NewChatBot("<App ID>", "<App Secret>")
+bot := lark.NewChatBot("<App ID>", "<App Secret>", lark.WithDomain(lark.DomainLark))
+```
+
+也可以在已有 Bot 上调用 setter：
+
+```go
 bot.SetDomain(lark.DomainLark)
 ```
 
 ## 用法
+
+### Bot 选项
+
+`NewChatBot` 与 `NewNotificationBot` 都支持变长参数 `BotOption`，便于在创建时一次性完成配置：
+
+```go
+bot := lark.NewChatBot(
+    "<App ID>", "<App Secret>",
+    lark.WithDomain(lark.DomainLark),
+    lark.WithAutoRenew(false),
+    lark.WithUserIDType(lark.UIDOpenID),
+    lark.WithHTTPClient(myHTTPClient),
+    lark.WithLogger(myLogger),
+)
+```
+
+可用选项：
+
+| 选项                     | 说明                                                       |
+| ------------------------ | ---------------------------------------------------------- |
+| `WithHTTPClient`         | 自定义 `HTTPClient` 实现                                   |
+| `WithLogger`             | 自定义 `LogWrapper` 日志器                                 |
+| `WithDomain`             | 设置 API 域名（`DomainFeishu` / `DomainLark`）             |
+| `WithAutoRenew`          | 切换 tenant access token 自动刷新（默认 `true`）           |
+| `WithTenantAccessToken`  | 预先设置 tenant access token                               |
+| `WithUserIDType`         | 设置默认的 user ID 类型                                    |
+| `WithWebhook`            | 设置 webhook URL（主要用于 `NotificationBot`）             |
 
 ### 鉴权
 
@@ -107,10 +139,17 @@ resp, err := bot.GetTenantAccessTokenInternal(ctx)
 // and we can now access the token value with `resp.TenantAccessToken`
 ```
 
-关闭自动鉴权刷新：
+关闭自动鉴权刷新（创建时）：
+```go
+bot := lark.NewChatBot("<App ID>", "<App Secret>", lark.WithAutoRenew(false))
+```
+
+或运行时关闭：
 ```go
 bot.SetAutoRenew(false)
 ```
+
+当关闭自动刷新且未预设 tenant access token 时，调用 API 会返回 `ErrTenantAccessTokenEmpty`。
 
 ### 消息
 
