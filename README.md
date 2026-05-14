@@ -183,7 +183,7 @@ Content functions:
 | --------- | ---------------- | ----------------------- | ---------------------------------------------------------------- |
 | Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                                     |
 | Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                                     |
-| Card      | `MsgInteractive` | Append interactive card | May build with [`CardBuilder`](card/README.md)                   |
+| Card      | `MsgInteractive` | Append interactive card | May build with [`CardBuilder`](https://github.com/go-lark/card-builder) |
 | Template  | `MsgInteractive` | Append card template    | Required to build with [CardKit](https://open.feishu.cn/cardkit) |
 | ShareChat | `MsgShareCard`   | Append group share card |                                                                  |
 | ShareUser | `MsgShareUser`   | Append user share card  |                                                                  |
@@ -330,7 +330,7 @@ And we add `PostEvent` to simulate message sending to make it even easier.
 2. Run Test
 
    ```bash
-   GO_LARK_TEST_MODE=local ./scripts/test.sh
+   GO_LARK_TEST_MODE=local ./scripts/test_v1.sh
    ```
 
 ### Extensions

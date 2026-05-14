@@ -52,23 +52,30 @@ go get github.com/go-lark/lark/v2
 聊天机器人：
 
 ```go
-import "github.com/go-lark/lark/v2"
+import (
+    "context"
+
+    "github.com/go-lark/lark/v2"
+)
 
 func main() {
     bot := lark.NewChatBot("<App ID>", "<App Secret>")
-    bot.StartHeartbeat()
-    bot.PostText("hello, world", lark.WithEmail("someone@example.com"))
+    bot.PostText(context.Background(), "hello, world", lark.WithEmail("someone@example.com"))
 }
 ```
 
 通知机器人：
 
 ```go
-import "github.com/go-lark/lark/v2"
+import (
+    "context"
+
+    "github.com/go-lark/lark/v2"
+)
 
 func main() {
     bot := lark.NewNotificationBot("<WEB HOOK URL>")
-    bot.PostNotificationV2(lark.NewMsgBuffer(lark.MsgText).Text("hello, wolrd").Build())
+    bot.PostNotification(context.Background(), lark.NewMsgBuffer(lark.MsgText).Text("hello, world").Build())
 }
 ```
 
@@ -96,7 +103,7 @@ go-lark v2 默认自动开启鉴权更新功能。你可以直接调用任何接
 手动鉴权：
 
 ```go
-resp, err := bot.GetTenantAccessTokenInternal()
+resp, err := bot.GetTenantAccessTokenInternal(ctx)
 // and we can now access the token value with `resp.TenantAccessToken`
 ```
 
@@ -163,7 +170,7 @@ Bind 函数：
 | --------- | ---------------- | ---------------- | ------------------------------------------------------------ |
 | Text      | `MsgText`        | 添加文本内容     | 可使用 `TextBuilder` 构造                                    |
 | Post      | `MsgPost`        | 添加富文本内容   | 可使用 `PostBuilder` 构造                                    |
-| Card      | `MsgInteractive` | 添加交互式卡片   | 可使用 [`CardBuilder`](card/README_zhCN.md) 构造             |
+| Card      | `MsgInteractive` | 添加交互式卡片   | 可使用 [`CardBuilder`](https://github.com/go-lark/card-builder) 构造 |
 | Template  | `MsgInteractive` | 添加卡片模板     | 可使用 [可视化搭建工具](https://open.feishu.cn/cardkit) 构造 |
 | ShareChat | `MsgShareCard`   | 添加分享群卡片   |                                                              |
 | ShareUser | `MsgShareUser`   | 添加分享用户卡片 |                                                              |
@@ -293,7 +300,7 @@ middleware.WithEncryption("<encryption-key>")
 2. 运行测试
 
    ```bash
-   GO_LARK_TEST_MODE=local ./scripts/test.sh
+   GO_LARK_TEST_MODE=local ./scripts/test_v2.sh
    ```
 
 ### 扩展

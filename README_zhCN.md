@@ -68,7 +68,7 @@ import "github.com/go-lark/lark"
 
 func main() {
     bot := lark.NewNotificationBot("<WEB HOOK URL>")
-    bot.PostNotificationV2(lark.NewMsgBuffer(lark.MsgText).Text("hello, wolrd").Build())
+    bot.PostNotificationV2(lark.NewMsgBuffer(lark.MsgText).Text("hello, world").Build())
 }
 ```
 
@@ -175,7 +175,7 @@ Bind 函数：
 | --------- | ---------------- | ---------------- | ------------------------------------------------------------ |
 | Text      | `MsgText`        | 添加文本内容     | 可使用 `TextBuilder` 构造                                    |
 | Post      | `MsgPost`        | 添加富文本内容   | 可使用 `PostBuilder` 构造                                    |
-| Card      | `MsgInteractive` | 添加交互式卡片   | 可使用 [`CardBuilder`](card/README_zhCN.md) 构造             |
+| Card      | `MsgInteractive` | 添加交互式卡片   | 可使用 [`CardBuilder`](https://github.com/go-lark/card-builder) 构造 |
 | Template  | `MsgInteractive` | 添加卡片模板     | 可使用 [可视化搭建工具](https://open.feishu.cn/cardkit) 构造 |
 | ShareChat | `MsgShareCard`   | 添加分享群卡片   |                                                              |
 | ShareUser | `MsgShareUser`   | 添加分享用户卡片 |                                                              |
@@ -321,7 +321,7 @@ middleware.WithEncryption("<encryption-key>")
 2. 运行测试
 
    ```bash
-   GO_LARK_TEST_MODE=local ./scripts/test.sh
+   GO_LARK_TEST_MODE=local ./scripts/test_v1.sh
    ```
 
 ### 扩展

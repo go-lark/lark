@@ -7,7 +7,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/go-lark/lark/v2.svg)](https://pkg.go.dev/github.com/go-lark/lark/v2)
 [![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
 
-[简体中文](/README_zhCN.md)
+[简体中文](/v2/README_zhCN.md)
 
 go-lark is an easy-to-use SDK for Feishu and Lark Open Platform,
 which implements messaging APIs, with full-fledged supports on building Chat Bot and Notification Bot.
@@ -53,22 +53,30 @@ Notification Bot:
 Chat Bot:
 
 ```go
-import "github.com/go-lark/lark/v2"
+import (
+    "context"
+
+    "github.com/go-lark/lark/v2"
+)
 
 func main() {
     bot := lark.NewChatBot("<App ID>", "<App Secret>")
-    bot.PostText("hello, world", lark.WithEmail("someone@example.com"))
+    bot.PostText(context.Background(), "hello, world", lark.WithEmail("someone@example.com"))
 }
 ```
 
 Notification Bot:
 
 ```go
-import "github.com/go-lark/lark/v2"
+import (
+    "context"
+
+    "github.com/go-lark/lark/v2"
+)
 
 func main() {
     bot := lark.NewNotificationBot("<WEB HOOK URL>")
-    bot.PostNotification(lark.NewMsgBuffer(lark.MsgText).Text("hello, world").Build())
+    bot.PostNotification(context.Background(), lark.NewMsgBuffer(lark.MsgText).Text("hello, world").Build())
 }
 ```
 
@@ -101,7 +109,7 @@ You may call any API you like.
 Manual authentication:
 
 ```go
-resp, err := bot.GetTenantAccessTokenInternal()
+resp, err := bot.GetTenantAccessTokenInternal(ctx)
 // and we can now access the token value with `resp.TenantAccessToken`
 ```
 
@@ -170,7 +178,7 @@ Content functions:
 | --------- | ---------------- | ----------------------- | ---------------------------------------------------------------- |
 | Text      | `MsgText`        | Append plain text       | May build with `TextBuilder`                                     |
 | Post      | `MsgPost`        | Append rich text        | May build with `PostBuilder`                                     |
-| Card      | `MsgInteractive` | Append interactive card | May build with [`CardBuilder`](card/README.md)                   |
+| Card      | `MsgInteractive` | Append interactive card | May build with [`CardBuilder`](https://github.com/go-lark/card-builder) |
 | Template  | `MsgInteractive` | Append card template    | Required to build with [CardKit](https://open.feishu.cn/cardkit) |
 | ShareChat | `MsgShareCard`   | Append group share card |                                                                  |
 | ShareUser | `MsgShareUser`   | Append user share card  |                                                                  |
@@ -299,7 +307,7 @@ And we add `PostEvent` to simulate message sending to make it even easier.
 2. Run Test
 
    ```bash
-   GO_LARK_TEST_MODE=local ./scripts/test.sh
+   GO_LARK_TEST_MODE=local ./scripts/test_v2.sh
    ```
 
 ### Extensions
