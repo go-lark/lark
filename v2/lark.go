@@ -54,8 +54,61 @@ type TenantAccessToken struct {
 	EstimatedExpireAt *time.Time
 }
 
-// NewChatBot with appID and appSecret
-func NewChatBot(appID, appSecret string) *Bot {
+// BotOption configures a Bot.
+type BotOption func(*Bot)
+
+// WithHTTPClient sets a custom HTTP client.
+func WithHTTPClient(c HTTPClient) BotOption {
+	return func(bot *Bot) {
+		bot.client = c
+	}
+}
+
+// WithLogger sets a custom logger.
+func WithLogger(logger LogWrapper) BotOption {
+	return func(bot *Bot) {
+		bot.logger = logger
+	}
+}
+
+// WithDomain sets the API domain (e.g. DomainFeishu, DomainLark).
+func WithDomain(domain string) BotOption {
+	return func(bot *Bot) {
+		bot.domain = domain
+	}
+}
+
+// WithAutoRenew toggles tenant access token auto renew.
+func WithAutoRenew(autoRenew bool) BotOption {
+	return func(bot *Bot) {
+		bot.autoRenew = autoRenew
+	}
+}
+
+// WithTenantAccessToken sets an initial tenant access token.
+func WithTenantAccessToken(t TenantAccessToken) BotOption {
+	return func(bot *Bot) {
+		bot.tenantAccessToken.Store(t)
+	}
+}
+
+// WithUserIDType sets the default user ID type used by chat APIs.
+func WithUserIDType(userIDType string) BotOption {
+	return func(bot *Bot) {
+		bot.userIDType = userIDType
+	}
+}
+
+// WithWebhook sets the webhook URL (mainly for NotificationBot).
+func WithWebhook(hookURL string) BotOption {
+	return func(bot *Bot) {
+		bot.webhook = hookURL
+	}
+}
+
+// NewChatBot with appID and appSecret.
+// Additional configuration can be supplied via BotOption.
+func NewChatBot(appID, appSecret string, opts ...BotOption) *Bot {
 	bot := &Bot{
 		botType:   ChatBot,
 		appID:     appID,
@@ -67,11 +120,16 @@ func NewChatBot(appID, appSecret string) *Bot {
 	bot.autoRenew = true
 	bot.tenantAccessToken.Store(TenantAccessToken{})
 
+	for _, opt := range opts {
+		opt(bot)
+	}
+
 	return bot
 }
 
-// NewNotificationBot with URL
-func NewNotificationBot(hookURL string) *Bot {
+// NewNotificationBot with URL.
+// Additional configuration can be supplied via BotOption.
+func NewNotificationBot(hookURL string, opts ...BotOption) *Bot {
 	bot := &Bot{
 		botType: NotificationBot,
 		webhook: hookURL,
@@ -79,6 +137,10 @@ func NewNotificationBot(hookURL string) *Bot {
 		logger:  initDefaultLogger(),
 	}
 	bot.tenantAccessToken.Store(TenantAccessToken{})
+
+	for _, opt := range opts {
+		opt(bot)
+	}
 
 	return bot
 }

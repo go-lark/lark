@@ -155,3 +155,73 @@ func TestTenantAccessToken(t *testing.T) {
 	})
 	assert.Equal(t, "test", bot.TenantAccessToken())
 }
+
+func TestWithHTTPClient(t *testing.T) {
+	custom := newDefaultClient()
+	bot := NewChatBot(testAppID, testAppSecret, WithHTTPClient(custom))
+	assert.Equal(t, custom, bot.client)
+}
+
+func TestWithLogger(t *testing.T) {
+	logger := initDefaultLogger()
+	bot := NewChatBot(testAppID, testAppSecret, WithLogger(logger))
+	assert.Equal(t, logger, bot.logger)
+}
+
+func TestWithDomain(t *testing.T) {
+	bot := NewChatBot(testAppID, testAppSecret, WithDomain(DomainLark))
+	assert.Equal(t, DomainLark, bot.domain)
+}
+
+func TestWithAutoRenew(t *testing.T) {
+	bot := NewChatBot(testAppID, testAppSecret, WithAutoRenew(false))
+	assert.False(t, bot.autoRenew)
+
+	bot = NewChatBot(testAppID, testAppSecret, WithAutoRenew(true))
+	assert.True(t, bot.autoRenew)
+}
+
+func TestWithTenantAccessToken(t *testing.T) {
+	token := TenantAccessToken{TenantAccessToken: "preset"}
+	bot := NewChatBot(testAppID, testAppSecret, WithTenantAccessToken(token))
+	assert.Equal(t, "preset", bot.TenantAccessToken())
+}
+
+func TestWithUserIDType(t *testing.T) {
+	bot := NewChatBot(testAppID, testAppSecret, WithUserIDType(UIDOpenID))
+	assert.Equal(t, UIDOpenID, bot.userIDType)
+}
+
+func TestWithWebhook(t *testing.T) {
+	bot := NewNotificationBot("initial", WithWebhook("override"))
+	assert.Equal(t, "override", bot.webhook)
+}
+
+func TestNewChatBotWithMultipleOptions(t *testing.T) {
+	logger := initDefaultLogger()
+	client := newDefaultClient()
+	bot := NewChatBot(
+		testAppID, testAppSecret,
+		WithDomain(DomainLark),
+		WithAutoRenew(false),
+		WithUserIDType(UIDOpenID),
+		WithHTTPClient(client),
+		WithLogger(logger),
+	)
+	assert.Equal(t, DomainLark, bot.domain)
+	assert.False(t, bot.autoRenew)
+	assert.Equal(t, UIDOpenID, bot.userIDType)
+	assert.Equal(t, client, bot.client)
+	assert.Equal(t, logger, bot.logger)
+}
+
+func TestNewNotificationBotWithOptions(t *testing.T) {
+	logger := initDefaultLogger()
+	bot := NewNotificationBot(
+		"hook",
+		WithLogger(logger),
+	)
+	assert.Equal(t, "hook", bot.webhook)
+	assert.Equal(t, logger, bot.logger)
+	assert.Equal(t, NotificationBot, bot.botType)
+}
