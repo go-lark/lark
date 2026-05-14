@@ -18,6 +18,7 @@ var (
 	ErrInvalidReceiveID       = errors.New("Invalid receive ID")
 	ErrEventTypeNotMatch      = errors.New("Event type not match")
 	ErrMessageType            = errors.New("Message type error")
+	ErrTenantAccessTokenEmpty = errors.New("Tenant access token is empty and auto-renew is disabled")
 )
 
 // APIError constructs an error with given response
